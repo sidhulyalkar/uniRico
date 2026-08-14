@@ -17,8 +17,16 @@
     <span id="score">00000</span>
   </div>
 
-  <!-- Keep this order: game.js expects LEVELS/F0..F9 to exist. -->
+  <!--
+    Classic scripts intentionally share one global lexical environment.
+    Load order mirrors the runtime dependency graph from data → simulation → rendering → UI.
+  -->
   <script src="levels.js"></script>
-  <script src="game.js"></script>
+  <script src="runtime/core.js"></script>
+  <script src="runtime/physics.js"></script>
+  <script src="runtime/render-world.js"></script>
+  <script src="runtime/render-entities.js"></script>
+  <script src="runtime/render-hud.js"></script>
+  <script src="runtime/ui.js"></script>
 </body>
 </html>
