@@ -1,49 +1,116 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
-  <title id="title">uniRico</title>
-  <desc id="desc">Rainbow ricochet puzzle game with a unicorn, clouds, prisms and rainbows.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="500" viewBox="0 0 1500 500" role="img" aria-labelledby="title desc">
+  <title id="title">uniRico — Rainbow Ricochet</title>
+  <desc id="desc">A wide three-to-one banner showing a unicorn firing a rainbow ricochet through a magical sky toward a grumpy cloud that becomes happy.</desc>
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#173f73"/>
-      <stop offset="1" stop-color="#7693bd"/>
+      <stop offset=".56" stop-color="#356da9"/>
+      <stop offset="1" stop-color="#7f9ac8"/>
     </linearGradient>
-    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <linearGradient id="rainbow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff646c"/>
+      <stop offset=".17" stop-color="#ffb653"/>
+      <stop offset=".34" stop-color="#ffe95f"/>
+      <stop offset=".51" stop-color="#70e968"/>
+      <stop offset=".68" stop-color="#52e4d5"/>
+      <stop offset=".84" stop-color="#70a7ff"/>
+      <stop offset="1" stop-color="#bd78ff"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="smallGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
-  <rect width="1200" height="420" rx="30" fill="url(#sky)"/>
-  <g opacity=".8" fill="#fff">
-    <circle cx="84" cy="80" r="3"/><circle cx="205" cy="54" r="2"/><circle cx="995" cy="76" r="3"/><circle cx="1104" cy="132" r="2"/><circle cx="910" cy="202" r="2"/><circle cx="270" cy="177" r="2"/>
+
+  <rect width="1500" height="500" rx="28" fill="url(#sky)"/>
+
+  <g fill="#fff" opacity=".62">
+    <circle cx="94" cy="58" r="3"/><circle cx="184" cy="108" r="2"/><circle cx="290" cy="48" r="2.5"/>
+    <circle cx="442" cy="84" r="2"/><circle cx="628" cy="48" r="3"/><circle cx="852" cy="92" r="2.5"/>
+    <circle cx="1010" cy="42" r="2"/><circle cx="1190" cy="88" r="3"/><circle cx="1405" cy="60" r="2.5"/>
+    <circle cx="248" cy="280" r="2"/><circle cx="472" cy="322" r="2.5"/><circle cx="712" cy="292" r="2"/>
+    <circle cx="964" cy="318" r="2.5"/><circle cx="1260" cy="292" r="2"/><circle cx="1430" cy="342" r="2.5"/>
   </g>
-  <g fill="none" stroke-linecap="round" filter="url(#glow)">
-    <path d="M300 300 Q600 -20 900 300" stroke="#ff5f6d" stroke-width="20"/>
-    <path d="M318 300 Q600 4 882 300" stroke="#ffd85a" stroke-width="18"/>
-    <path d="M336 300 Q600 28 864 300" stroke="#78e85f" stroke-width="18"/>
-    <path d="M354 300 Q600 52 846 300" stroke="#58e4d4" stroke-width="18"/>
-    <path d="M372 300 Q600 76 828 300" stroke="#5a91ef" stroke-width="18"/>
-    <path d="M390 300 Q600 100 810 300" stroke="#b06bea" stroke-width="18"/>
+
+  <g fill="#fff" opacity=".14">
+    <g transform="translate(80 130)"><circle r="44"/><circle cx="40" cy="-16" r="34"/><circle cx="78" cy="6" r="40"/></g>
+    <g transform="translate(344 352)"><circle r="34"/><circle cx="32" cy="-13" r="26"/><circle cx="62" cy="5" r="31"/></g>
+    <g transform="translate(1220 118)"><circle r="42"/><circle cx="38" cy="-16" r="32"/><circle cx="76" cy="5" r="38"/></g>
+    <g transform="translate(1375 360)"><circle r="38"/><circle cx="34" cy="-15" r="28"/><circle cx="70" cy="5" r="34"/></g>
   </g>
-  <g fill="#fff" opacity=".96">
-    <circle cx="210" cy="314" r="56"/><circle cx="260" cy="302" r="72"/><circle cx="320" cy="320" r="50"/><rect x="170" y="315" width="190" height="60" rx="30"/>
-    <circle cx="870" cy="314" r="56"/><circle cx="930" cy="301" r="74"/><circle cx="995" cy="320" r="54"/><rect x="825" y="315" width="220" height="60" rx="30"/>
+
+  <g opacity=".3" fill="none" stroke-linecap="round">
+    <path d="M100 485 C420 250 1080 250 1400 485" stroke="#ff6e75" stroke-width="18"/>
+    <path d="M120 485 C430 270 1070 270 1380 485" stroke="#ffd95d" stroke-width="18"/>
+    <path d="M140 485 C440 290 1060 290 1360 485" stroke="#78e96c" stroke-width="18"/>
+    <path d="M160 485 C450 310 1050 310 1340 485" stroke="#59e4d7" stroke-width="18"/>
+    <path d="M180 485 C460 330 1040 330 1320 485" stroke="#73a9ff" stroke-width="18"/>
+    <path d="M200 485 C470 350 1030 350 1300 485" stroke="#bb7cff" stroke-width="18"/>
   </g>
-  <g transform="translate(100 245)">
-    <ellipse cx="56" cy="46" rx="44" ry="27" fill="#fff"/>
-    <circle cx="78" cy="30" r="25" fill="#fff"/>
-    <path d="M88 10 117 28 87 29Z" fill="#ffe06e"/>
-    <path d="M69 9 77 -10 84 10Z" fill="#f7a4c6"/>
-    <circle cx="88" cy="27" r="4" fill="#574665"/>
-    <path d="M16 42 Q-12 25 -24 42" stroke="#ff6fa7" stroke-width="8" fill="none"/>
-    <path d="M16 50 Q-12 33 -24 50" stroke="#ffd65d" stroke-width="8" fill="none"/>
-    <path d="M16 58 Q-12 41 -24 58" stroke="#65e373" stroke-width="8" fill="none"/>
-    <path d="M16 66 Q-12 49 -24 66" stroke="#57a8f3" stroke-width="8" fill="none"/>
+
+  <g text-anchor="middle" filter="url(#smallGlow)">
+    <text x="750" y="150" font-family="Georgia,'Times New Roman',serif" font-size="104" font-style="italic" font-weight="700" fill="#fff" stroke="#7c5a98" stroke-width="5">uniRico</text>
+    <text x="750" y="222" font-family="Trebuchet MS,Arial,sans-serif" font-size="43" font-weight="800" letter-spacing="3" fill="#ff8bc8" stroke="#fff3ff" stroke-width="3">RAINBOW RICOCHET</text>
+    <text x="750" y="270" font-family="Trebuchet MS,Arial,sans-serif" font-size="25" font-weight="700" fill="#f8f3ff">The sky got grumpy. You have a horn. Fix it.</text>
   </g>
-  <g transform="translate(920 225)">
-    <circle cx="45" cy="46" r="34" fill="#626b82"/><circle cx="76" cy="42" r="40" fill="#626b82"/><circle cx="108" cy="48" r="30" fill="#626b82"/><rect x="16" y="47" width="120" height="37" rx="18" fill="#626b82"/>
-    <path d="M48 48 62 54M104 48 90 54" stroke="#34394b" stroke-width="6" stroke-linecap="round"/>
-    <path d="M66 71 Q77 62 89 71" fill="none" stroke="#34394b" stroke-width="5"/>
+
+  <g transform="translate(132 238)">
+    <ellipse cx="72" cy="62" rx="56" ry="39" fill="#fff"/>
+    <circle cx="48" cy="42" r="29" fill="#fff"/>
+    <polygon points="38,16 48,-2 58,18" fill="#f3a8c8"/>
+    <polygon points="55,18 84,-16 92,2 67,25" fill="#ffd25e"/>
+    <circle cx="55" cy="43" r="4.5" fill="#493453"/>
+    <circle cx="41" cy="56" r="5" fill="#ffbfd6"/>
+    <path d="M13 46 Q-17 30 -30 46" stroke="#ff696f" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M13 54 Q-17 38 -30 54" stroke="#ffbc55" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M13 62 Q-17 46 -30 62" stroke="#72e46a" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M13 70 Q-17 54 -30 70" stroke="#55e4d6" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M13 78 Q-17 62 -30 78" stroke="#72a8ff" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M13 86 Q-17 70 -30 86" stroke="#b97cff" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M116 70 Q148 58 170 76" stroke="#ff6b73" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M116 78 Q148 66 170 84" stroke="#ffd75d" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M116 86 Q148 74 170 92" stroke="#63e26f" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M116 94 Q148 82 170 100" stroke="#5da8f5" stroke-width="8" fill="none" stroke-linecap="round"/>
   </g>
-  <path d="M190 280 390 230 500 274 720 190 920 276" fill="none" stroke="#fff" stroke-width="8" opacity=".9" stroke-dasharray="3 12" stroke-linecap="round"/>
-  <g font-family="Trebuchet MS,Arial,sans-serif" text-anchor="middle">
-    <text x="600" y="155" fill="#fff" font-size="96" font-weight="800" letter-spacing="3">uniRico</text>
-    <text x="600" y="210" fill="#ffd5e8" font-size="30" font-weight="700" letter-spacing="5">RAINBOW RICOCHET</text>
-    <text x="600" y="355" fill="#fff" font-size="21" opacity=".9">AIM THE HORN · BEND THE RAINBOW · FIX THE SKY</text>
+
+  <path d="M224 258 C300 254 340 250 405 232" stroke="url(#rainbow)" stroke-width="11" fill="none" stroke-linecap="round" filter="url(#smallGlow)"/>
+  <circle cx="410" cy="230" r="14" fill="#fff" stroke="#ffb5e4" stroke-width="5" filter="url(#smallGlow)"/>
+  <path d="M425 234 L1014 394" stroke="#ff9de1" stroke-width="3" opacity=".36" stroke-dasharray="7 12" fill="none"/>
+  <circle cx="1018" cy="395" r="7" fill="#fff" filter="url(#smallGlow)"/>
+  <path d="M1023 391 L1302 236" stroke="url(#rainbow)" stroke-width="10" fill="none" stroke-linecap="round" filter="url(#smallGlow)"/>
+
+  <g transform="translate(625 405)">
+    <path d="M-62 0 A62 62 0 0 1 62 0" stroke="#b76cff" stroke-width="10" fill="none"/>
+    <path d="M-50 0 A50 50 0 0 1 50 0" stroke="#6f9fff" stroke-width="10" fill="none"/>
+    <path d="M-38 0 A38 38 0 0 1 38 0" stroke="#55e4d5" stroke-width="10" fill="none"/>
+    <path d="M-26 0 A26 26 0 0 1 26 0" stroke="#70e568" stroke-width="10" fill="none"/>
+    <path d="M-14 0 A14 14 0 0 1 14 0" stroke="#ffd95b" stroke-width="10" fill="none"/>
+    <circle cx="-65" cy="0" r="9" fill="#fff"/><circle cx="65" cy="0" r="9" fill="#fff"/>
   </g>
+
+  <rect x="987" y="335" width="25" height="112" rx="6" fill="#fff" opacity=".82" stroke="#ffe26d" stroke-width="4"/>
+  <rect x="992" y="340" width="15" height="102" rx="4" fill="url(#rainbow)" opacity=".5"/>
+
+  <g transform="translate(1170 158)">
+    <circle cx="38" cy="46" r="35" fill="#71758d"/><circle cx="70" cy="32" r="31" fill="#777b93"/><circle cx="102" cy="48" r="34" fill="#666b84"/><rect x="15" y="48" width="112" height="35" rx="18" fill="#6b6f88"/>
+    <circle cx="58" cy="50" r="4.5" fill="#30243d"/><circle cx="88" cy="50" r="4.5" fill="#30243d"/>
+    <path d="M48 39 L66 44M98 39 L80 44" stroke="#30243d" stroke-width="4" stroke-linecap="round"/>
+    <path d="M58 69 Q73 59 89 69" stroke="#30243d" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <polygon points="42,94 56,94 48,116 62,116 38,148 46,124 34,124" fill="#ffd651"/>
+    <polygon points="88,95 102,95 94,117 108,117 84,147 92,124 80,124" fill="#ffd651"/>
+    <circle cx="72" cy="54" r="76" fill="none" stroke="#ad7ce8" stroke-width="7" opacity=".28"/>
+  </g>
+
+  <g transform="translate(1320 194)" filter="url(#smallGlow)">
+    <circle cx="34" cy="42" r="31" fill="#fff"/><circle cx="66" cy="26" r="28" fill="#fff"/><circle cx="98" cy="44" r="31" fill="#fff"/><rect x="12" y="42" width="108" height="34" rx="17" fill="#fff"/>
+    <circle cx="56" cy="48" r="4" fill="#59456d"/><circle cx="82" cy="48" r="4" fill="#59456d"/>
+    <path d="M54 61 Q69 74 84 61" stroke="#59456d" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="45" cy="61" r="4.5" fill="#ffbed4"/><circle cx="94" cy="61" r="4.5" fill="#ffbed4"/>
+  </g>
+
+  <text x="750" y="470" text-anchor="middle" font-family="Trebuchet MS,Arial,sans-serif" font-size="18" font-weight="700" fill="#fff" opacity=".86">AIM THE HORN · BEND THE RAINBOW · FIX THE SKY</text>
 </svg>
