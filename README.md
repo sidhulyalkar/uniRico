@@ -20,45 +20,41 @@
 
 ## ✨ What is uniRico?
 
-**uniRico** is a compact HTML5 Canvas puzzle game where you aim a unicorn's horn and fire a fading rainbow projectile through a magical sky.
+**uniRico** is a compact HTML5 Canvas puzzle game where you aim a unicorn's horn and fire a fading rainbow through a magical sky.
 
 The shot can ricochet from prisms, pass through rainbow arches, bend in wind, curve around moonbow gravity fields, pick up spin or charge, and interact with other magical effects. Each level contains **angry gray storm clouds** that must be reached in the correct order and with the correct number of bounces. Hit them correctly and the rainbow cheers them up, turning them into happy white clouds.
 
-The entire fantasy can be explained in one line:
-
 > **Aim horn → fire rainbow → bend the trajectory → cheer up the clouds.**
 
-The presentation is intentionally cute. The puzzle system underneath it is not. Later levels combine moving geometry, timing windows, portals, continuous forces, and exact reflection counts into long-form trajectory problems.
+The presentation is deliberately cute. The puzzle system underneath it is not. Later levels combine moving geometry, timing windows, portals, continuous forces, persistent projectile state, and exact reflection counts into long-form trajectory problems.
 
 ---
 
 ## 🎮 The play loop
 
 1. **Aim the horn** with the mouse or pointer.
-2. **Read the white trajectory preview** and the moving sky systems.
+2. **Read the white trajectory preview** and moving sky systems.
 3. **Fire the rainbow** and commit to the shot.
 4. **Ricochet through prisms, arches, wind, gravity, spin, and magic.**
 5. **Reach each grumpy cloud with exactly the required bounce count.**
-6. **Turn it happy** and continue the chain until the sky is restored.
+6. **Turn it happy** and continue the sequence until the sky is restored.
 
 A successful shot is both the solution and the spectacle: the projectile leaves a fading multi-band rainbow ribbon across the level.
 
 ---
 
-## 🌈 Current release
+## 🌈 Current release: v0.3.0
 
-### v0.3.0
-
-The current game includes:
+The current game contains:
 
 - **40 handcrafted puzzle levels**
-- procedural unicorn launcher drawn entirely with Canvas
-- six-band rainbow projectile with a fading ribbon tail
+- a procedural Canvas-drawn unicorn launcher
+- a six-band rainbow projectile with a fading ribbon tail
 - angry storm-cloud targets that become happy when cleared
-- exact-bounce lock logic
+- exact-bounce target logic
 - moving targets and moving reflectors
 - rainbow-arch portals
-- wind / cloud gust fields
+- wind / cloud-gust fields
 - dream-cloud slow zones
 - stardust acceleration zones
 - moonbow gravity fields
@@ -67,11 +63,11 @@ The current game includes:
 - aurora resonance gates
 - procedural particles, sparkles, clouds, rainbows, and audio
 - local best scores, stars, shots, and completion records
-- level select
-- built-in help tools: **Show Aim**, **Watch Mirrored Shot**, and **Watch Solution**
+- level select and familiar navigation
+- built-in help: **Show Aim**, **Watch Mirrored Shot**, and **Watch Solution**
 - no external runtime libraries or downloaded game assets
 
-The competition runtime remains a single self-contained `index.html`.
+The competition-oriented runtime remains a single self-contained `index.html`.
 
 ---
 
@@ -91,9 +87,9 @@ The competition runtime remains a single self-contained `index.html`.
 
 ---
 
-## ☁️ A game language built around the theme
+## ☁️ The theme is the game language
 
-The goal was not to put a unicorn sprite on top of an unrelated physics game. The mechanics themselves are translated into one coherent sky-magic vocabulary.
+The goal was not to put unicorn art on top of an unrelated physics game. The mechanics themselves are translated into one coherent sky-magic vocabulary.
 
 | Gameplay function | uniRico presentation |
 |---|---|
@@ -115,79 +111,93 @@ The goal was not to put a unicorn sprite on top of an unrelated physics game. Th
 | Committed shot | Rainbow ribbon |
 | Learned solution | Faint solution trace |
 
-This matters because the theme becomes part of how players read the puzzle rather than decoration layered on after the fact.
+That makes the theme part of how the player reads the puzzle rather than decoration layered on afterward.
 
 ---
 
 ## 🧠 Puzzle design
 
-Every cloud target encodes a required bounce count. The shot must reach the active cloud with **exactly** that number of reflections before the ordered sequence can advance.
+Every active cloud encodes a required bounce count. The shot must reach it with **exactly** that number of reflections before the ordered sequence can advance.
 
-The campaign then composes that rule with different systems:
+The campaign then composes that rule with other systems:
 
-- **moving geometry** asks the player to solve where an object *will be*, not where it is now;
+- **moving geometry** asks where an object *will be*, not where it is now;
 - **wind and gravity** convert straight-line aiming into continuous trajectory shaping;
-- **spin and polarity** create persistent state carried across the shot;
+- **spin and polarity** create state that persists across the shot;
 - **portals** break local spatial intuition and create long routes;
-- **timed barriers and resonance gates** make arrival time and speed part of the solution;
-- **reduced preview distance** in later levels asks the player to reason beyond what the guide explicitly shows.
+- **timed barriers and resonance gates** make arrival time and speed part of the answer;
+- **shorter late-game previews** force the player to reason beyond what the guide explicitly shows.
 
-The intention is a difficulty curve that starts visually obvious and ends with compact little machines that the player learns to read.
+The intended difficulty curve starts with readable one-idea puzzles and ends with compact little sky-machines that the player learns to decode.
 
 ---
 
-## 🔍 Readable source vs. competition build
+# 🔍 Two views of the same game
 
-js13kGames is fundamentally about the tiny shipped package, but the public repository should still be useful to people who want to learn from the implementation.
+A size-constrained competition artifact and a good public codebase have different needs. This repository deliberately supports both.
 
-This repository therefore exposes **two views of the same game**:
+## 1. `index.html` — byte-conscious runtime
 
-### 1. `index.html` — competition-oriented runtime
+The root build keeps HTML, CSS, JavaScript, level data, rendering, audio, and UI together so it can compress efficiently for the js13k archive.
 
-The single-file build keeps HTML, CSS, JavaScript, level data, rendering, audio, and UI together so it can be compressed efficiently for the 13KB archive.
+## 2. `src/` — readable development mirror
 
-### 2. `src/` — readable development mirror
-
-The same v0.3.0 code has been split into inspectable files:
+The same v0.3.0 systems are split into inspectable source files:
 
 ```text
 src/
-├── index.html    # readable development shell
-├── style.css     # HUD / page styling
-├── levels.js     # field rigs + all 40 level definitions
-├── game.js       # formatted runtime, simulation, rendering, UI, audio
-└── README.md     # how the readable mirror maps to the tiny build
+├── README.md
+├── index.html
+├── style.css
+├── levels.js
+└── runtime/
+    ├── core.js
+    ├── physics.js
+    ├── render-world.js
+    ├── render-entities.js
+    ├── render-hud.js
+    └── ui.js
 ```
 
-The readable mirror intentionally preserves compact runtime identifiers where changing them would make comparison with the shipping artifact harder. **`docs/SOURCE_GUIDE.md` provides the descriptive symbol map** and explains what the compact functions and level keys mean.
+The readable mirror preserves some compact identifiers where changing them would make comparison with the shipping artifact harder. [`docs/SOURCE_GUIDE.md`](docs/SOURCE_GUIDE.md) provides the descriptive symbol map, level-key reference, data shapes, execution flow, and “where do I edit this?” guide.
 
-Recommended reading order:
+### Recommended reading order
 
-1. [`README.md`](README.md)
-2. [`docs/SOURCE_GUIDE.md`](docs/SOURCE_GUIDE.md)
-3. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-4. [`src/levels.js`](src/levels.js)
-5. [`src/game.js`](src/game.js)
-6. [`index.html`](index.html) when you want to see the byte-conscious shipped form
+1. [`docs/SOURCE_GUIDE.md`](docs/SOURCE_GUIDE.md)
+2. [`src/levels.js`](src/levels.js)
+3. [`src/runtime/core.js`](src/runtime/core.js)
+4. [`src/runtime/physics.js`](src/runtime/physics.js)
+5. [`src/runtime/render-world.js`](src/runtime/render-world.js)
+6. [`src/runtime/render-entities.js`](src/runtime/render-entities.js)
+7. [`src/runtime/render-hud.js`](src/runtime/render-hud.js)
+8. [`src/runtime/ui.js`](src/runtime/ui.js)
+9. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+10. [`index.html`](index.html) when you want to see the compressed competition-oriented form
 
 ---
 
-## 🗂 Repository layout
+## 🗂 Repository map
 
 ```text
 uniRico/
 ├── index.html                         # Complete playable v0.3.0 runtime
 ├── README.md                          # Project showcase + entry point
-├── CHANGELOG.md                       # Release history
+├── CHANGELOG.md                       # Release / repository history
 ├── .gitignore
 ├── src/
-│   ├── README.md                      # Readable-source notes
-│   ├── index.html                     # Development shell
-│   ├── style.css                      # Extracted readable CSS
-│   ├── levels.js                      # Campaign + reusable rigs
-│   └── game.js                        # Formatted runtime source
+│   ├── README.md                      # How to read and run the source mirror
+│   ├── index.html                     # Readable development shell
+│   ├── style.css                      # Extracted HUD / page styling
+│   ├── levels.js                      # Campaign + reusable field rigs
+│   └── runtime/
+│       ├── core.js                    # State, motion, records, audio
+│       ├── physics.js                 # Projectile simulation and targets
+│       ├── render-world.js            # Environment / mechanic rendering
+│       ├── render-entities.js         # Unicorn, clouds, trails, particles
+│       ├── render-hud.js              # HUD, menus, help, level select
+│       └── ui.js                      # Frame loop and input state machine
 └── docs/
-    ├── banner.svg                     # README cover banner
+    ├── banner.svg                     # 3:1 README cover banner
     ├── SOURCE_GUIDE.md                # Symbol map + reading guide
     ├── ARCHITECTURE.md                # Systems / engine walkthrough
     └── COMPETITION_CHECKLIST.md       # Release and submission gate
@@ -211,24 +221,24 @@ flowchart LR
     State --> Save[localStorage Records]
 ```
 
-Key implementation choices:
+The important implementation choices are:
 
-- **960 × 600 logical world** scaled to the browser window
-- **fixed simulation steps** independent of rendering cadence
-- **one simulation path** shared by live projectile and trajectory prediction
-- **declarative level objects** with missing mechanic arrays meaning “not present”
+- **960 × 600 logical world** scaled into the browser window
+- **fixed simulation steps** independent of render cadence
+- **one physics path** shared by the live projectile and trajectory prediction
+- **declarative level objects** where absent arrays mean absent mechanics
 - **shared field rigs** reused by advanced levels to save bytes
-- **procedural Canvas visuals** instead of sprite assets
+- **procedural Canvas art** instead of sprite assets
 - **procedural Web Audio** instead of audio files
 - **packed solution data** for hints and demonstrations
 
-For the deep dive, see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+For the detailed rationale, see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ---
 
 ## 🧩 Compact level format
 
-A level is a small object with a few common keys:
+A level is a small object with recurring keys:
 
 | Key | Meaning |
 |---|---|
@@ -250,13 +260,41 @@ A level is a small object with a few common keys:
 | `r` | resonance gates |
 | `v` | hazards |
 
-A target uses the compact tuple:
+A cloud target uses:
 
 ```text
 [x, y, requiredBounces, motionMode, amplitude, speed, phase, radius]
 ```
 
-Later levels spread reusable `F0...F9` rigs into the level object. This is one of the main ways the campaign gets mechanically dense without paying to restate the same environment data over and over.
+Later levels spread reusable `F0...F9` field rigs into the level object. That is one of the main ways the campaign becomes mechanically dense without restating the same environment data over and over.
+
+---
+
+## 🧵 Trace one shot through the source
+
+A useful way to learn the code is to follow a single click:
+
+```text
+pointer aim
+   ↓
+$U / $3          input + fire
+   ↓
+$i               construct projectile
+   ↓
+$Q               fixed simulation update
+   ↓
+$7               advance live shot / target progression
+   ↓
+_f               one physics tick
+   ↓
+Z / _e / $O ...  reflections, walls, portals, fields
+   ↓
+$C               draw fading rainbow ribbon
+   ↓
+win / $4         complete or fail
+```
+
+The compact names are mapped to descriptive meanings in [`docs/SOURCE_GUIDE.md`](docs/SOURCE_GUIDE.md). The source is much easier to understand once that one lifecycle is clear.
 
 ---
 
@@ -264,35 +302,45 @@ Later levels spread reusable `F0...F9` rigs into the level object. This is one o
 
 ### Competition-style build
 
-No install step is required. Open:
-
-```text
-index.html
-```
-
-or serve the repository:
+No install step is required. Open `index.html`, or serve the repository:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-then open `http://localhost:8000`.
+Then open:
+
+```text
+http://localhost:8000/
+```
 
 ### Readable development mirror
 
-Serve the repository and open:
+With the same server running, open:
 
 ```text
 http://localhost:8000/src/
 ```
 
-The `src/` version loads `levels.js`, `game.js`, and `style.css` separately so the implementation is easier to inspect in browser developer tools.
+The development shell loads the readable source in dependency order:
+
+```text
+levels.js
+runtime/core.js
+runtime/physics.js
+runtime/render-world.js
+runtime/render-entities.js
+runtime/render-hud.js
+runtime/ui.js
+```
+
+That makes the systems easier to inspect directly in browser developer tools without introducing a framework or build dependency.
 
 ---
 
-## 📦 js13kGames size target
+## 📦 js13k size checkpoint
 
-The standard js13kGames archive ceiling is **13 KiB = 13,312 bytes**.
+The standard archive ceiling is **13 KiB = 13,312 bytes**.
 
 The locally frozen v0.3.0 competition archive currently measures:
 
@@ -302,7 +350,7 @@ The locally frozen v0.3.0 competition archive currently measures:
 SHA-256: 1588b481c786939a99dd360409b42eb425889cec1b04fc52ba66acf7b9c5264e
 ```
 
-The exact submission ZIP is deliberately kept separate from the readable repository tree. When the final Desktop candidate is frozen, it should be attached to a tagged release so the repository commit, ZIP artifact, byte count, and hash form one reproducible checkpoint.
+The exact submission ZIP is kept separate from the readable repository tree. When the final Desktop candidate is frozen, it should be attached to a tagged release so the source commit, ZIP artifact, byte count, and hash form one reproducible checkpoint.
 
 See [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md).
 
@@ -323,10 +371,10 @@ Before a competition build is frozen, the candidate should pass:
 9. solution playback check
 10. local record persistence check
 11. resize and multiple desktop aspect-ratio checks
-12. SHA-256 freeze of the exact submitted archive
-13. public readable-source review
+12. readable-source mirror review
+13. SHA-256 freeze of the exact submitted archive
 
-The expanded checklist lives in [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md).
+The expanded gate lives in [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md).
 
 ---
 
@@ -334,29 +382,15 @@ The expanded checklist lives in [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITI
 
 uniRico aims for **cute clarity rather than decorative overload**:
 
-- a darker twilight-blue playfield keeps white trajectory lines readable;
+- the twilight-blue playfield keeps white prediction lines readable;
 - pale cloud-shaped HUD panels separate information from the arena;
-- rainbow saturation is reserved for motion, interaction, and success;
+- rainbow saturation is concentrated around motion, interaction, and success;
 - grumpy gray clouds communicate unresolved objectives immediately;
 - happy white clouds make restoration emotionally obvious;
-- environmental systems remain visually distinguishable even when several overlap;
-- menus use conventional words such as **Levels**, **Help**, and **Restart Level** even when the world itself is whimsical.
+- environmental systems remain distinguishable even when several overlap;
+- menus use familiar words such as **Levels**, **Help**, and **Restart Level** even when the world itself is whimsical.
 
 The player should be solving the puzzle, not solving the interface.
-
----
-
-## 🛣 Development direction
-
-Current priorities are:
-
-- keep the rainbow ricochet readable and satisfying;
-- make every mechanic feel native to unicorn / rainbow / sky magic;
-- teach bounce-count logic with minimal text;
-- preserve meaningful difficulty instead of becoming only a visual toy;
-- spend bytes on mechanics, feedback, or clarity;
-- keep the Desktop package under the js13k ceiling;
-- keep the public source genuinely useful as a learning artifact.
 
 ---
 
@@ -366,7 +400,7 @@ uniRico is being developed for the **Desktop** category of **js13kGames 2026**, 
 
 Competition site: `https://js13kgames.com/2026/`
 
-The tiny build is the constraint. This repository is the explanation.
+The tiny build is the constraint. **This repository is the explanation.**
 
 ---
 
