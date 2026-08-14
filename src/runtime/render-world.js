@@ -1,0 +1,187 @@
+/**
+ * uniRico runtime: procedural Canvas rendering and themed visual systems.
+ */
+
+// -----------------------------------------------------------------------------
+// Canvas rendering helpers and themed world renderers
+// -----------------------------------------------------------------------------
+function $M() { let [s, x, y] = tr(); X.setTransform($V * s, 0, 0, $V * s, $V * x, $V * y); } function K(x, y, r, c, st = 0) { X.beginPath(); X.arc(x, y, r, 0, T); st ? (X.strokeStyle = c, X.stroke()) : (X.fillStyle = c, X.fill()); } function Cld(x, y, r, c, f = 0) { K(x - r * .55, y, r * .52, c); K(x, y - r * .22, r * .68, c); K(x + r * .55, y, r * .48, c); X.fillStyle = c; X.fillRect(x - r, y - r * .02, r * 2, r * .52); if (f) {
+    K(x - r * .28, y + r * .08, 2, '#586078');
+    K(x + r * .28, y + r * .08, 2, '#586078');
+    X.strokeStyle = '#586078';
+    X.lineWidth = 2;
+    if (f < 0) {
+        X.beginPath();
+        X.moveTo(x - r * .43, y - r * .07);
+        X.lineTo(x - r * .15, y);
+        X.moveTo(x + r * .43, y - r * .07);
+        X.lineTo(x + r * .15, y);
+        X.stroke();
+    }
+    X.beginPath();
+    X.arc(x, y + r * .23, r * .22, f > 0 ? 0 : P, f > 0 ? P : T);
+    X.stroke();
+} } function _h() { let g = X.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#173f70'); g.addColorStop(.62, '#3f72a3'); g.addColorStop(1, '#7787b5'); X.fillStyle = g; X.fillRect(0, 0, W, H); for (let i = 0; i < 15; i++) {
+    let x = (i * 179 + J * .05 * (i % 3 + 1)) % (W + 180) - 90, y = 80 + (i * 107) % 480, r = 18 + (i % 4) * 6;
+    Cld(x, y, r, '#ffffff4a');
+} for (let i = 0; i < 28; i++) {
+    let x = (i * 137 + J * .12 * (i % 3 + 1)) % W, y = (i * 83) % H, a = .25 + .45 * Math.sin(J * .04 + i);
+    X.fillStyle = `rgba(255,255,255,${a})`;
+    X.fillRect(x - 2, y, 5, 1);
+    X.fillRect(x, y - 2, 1, 5);
+} for (let i = 0; i < 6; i++) {
+    X.strokeStyle = `hsla(${i * 55},90%,66%,.13)`;
+    X.lineWidth = 10;
+    X.beginPath();
+    X.arc(W / 2, H + 235, 470 - i * 12, P, T);
+    X.stroke();
+} } function $G(x, y, m, a, s, p) { if (!m)
+    return; X.strokeStyle = '#fff8'; X.lineWidth = 1; X.setLineDash([3, 9]); X.beginPath(); if (m == 1) {
+    X.moveTo(x - a, y);
+    X.lineTo(x + a, y);
+}
+else if (m == 2) {
+    X.moveTo(x, y - a);
+    X.lineTo(x, y + a);
+}
+else if (m == 3)
+    X.arc(x, y, a, 0, T);
+else
+    for (let i = 0; i < 60; i++) {
+        let q = i / 59 * T, u = x + Math.sin(q) * a, v = y + Math.sin(q * 2) * a * .55;
+        i ? X.lineTo(u, v) : X.moveTo(u, v);
+    } X.stroke(); X.setLineDash([]); } function $R() { for (let w of A(O(), 'w')) {
+    $G(w[0] + w[2] / 2, w[1] + w[3] / 2, w[4], w[5], w[6], w[7]);
+    let q = wp(w, J), o = wp(w, J - 1), mv = Math.hypot(q[0] - o[0], q[1] - o[1]);
+    X.fillStyle = '#fffb';
+    X.fillRect(q[0], q[1], q[2], q[3]);
+    X.strokeStyle = mv ? '#ffd66f' : '#fff';
+    X.lineWidth = 2;
+    X.strokeRect(q[0] + .5, q[1] + .5, q[2] - 1, q[3] - 1);
+    for (let z = 5; z < (q[2] > q[3] ? q[2] : q[3]); z += 14) {
+        X.fillStyle = `hsl(${z * 19},88%,68%)`;
+        q[2] > q[3] ? X.fillRect(q[0] + z, q[1], 6, 3) : X.fillRect(q[0], q[1] + z, 3, 6);
+    }
+} } function $I() { for (let o of A(O(), 'o'))
+    for (let j = 0; j < 2; j++) {
+        let b = [o[j ? 2 : 0], o[j ? 3 : 1]], k = j ? 9 : 5;
+        $G(b[0], b[1], o[k], o[k + 1], o[k + 2], o[k + 3]);
+        let q = pp(o, j, J), r = 17 + Math.sin(J * .08 + j) * 2;
+        for (let z = 0; z < 6; z++) {
+            X.lineWidth = 3;
+            X.beginPath();
+            X.arc(q[0], q[1] + 5, r + z * 3, P, T);
+            X.strokeStyle = `hsla(${z * 55},95%,67%,.82)`;
+            X.stroke();
+        }
+        Cld(q[0] - r, q[1] + 7, 7, '#fff9');
+        Cld(q[0] + r, q[1] + 7, 7, '#fff9');
+    } } function fans() { for (let f of A(O(), 'f')) {
+    let a = Math.atan2(f[5], f[4]), dx = Math.cos(a), dy = Math.sin(a);
+    Cld(f[0] + f[2] / 2, f[1] + f[3] / 2, 18, '#fff6');
+    for (let i = 0; i < 9; i++) {
+        let q = (J * 1.9 + i * 47) % Math.max(f[2], f[3]), x = f[0] + (i * 73 % f[2]) + dx * q * .25, y = f[1] + (i * 41 % f[3]) + dy * q * .25;
+        X.strokeStyle = '#fffc';
+        X.lineWidth = 2;
+        X.beginPath();
+        X.moveTo(x, y);
+        X.quadraticCurveTo(x - dx * 12 - dy * 7, y - dy * 12 + dx * 7, x - dx * 28, y - dy * 28);
+        X.stroke();
+    }
+} } function $S() { for (let z of A(O(), 'z')) {
+    for (let i = 0; i < 12; i++) {
+        let x = z[0] + 12 + (i * 47) % (z[2] - 20), y = z[1] + 18 + (i * 31) % (z[3] - 24);
+        Cld(x, y, 13 + (i % 3) * 3, z[4] < 1 ? '#fff7' : '#fff1a866');
+    }
+} for (let a of A(O(), 'a')) {
+    for (let i = 0; i < 18; i++) {
+        let x = a[0] + 8 + (i * 41) % a[2], y = a[1] + 8 + (i * 29) % a[3], h = (i * 67 + J * 2) % 360;
+        X.fillStyle = `hsl(${h},95%,70%)`;
+        X.fillRect(x - 2, y, 5, 1);
+        X.fillRect(x, y - 2, 1, 5);
+    }
+    X.strokeStyle = '#ffd36d99';
+    X.lineWidth = 2;
+    for (let x = a[0] + 18; x < a[0] + a[2]; x += 30) {
+        let y = a[1] + a[3] / 2, q = 8 + Math.sin(J * .08 + x) * 2;
+        X.beginPath();
+        X.moveTo(x - q, y - q);
+        X.lineTo(x, y);
+        X.lineTo(x - q, y + q);
+        X.stroke();
+    }
+} } function $P() { for (let g of A(O(), 'g')) {
+    let G = X.createRadialGradient(g[0], g[1], 4, g[0], g[1], g[3]);
+    G.addColorStop(0, '#fff8d655');
+    G.addColorStop(.25, '#b89cff26');
+    G.addColorStop(1, '#91cfff00');
+    K(g[0], g[1], g[3], G);
+    for (let r = 45; r < g[3]; r += 55) {
+        X.lineWidth = 2;
+        K(g[0], g[1], r, `hsla(${r},80%,70%,.18)`, 1);
+    }
+    K(g[0], g[1], 18, '#fff5b8');
+    K(g[0] + 7, g[1] - 5, 16, '#b9dfff');
+} for (let k of A(O(), 'k')) {
+    let c = k[4] > 0 ? '#ff8eae' : '#7bcfff';
+    K(k[0], k[1], k[3], '#ffffff12');
+    X.strokeStyle = c;
+    X.lineWidth = 3;
+    X.beginPath();
+    X.moveTo(k[0] - 14, k[1]);
+    X.lineTo(k[0] + 14, k[1]);
+    X.moveTo(k[0], k[1] - 14);
+    X.lineTo(k[0], k[1] + 14);
+    X.stroke();
+    K(k[0], k[1], 5, '#fff');
+    X.fillStyle = c;
+    X.font = 'bold 14px sans-serif';
+    X.textAlign = 'center';
+    X.fillText(k[4] > 0 ? '+' : '−', k[0], k[1] + 28);
+} } function $v() { for (let s of A(O(), 's')) {
+    let x = s[0] + s[2] / 2, y = s[1] + s[3] / 2;
+    X.strokeStyle = '#d887ff99';
+    X.lineWidth = 2;
+    for (let r = 10; r < Math.min(s[2], s[3]) * .44; r += 10) {
+        X.beginPath();
+        X.arc(x, y, r, J * .03 + r * .1, J * .03 + r * .1 + (s[4] < 0 ? -1 : 1) * P * .95);
+        X.stroke();
+    }
+    for (let i = 0; i < 8; i++)
+        K(x + Math.sin(i * 8 + J * .03) * s[2] * .4, y + Math.cos(i * 5 + J * .02) * s[3] * .4, 2, `hsl(${i * 47},90%,70%)`);
+} for (let c of A(O(), 'c')) {
+    let h = c[4] > 0 ? 340 : 190;
+    for (let i = 0; i < 15; i++) {
+        let x = c[0] + 10 + (i * 37) % c[2], y = c[1] + 10 + (i * 29) % c[3];
+        K(x, y, 1.5, `hsla(${h + i * 7},90%,70%,.55)`);
+    }
+    X.fillStyle = `hsl(${h},80%,60%)`;
+    X.font = 'bold 20px sans-serif';
+    X.textAlign = 'center';
+    X.fillText(c[4] > 0 ? '+' : '−', c[0] + c[2] / 2, c[1] + c[3] / 2);
+} } function $B() { for (let b of A(O(), 'b')) {
+    let on = ((J + b[6]) % b[4]) < b[5], c = on ? '#687386ee' : '#fff7';
+    for (let y = b[1] + 8; y < b[1] + b[3]; y += 18)
+        Cld(b[0] + b[2] / 2, y, 10, c, on ? -1 : 0);
+    if (on) {
+        X.strokeStyle = '#ffe16a';
+        X.lineWidth = 2;
+        for (let y = b[1] + 18; y < b[1] + b[3]; y += 54) {
+            X.beginPath();
+            X.moveTo(b[0] - 3, y);
+            X.lineTo(b[0] + 8, y + 8);
+            X.lineTo(b[0], y + 16);
+            X.stroke();
+        }
+    }
+} for (let r of A(O(), 'r')) {
+    let sp = B ? Math.hypot(B.vx, B.vy) : 7, on = sp >= r[4] && sp <= r[5];
+    for (let y = r[1] + 7; y < r[1] + r[3]; y += 13) {
+        X.fillStyle = on ? `hsl(${y},80%,70%)` : '#fff9';
+        X.fillRect(r[0] - 3, y, r[2] + 6, 4);
+    }
+} for (let v of A(O(), 'v')) {
+    Cld(v[0], v[1], v[2], '#55586f', -1);
+    X.lineWidth = 2;
+    K(v[0], v[1], v[2] + 7, '#b77cff99', 1);
+} }
