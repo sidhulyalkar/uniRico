@@ -10,9 +10,14 @@ The game is size-constrained, so the shipping runtime deliberately uses short id
 
 1. [`README.md`](../README.md) — what the game is and why the systems exist
 2. [`src/levels.js`](../src/levels.js) — the declarative campaign data
-3. [`src/game.js`](../src/game.js) — formatted runtime source
-4. [`docs/ARCHITECTURE.md`](ARCHITECTURE.md) — design and engine-level explanation
-5. [`index.html`](../index.html) — the actual compact single-file runtime
+3. [`src/runtime/core.js`](../src/runtime/core.js) — state, motion, lifecycle, records, audio
+4. [`src/runtime/physics.js`](../src/runtime/physics.js) — projectile simulation and cloud progression
+5. [`src/runtime/render-world.js`](../src/runtime/render-world.js) — environment / mechanics rendering
+6. [`src/runtime/render-entities.js`](../src/runtime/render-entities.js) — unicorn, clouds, traces, rainbow projectile
+7. [`src/runtime/render-hud.js`](../src/runtime/render-hud.js) — HUD, menus, levels, help
+8. [`src/runtime/ui.js`](../src/runtime/ui.js) — frame composition and input
+9. [`docs/ARCHITECTURE.md`](ARCHITECTURE.md) — design and engine-level explanation
+10. [`index.html`](../index.html) — the actual compact single-file runtime
 
 The files in `src/` are a readability mirror of the current v0.3.0 runtime. They preserve compact identifiers where doing so makes comparison with the shipped artifact easier.
 
@@ -32,7 +37,19 @@ Treat the runtime as seven conceptual modules:
 7. Fixed-step simulation loop
 ```
 
-Those modules live in one script in the competition build, but they are conceptually separate.
+The readable mirror maps those concepts onto files:
+
+```text
+levels.js
+runtime/core.js
+runtime/physics.js
+runtime/render-world.js
+runtime/render-entities.js
+runtime/render-hud.js
+runtime/ui.js
+```
+
+Those systems are folded into one script in the competition-oriented build.
 
 ---
 
@@ -44,7 +61,7 @@ The logical game world is:
 960 × 600
 ```
 
-The canvas scales to fit the browser while pointer coordinates are converted back into this logical space. That means level geometry, collision detection, prediction, and rendering all operate in one stable coordinate system.
+The canvas scales to fit the browser while pointer coordinates are converted back into this logical space. Level geometry, collision detection, prediction, and rendering therefore operate in one stable coordinate system.
 
 Gameplay advances in approximately **16.667 ms fixed simulation steps** inside a `requestAnimationFrame` loop. The render rate can vary while the projectile model remains comparatively stable.
 
@@ -104,8 +121,6 @@ The later tuple fields animate targets using the shared motion function.
 
 The same small periodic-motion helper is shared by targets, moving walls, and portal endpoints.
 
-Conceptually:
-
 | Mode | Motion |
 |---|---|
 | `0` | stationary |
@@ -120,7 +135,7 @@ Reusing the same primitive across multiple mechanic families is one of the centr
 
 # 6. Shared field rigs
 
-`F0` through `F9` in `src/levels.js` are reusable mechanical environments.
+`F0` through `F9` in [`src/levels.js`](../src/levels.js) are reusable mechanical environments.
 
 A later campaign level can write:
 
@@ -173,6 +188,8 @@ validate gates / hazards
 check active cloud target
 ```
 
+The main implementation lives in [`src/runtime/physics.js`](../src/runtime/physics.js).
+
 ---
 
 # 8. Why prediction and the live shot agree
@@ -195,109 +212,115 @@ The compact build uses short names to save bytes. The table below gives the desc
 
 ## Layout / data helpers
 
-| Compact symbol | Descriptive meaning |
-|---|---|
-| `$x` | resize canvas / update device pixel ratio |
-| `tr` | calculate logical-world scale and offset |
-| `$L` | convert pointer event to world coordinates |
-| `O` | get current level |
-| `A` | get mechanic array or empty array |
-| `$w` | shared periodic motion function |
-| `tp` | target position at simulation time |
-| `wp` | wall position at simulation time |
-| `pp` | portal endpoint position at simulation time |
+| Compact symbol | Descriptive meaning | Readable file |
+|---|---|---|
+| `$x` | resize canvas / update device pixel ratio | `runtime/core.js` |
+| `tr` | calculate logical-world scale and offset | `runtime/core.js` |
+| `$L` | convert pointer event to world coordinates | `runtime/core.js` |
+| `O` | get current level | `runtime/core.js` |
+| `A` | get mechanic array or empty array | `runtime/core.js` |
+| `$w` | shared periodic motion function | `runtime/core.js` |
+| `tp` | target position at simulation time | `runtime/core.js` |
+| `wp` | wall position at simulation time | `runtime/core.js` |
+| `pp` | portal endpoint position at simulation time | `runtime/core.js` |
 
 ## Records / lifecycle
 
-| Compact symbol | Descriptive meaning |
-|---|---|
-| `$2` | recompute campaign totals |
-| `$o` | persist records / current level |
-| `_c` | format simulation time |
-| `$Y` | level par time |
-| `sol` | decode compact solution angle / delay |
-| `$Z` | calculate score and star rank |
-| `$0` | refresh HUD |
-| `$1` | reset current attempt |
-| `$b` | launch / enter a level |
+| Compact symbol | Descriptive meaning | Readable file |
+|---|---|---|
+| `$2` | recompute campaign totals | `runtime/core.js` |
+| `$o` | persist records / current level | `runtime/core.js` |
+| `_c` | format simulation time | `runtime/core.js` |
+| `$Y` | level par time | `runtime/core.js` |
+| `sol` | decode compact solution angle / delay | `runtime/core.js` |
+| `$Z` | calculate score and star rank | `runtime/core.js` |
+| `$0` | refresh HUD | `runtime/core.js` |
+| `$1` | reset current attempt | `runtime/core.js` |
+| `$b` | launch / enter a level | `runtime/core.js` |
 
 ## Audio / feedback
 
-| Compact symbol | Descriptive meaning |
-|---|---|
-| `_i` | get/resume AudioContext |
-| `$j` | synthesize a short tone |
-| `$u` | spawn particle burst |
-| `_d` | spawn floating feedback text |
+| Compact symbol | Descriptive meaning | Readable file |
+|---|---|---|
+| `_i` | get/resume AudioContext | `runtime/core.js` |
+| `$j` | synthesize a short tone | `runtime/core.js` |
+| `$u` | spawn particle burst | `runtime/core.js` |
+| `_d` | spawn floating feedback text | `runtime/core.js` |
 
 ## Physics
 
-| Compact symbol | Descriptive meaning |
-|---|---|
-| `Z` | reflect projectile velocity and count bounce |
-| `_e` | moving-wall collision |
-| `$E` | timed-barrier collision |
-| `$O` | portal transfer / portal hold behavior |
-| `$D` | one-shot accelerator / spin / charge field transitions |
-| `_f` | advance one projectile simulation tick |
-| `$i` | construct a new projectile |
+| Compact symbol | Descriptive meaning | Readable file |
+|---|---|---|
+| `Z` | reflect projectile velocity and count bounce | `runtime/physics.js` |
+| `_e` | moving-wall collision | `runtime/physics.js` |
+| `$E` | timed-barrier collision | `runtime/physics.js` |
+| `$O` | portal transfer / portal hold behavior | `runtime/physics.js` |
+| `$D` | one-shot accelerator / spin / charge field transitions | `runtime/physics.js` |
+| `_f` | advance one projectile simulation tick | `runtime/physics.js` |
+| `$i` | construct a new projectile | `runtime/physics.js` |
 
 ## Shot / target lifecycle
 
-| Compact symbol | Descriptive meaning |
-|---|---|
-| `$3` | fire current aimed shot |
-| `$z` | archive previous path |
-| `$4` | fail / end a missed shot |
-| `win` | score and complete the level |
-| `$5` | advance to next level / finish campaign |
-| `$6` | enter automated help playback |
-| `$p` | finish solution / mirrored playback |
-| `$7` | advance live shot and validate current cloud |
+| Compact symbol | Descriptive meaning | Readable file |
+|---|---|---|
+| `$3` | fire current aimed shot | `runtime/physics.js` |
+| `$z` | archive previous path | `runtime/physics.js` |
+| `$4` | fail / end a missed shot | `runtime/physics.js` |
+| `win` | score and complete the level | `runtime/physics.js` |
+| `$5` | advance to next level / finish campaign | `runtime/physics.js` |
+| `$6` | enter automated help playback | `runtime/physics.js` |
+| `$p` | finish solution / mirrored playback | `runtime/physics.js` |
+| `$7` | advance live shot and validate current cloud | `runtime/physics.js` |
+| `$Q` | one fixed simulation update | `runtime/physics.js` |
 
-## Update
+## Environment rendering
 
-| Compact symbol | Descriptive meaning |
-|---|---|
-| `$Q` | one fixed simulation update |
+| Compact symbol | Descriptive meaning | Readable file |
+|---|---|---|
+| `$M` | transform canvas into logical world coordinates | `runtime/render-world.js` |
+| `K` | circle helper | `runtime/render-world.js` |
+| `Cld` | procedural cloud helper | `runtime/render-world.js` |
+| `_h` | sky background / atmosphere | `runtime/render-world.js` |
+| `$G` | motion guide rendering | `runtime/render-world.js` |
+| `$R` | prisms / walls | `runtime/render-world.js` |
+| `$I` | rainbow arches / portals | `runtime/render-world.js` |
+| `fans` | wind-field rendering | `runtime/render-world.js` |
+| `$S` | dream-cloud / accelerator zones | `runtime/render-world.js` |
+| `$P` | gravity and polarity fields | `runtime/render-world.js` |
+| `$v` | spin / charge zones | `runtime/render-world.js` |
+| `$B` | barriers, resonance gates, hazards | `runtime/render-world.js` |
 
-## Rendering
+## Entity / trajectory rendering
 
-| Compact symbol | Descriptive meaning |
-|---|---|
-| `$M` | transform canvas into logical world coordinates |
-| `K` | circle helper |
-| `_h` | sky background / atmosphere |
-| `$G` | motion guide rendering |
-| `$R` | prisms / walls |
-| `$I` | rainbow arches / portals |
-| `fans` | wind-field rendering |
-| `$S` | dream-cloud / accelerator zones |
-| `$P` | gravity and polarity fields |
-| `$v` | spin / charge zones |
-| `$B` | barriers, resonance gates, hazards |
-| `$H` | cloud targets |
-| `$N` | unicorn launcher |
-| `$J` | white trajectory prediction |
-| `ghost` | historical / learned traces |
-| `$C` | live rainbow projectile and tail |
-| `fx` | particles and floating text |
-| `$8` | in-game information panels |
-| `_g` | menu button helper |
-| `$9` | best-record text |
-| `$f` | level-grid hover / selection index |
-| `$A` | level-select screen |
-| `$K` | menus / overlays |
-| `_a` | compose one rendered frame |
-| `_b` | requestAnimationFrame driver |
+| Compact symbol | Descriptive meaning | Readable file |
+|---|---|---|
+| `$H` | cloud targets | `runtime/render-entities.js` |
+| `$N` | unicorn launcher | `runtime/render-entities.js` |
+| `$J` | white trajectory prediction | `runtime/render-entities.js` |
+| `ghost` | historical / learned traces | `runtime/render-entities.js` |
+| `$C` | live rainbow projectile and tail | `runtime/render-entities.js` |
+| `fx` | particles and floating text | `runtime/render-entities.js` |
 
-## Input
+## HUD / menus
 
-| Compact symbol | Descriptive meaning |
-|---|---|
-| `$U` | pointer click / menu action dispatcher |
+| Compact symbol | Descriptive meaning | Readable file |
+|---|---|---|
+| `$8` | in-game information panels | `runtime/render-hud.js` |
+| `_g` | menu button helper | `runtime/render-hud.js` |
+| `$9` | best-record text | `runtime/render-hud.js` |
+| `$f` | level-grid hover / selection index | `runtime/render-hud.js` |
+| `$A` | level-select screen | `runtime/render-hud.js` |
+| `$K` | menus / overlays | `runtime/render-hud.js` |
 
-The keyboard handler is registered at the bottom of the runtime and performs the same state transitions for shortcuts.
+## Frame / input
+
+| Compact symbol | Descriptive meaning | Readable file |
+|---|---|---|
+| `_a` | compose one rendered frame | `runtime/ui.js` |
+| `_b` | requestAnimationFrame driver | `runtime/ui.js` |
+| `$U` | pointer click / menu action dispatcher | `runtime/ui.js` |
+
+The keyboard handler is registered at the bottom of `runtime/ui.js` and performs the same state transitions for shortcuts.
 
 ---
 
@@ -328,8 +351,6 @@ These names are kept compact only in the size-conscious runtime. When reasoning 
 
 The frame compositor intentionally draws systems in layers so the playfield remains readable.
 
-At a high level:
-
 ```text
 sky
 previous traces
@@ -352,7 +373,7 @@ That order prevents the rainbow trail from disappearing behind most environmenta
 
 # 12. Assistance system
 
-uniRico has three progressively stronger forms of help:
+uniRico has three progressively stronger forms of help.
 
 ### Show Aim
 Moves the aim direction to the encoded solution angle. Timing may still matter.
@@ -369,9 +390,7 @@ The solution payload is packed into a small base64-backed representation in the 
 
 # 13. Menu modes
 
-The compact runtime stores menu / play state numerically.
-
-Conceptually the states are:
+The compact runtime stores menu / play state numerically. Conceptually the states are:
 
 ```text
 main menu
@@ -384,48 +403,76 @@ help
 solution playback
 ```
 
-When reading input logic, first identify the current mode, then follow the corresponding button / shortcut branch.
+When reading input logic, first identify the current mode, then follow the corresponding button / shortcut branch in `runtime/ui.js` and the rendered state in `runtime/render-hud.js`.
 
 ---
 
 # 14. Where to make common edits
 
 ## Change a level
-Edit `src/levels.js` and the corresponding compact data in the production build when preparing a release.
+Edit [`src/levels.js`](../src/levels.js) and keep the corresponding compact data aligned when preparing a release.
 
 ## Change physics
-Start in the projectile step function (`_f` in the compact runtime), then inspect the helpers for the mechanic you are modifying.
+Start in `_f` inside [`src/runtime/physics.js`](../src/runtime/physics.js), then inspect the helper for the mechanic being modified.
 
 ## Change projectile appearance
-Look at `$C` and `ghost` in `src/game.js`.
+Look at `$C` and `ghost` in [`src/runtime/render-entities.js`](../src/runtime/render-entities.js).
 
 ## Change clouds / objectives
-Look at `$H`, the target-validation section of `$7`, and the particle feedback helpers.
+Look at `$H` in `render-entities.js`, then the target-validation section of `$7` in `physics.js`.
 
 ## Change menus
-Look at `$K`, `$A`, `_g`, `$U`, and the keyboard handler.
+Look at `$K`, `$A`, and `_g` in `render-hud.js`, then `$U` and the keyboard handler in `ui.js`.
 
 ## Change the unicorn
-Look at `$N`.
+Look at `$N` in `render-entities.js`.
 
 ## Change audio
-Look at `_i` and `$j`.
+Look at `_i` and `$j` in `core.js`.
 
 ---
 
-# 15. Development mirror vs. submission artifact
+# 15. Trace one shot end to end
+
+A useful exercise is to follow one click through the implementation:
+
+```text
+pointer aim
+  ↓
+$U / $3          input + fire
+  ↓
+$i               construct projectile
+  ↓
+$Q               fixed simulation update
+  ↓
+$7               live-shot / cloud progression
+  ↓
+_f               one physics tick
+  ↓
+Z / _e / $O ...  reflection, wall, portal, fields
+  ↓
+$C               draw fading rainbow ribbon
+  ↓
+win / $4         complete or fail
+```
+
+That one lifecycle explains most of the game.
+
+---
+
+# 16. Development mirror vs. submission artifact
 
 The files in `src/` are **for humans**.
 
 The root `index.html` is **for the byte budget**.
 
-They currently represent the same v0.3.0 behavior, but only the root single-file build is the competition-oriented artifact. Future gameplay changes should ideally be made in readable source first and then folded into the compact release build.
+They represent the same v0.3.0 gameplay architecture, but only the root single-file build is the competition-oriented artifact. Future gameplay changes should ideally be made in readable source first and then folded into the compact release build.
 
-A proper post-jam build pipeline could automate that transformation. For the current competition phase, the repository deliberately favors simplicity and traceability over introducing a large toolchain solely to generate a 13KB file.
+A post-jam pipeline could automate that transformation. During the competition phase, the repository favors simplicity and traceability over introducing a large toolchain solely to generate a 13KB file.
 
 ---
 
-# 16. The main engineering lesson
+# 17. The main engineering lesson
 
 The important part of uniRico's implementation is not any individual abbreviated function name. It is the reuse strategy:
 
