@@ -5,54 +5,77 @@
 </p>
 
 <p align="center">
-  <strong>A tiny rainbow-ricochet puzzle game about a magical unicorn, grumpy storm clouds, and fixing the sky one impossible shot at a time.</strong>
+  <strong>A 13KB rainbow-ricochet puzzle game about a magical unicorn, grumpy storm clouds, and fixing the sky one impossible shot at a time.</strong>
 </p>
 
 <p align="center">
   <strong>THE SKY GOT GRUMPY · YOU HAVE A HORN · FIX IT</strong>
 </p>
 
-Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
+<p align="center">
+  Built for <strong>js13kGames 2026</strong> · Theme: <strong>Unicorns and Rainbows</strong> · Target category: <strong>Desktop</strong>
+</p>
+
+---
 
 ## ✨ What is uniRico?
 
-uniRico is a compact HTML5 Canvas puzzle game where you aim a unicorn's horn and fire a fading rainbow projectile through a magical sky. The shot can ricochet from prisms, pass through rainbow arches, bend in wind, curve around moonbow gravity fields, pick up spin or charge, and interact with other magical effects.
+**uniRico** is a compact HTML5 Canvas puzzle game where you aim a unicorn's horn and fire a fading rainbow projectile through a magical sky.
 
-The goal is not to destroy enemies. Each level contains **angry gray storm clouds** that need to be reached in the correct order and with the correct number of bounces. Hit them correctly and the rainbow cheers them up, turning them into happy white clouds.
+The shot can ricochet from prisms, pass through rainbow arches, bend in wind, curve around moonbow gravity fields, pick up spin or charge, and interact with other magical effects. Each level contains **angry gray storm clouds** that must be reached in the correct order and with the correct number of bounces. Hit them correctly and the rainbow cheers them up, turning them into happy white clouds.
 
-The core fantasy is deliberately simple:
+The entire fantasy can be explained in one line:
 
-> **Aim horn → fire rainbow → ricochet through sky magic → cheer up the clouds.**
+> **Aim horn → fire rainbow → bend the trajectory → cheer up the clouds.**
 
-## 🎮 Current release
+The presentation is intentionally cute. The puzzle system underneath it is not. Later levels combine moving geometry, timing windows, portals, continuous forces, and exact reflection counts into long-form trajectory problems.
 
-**v0.3.0**
+---
 
-The current prototype contains:
+## 🎮 The play loop
 
-- 40 handcrafted puzzle levels
-- A procedural unicorn launcher drawn entirely with Canvas
-- A six-band rainbow projectile with a fading ribbon tail
-- Angry storm-cloud targets that become happy when cleared
-- Exact-bounce puzzle logic
-- Moving targets and moving reflectors
-- Rainbow-arch portals
-- Wind / cloud gust fields
-- Dream-cloud slow zones
-- Stardust acceleration zones
-- Moonbow gravity fields
-- Spin and magnetic charge mechanics
-- Pulsing storm barriers
-- Aurora resonance gates
-- Procedural particles, sparkles, clouds, rainbows, and audio
-- Local best scores, stars, shots, and completion records
-- Level select
-- Help tools including aim hints, mirrored demonstrations, and full solution playback
-- No external runtime libraries or downloaded assets
+1. **Aim the horn** with the mouse or pointer.
+2. **Read the white trajectory preview** and the moving sky systems.
+3. **Fire the rainbow** and commit to the shot.
+4. **Ricochet through prisms, arches, wind, gravity, spin, and magic.**
+5. **Reach each grumpy cloud with exactly the required bounce count.**
+6. **Turn it happy** and continue the chain until the sky is restored.
 
-The game is intentionally a single self-contained HTML file at runtime.
+A successful shot is both the solution and the spectacle: the projectile leaves a fading multi-band rainbow ribbon across the level.
 
-## 🕹️ Controls
+---
+
+## 🌈 Current release
+
+### v0.3.0
+
+The current game includes:
+
+- **40 handcrafted puzzle levels**
+- procedural unicorn launcher drawn entirely with Canvas
+- six-band rainbow projectile with a fading ribbon tail
+- angry storm-cloud targets that become happy when cleared
+- exact-bounce lock logic
+- moving targets and moving reflectors
+- rainbow-arch portals
+- wind / cloud gust fields
+- dream-cloud slow zones
+- stardust acceleration zones
+- moonbow gravity fields
+- spin and magnetic charge mechanics
+- pulsing storm barriers
+- aurora resonance gates
+- procedural particles, sparkles, clouds, rainbows, and audio
+- local best scores, stars, shots, and completion records
+- level select
+- built-in help tools: **Show Aim**, **Watch Mirrored Shot**, and **Watch Solution**
+- no external runtime libraries or downloaded game assets
+
+The competition runtime remains a single self-contained `index.html`.
+
+---
+
+## 🕹 Controls
 
 | Input | Action |
 |---|---|
@@ -64,24 +87,13 @@ The game is intentionally a single self-contained HTML file at runtime.
 | `P` | Toggle trajectory preview |
 | `S` | Toggle sound |
 | `[` / `]` | Previous / next level during development/testing |
+| `Space` / `Enter` | Continue after level completion |
 
-## ☁️ Gameplay language
+---
 
-uniRico uses familiar menu terminology while keeping the whimsical vocabulary inside the game itself.
+## ☁️ A game language built around the theme
 
-- **LEVELS** opens level select
-- **RESTART LEVEL** restarts the current puzzle
-- **HELP** opens assistance tools
-- **SHOW AIM** points the horn toward the encoded solution angle
-- **WATCH MIRRORED SHOT** demonstrates the maneuver in mirrored form for practice
-- **WATCH SOLUTION** demonstrates the actual solution
-- **SOLUTION PATH** displays a learned solution trace
-
-This keeps navigation readable while allowing the playfield itself to remain unabashedly unicorn-shaped.
-
-## 🌈 Thematic systems
-
-The game's physics vocabulary is translated into one coherent sky-magic world.
+The goal was not to put a unicorn sprite on top of an unrelated physics game. The mechanics themselves are translated into one coherent sky-magic vocabulary.
 
 | Gameplay function | uniRico presentation |
 |---|---|
@@ -100,49 +112,183 @@ The game's physics vocabulary is translated into one coherent sky-magic world.
 | Resonance | Aurora gates |
 | Failure hazards | Dark storm-cloud / night-sky hazards |
 | Prediction | Bright white dotted trajectory |
-| Successful history | Rainbow traces and sparkles |
+| Committed shot | Rainbow ribbon |
+| Learned solution | Faint solution trace |
+
+This matters because the theme becomes part of how players read the puzzle rather than decoration layered on after the fact.
+
+---
 
 ## 🧠 Puzzle design
 
-Every target encodes a required bounce count. A shot must reach the current cloud with exactly that number of reflections before the level can advance to the next cloud.
+Every cloud target encodes a required bounce count. The shot must reach the active cloud with **exactly** that number of reflections before the ordered sequence can advance.
 
-Later levels combine this rule with moving geometry and continuous forces. The result is less about twitch shooting and more about **reading a dynamic system, predicting the future path, and committing to one precise magical ricochet**.
+The campaign then composes that rule with different systems:
 
-The 40-level campaign gradually layers mechanics rather than introducing them all at once. Early levels establish reflection and timing; later levels combine portals, wind, gravity, spin, charge, resonance, moving targets, and reduced trajectory foresight.
+- **moving geometry** asks the player to solve where an object *will be*, not where it is now;
+- **wind and gravity** convert straight-line aiming into continuous trajectory shaping;
+- **spin and polarity** create persistent state carried across the shot;
+- **portals** break local spatial intuition and create long routes;
+- **timed barriers and resonance gates** make arrival time and speed part of the solution;
+- **reduced preview distance** in later levels asks the player to reason beyond what the guide explicitly shows.
 
-## 🗂️ Repository layout
+The intention is a difficulty curve that starts visually obvious and ends with compact little machines that the player learns to read.
+
+---
+
+## 🔍 Readable source vs. competition build
+
+js13kGames is fundamentally about the tiny shipped package, but the public repository should still be useful to people who want to learn from the implementation.
+
+This repository therefore exposes **two views of the same game**:
+
+### 1. `index.html` — competition-oriented runtime
+
+The single-file build keeps HTML, CSS, JavaScript, level data, rendering, audio, and UI together so it can be compressed efficiently for the 13KB archive.
+
+### 2. `src/` — readable development mirror
+
+The same v0.3.0 code has been split into inspectable files:
+
+```text
+src/
+├── index.html    # readable development shell
+├── style.css     # HUD / page styling
+├── levels.js     # field rigs + all 40 level definitions
+├── game.js       # formatted runtime, simulation, rendering, UI, audio
+└── README.md     # how the readable mirror maps to the tiny build
+```
+
+The readable mirror intentionally preserves compact runtime identifiers where changing them would make comparison with the shipping artifact harder. **`docs/SOURCE_GUIDE.md` provides the descriptive symbol map** and explains what the compact functions and level keys mean.
+
+Recommended reading order:
+
+1. [`README.md`](README.md)
+2. [`docs/SOURCE_GUIDE.md`](docs/SOURCE_GUIDE.md)
+3. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+4. [`src/levels.js`](src/levels.js)
+5. [`src/game.js`](src/game.js)
+6. [`index.html`](index.html) when you want to see the byte-conscious shipped form
+
+---
+
+## 🗂 Repository layout
 
 ```text
 uniRico/
-├── index.html                         # Complete playable v0.3.0 prototype
-├── README.md
-├── CHANGELOG.md
+├── index.html                         # Complete playable v0.3.0 runtime
+├── README.md                          # Project showcase + entry point
+├── CHANGELOG.md                       # Release history
 ├── .gitignore
+├── src/
+│   ├── README.md                      # Readable-source notes
+│   ├── index.html                     # Development shell
+│   ├── style.css                      # Extracted readable CSS
+│   ├── levels.js                      # Campaign + reusable rigs
+│   └── game.js                        # Formatted runtime source
 └── docs/
-    ├── banner.svg
-    ├── ARCHITECTURE.md
-    └── COMPETITION_CHECKLIST.md
+    ├── banner.svg                     # README cover banner
+    ├── SOURCE_GUIDE.md                # Symbol map + reading guide
+    ├── ARCHITECTURE.md                # Systems / engine walkthrough
+    └── COMPETITION_CHECKLIST.md       # Release and submission gate
 ```
 
-The current runtime is single-file by design. The public documentation explains the compact structures and mechanic keys used inside the competition-oriented source.
+---
+
+## 🧬 Architecture at a glance
+
+```mermaid
+flowchart LR
+    Input[Pointer + Keyboard] --> State[Game / Menu State]
+    State --> Sim[Fixed-Step Projectile Simulation]
+    Levels[Declarative Level Data] --> Sim
+    Sim --> Fields[Prisms · Wind · Portals · Gravity · Spin · Charge]
+    Fields --> Targets[Ordered Cloud Locks]
+    Sim --> Render[Canvas Renderer]
+    Targets --> Render
+    Render --> FX[Rainbow Trails · Clouds · Sparkles]
+    State --> Audio[Procedural Web Audio]
+    State --> Save[localStorage Records]
+```
+
+Key implementation choices:
+
+- **960 × 600 logical world** scaled to the browser window
+- **fixed simulation steps** independent of rendering cadence
+- **one simulation path** shared by live projectile and trajectory prediction
+- **declarative level objects** with missing mechanic arrays meaning “not present”
+- **shared field rigs** reused by advanced levels to save bytes
+- **procedural Canvas visuals** instead of sprite assets
+- **procedural Web Audio** instead of audio files
+- **packed solution data** for hints and demonstrations
+
+For the deep dive, see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+---
+
+## 🧩 Compact level format
+
+A level is a small object with a few common keys:
+
+| Key | Meaning |
+|---|---|
+| `n` | level name |
+| `p` | unicorn start position |
+| `t` | ordered cloud targets |
+| `m` | reflection limit |
+| `q` | trajectory-preview simulation budget |
+| `w` | reflective walls / prisms |
+| `o` | rainbow-arch portals |
+| `f` | wind fields |
+| `z` | dream-cloud slow zones |
+| `a` | accelerator zones |
+| `g` | gravity / moonbow fields |
+| `s` | spin fields |
+| `c` | charge zones |
+| `k` | polarity / magnetic fields |
+| `b` | timed storm barriers |
+| `r` | resonance gates |
+| `v` | hazards |
+
+A target uses the compact tuple:
+
+```text
+[x, y, requiredBounces, motionMode, amplitude, speed, phase, radius]
+```
+
+Later levels spread reusable `F0...F9` rigs into the level object. This is one of the main ways the campaign gets mechanically dense without paying to restate the same environment data over and over.
+
+---
 
 ## 🚀 Running locally
 
-There is no install step.
+### Competition-style build
 
-### Option 1: open directly
+No install step is required. Open:
 
-Open `index.html` in a modern browser.
+```text
+index.html
+```
 
-### Option 2: use a local server
+or serve the repository:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000`.
+then open `http://localhost:8000`.
 
-The game has no package dependencies, build framework, external font dependency, sprite sheet, or required network service.
+### Readable development mirror
+
+Serve the repository and open:
+
+```text
+http://localhost:8000/src/
+```
+
+The `src/` version loads `levels.js`, `game.js`, and `style.css` separately so the implementation is easier to inspect in browser developer tools.
+
+---
 
 ## 📦 js13kGames size target
 
@@ -156,80 +302,71 @@ The locally frozen v0.3.0 competition archive currently measures:
 SHA-256: 1588b481c786939a99dd360409b42eb425889cec1b04fc52ba66acf7b9c5264e
 ```
 
-The repository tracks the game source and development documentation. The exact ZIP intended for submission should be frozen separately and attached to a tagged release once the final Desktop candidate is selected.
+The exact submission ZIP is deliberately kept separate from the readable repository tree. When the final Desktop candidate is frozen, it should be attached to a tagged release so the repository commit, ZIP artifact, byte count, and hash form one reproducible checkpoint.
 
-See [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md) for the full release gate.
+See [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md).
 
-## 🧬 Technical approach
+---
 
-uniRico is deliberately engine-free.
+## 🧪 Release gate
 
-- **Rendering:** HTML5 Canvas 2D
-- **Audio:** procedural Web Audio oscillators
-- **Input:** Pointer Events + keyboard
-- **Persistence:** `localStorage`
-- **Physics:** custom deterministic 2D projectile simulation
-- **Assets:** runtime visuals are procedurally drawn
-- **Dependencies:** none
-- **Runtime entry point:** `index.html`
+Before a competition build is frozen, the candidate should pass:
 
-The trajectory preview and live projectile use the same simulation rules. That is important for a precision ricochet game: the guide should describe the same world the actual rainbow travels through.
-
-Level data is compact and declarative. Shared field rigs are reused across advanced levels to conserve bytes while still allowing combinations of moving walls, portals, gusts, gravity, slow zones, acceleration, spin, charge, barriers, resonance gates, and hazards.
-
-For a deeper walkthrough, see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
-
-## 🎨 Visual direction
-
-The visual design aims for **cute clarity rather than decorative overload**:
-
-- a darker twilight-blue playfield keeps white prediction lines readable
-- pale cloud-shaped HUD panels keep status text legible
-- rainbow effects are reserved for meaningful motion and success feedback
-- environmental systems remain visually distinct even when several overlap
-- storm clouds clearly communicate unresolved targets
-- happy white clouds communicate restoration immediately
-
-The game should look magical without making the player decode the interface.
-
-## 🧪 Release checks
-
-Before freezing a competition build, the candidate should pass:
-
-1. Exact ZIP size check
+1. exact ZIP byte-count check
 2. `index.html` at archive root
-3. No external runtime resource requests
-4. Chrome smoke test
-5. Firefox smoke test
-6. No console errors
-7. Early, middle, and late-level playthrough checks
-8. Pause / Help / Levels / Restart checks
-9. Solution playback check
-10. Local record persistence check
-11. Resize / different desktop window size check
+3. offline / no-external-runtime-resource check
+4. latest Chrome smoke test
+5. latest Firefox smoke test
+6. zero console errors
+7. early-, middle-, and late-campaign gameplay checks
+8. pause / Help / Levels / Restart checks
+9. solution playback check
+10. local record persistence check
+11. resize and multiple desktop aspect-ratio checks
 12. SHA-256 freeze of the exact submitted archive
+13. public readable-source review
 
 The expanded checklist lives in [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md).
 
-## 🛣️ Direction
+---
 
-The current design priorities are:
+## 🎨 Visual design principles
 
-- keep the central rainbow ricochet readable and satisfying
-- make every mechanic feel native to unicorn / rainbow / sky magic
-- teach bounce-count logic with minimal text
-- preserve meaningful difficulty instead of turning the game into a visual toy
-- use every byte for mechanics, feedback, or clarity
-- keep the final Desktop submission comfortably inside the js13kGames limit
-- maintain a readable public development history while keeping the shipped artifact tiny
+uniRico aims for **cute clarity rather than decorative overload**:
+
+- a darker twilight-blue playfield keeps white trajectory lines readable;
+- pale cloud-shaped HUD panels separate information from the arena;
+- rainbow saturation is reserved for motion, interaction, and success;
+- grumpy gray clouds communicate unresolved objectives immediately;
+- happy white clouds make restoration emotionally obvious;
+- environmental systems remain visually distinguishable even when several overlap;
+- menus use conventional words such as **Levels**, **Help**, and **Restart Level** even when the world itself is whimsical.
+
+The player should be solving the puzzle, not solving the interface.
+
+---
+
+## 🛣 Development direction
+
+Current priorities are:
+
+- keep the rainbow ricochet readable and satisfying;
+- make every mechanic feel native to unicorn / rainbow / sky magic;
+- teach bounce-count logic with minimal text;
+- preserve meaningful difficulty instead of becoming only a visual toy;
+- spend bytes on mechanics, feedback, or clarity;
+- keep the Desktop package under the js13k ceiling;
+- keep the public source genuinely useful as a learning artifact.
+
+---
 
 ## 🏆 Built for js13kGames 2026
 
-uniRico is being developed for the **Desktop** category of **js13kGames 2026**, whose theme is **Unicorns and Rainbows**.
+uniRico is being developed for the **Desktop** category of **js13kGames 2026**, themed **Unicorns and Rainbows**.
 
-Competition page: https://js13kgames.com/2026/
+Competition site: `https://js13kgames.com/2026/`
 
-The project is public so the game's evolution, code, size constraints, and design decisions can be inspected openly.
+The tiny build is the constraint. This repository is the explanation.
 
 ---
 
