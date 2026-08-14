@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local development
+node_modules/
+.env
+.env.*
+
+# Temporary build output
+.tmp/
+tmp/
+*.log
+
+# Local archives not intentionally committed
+*.zip
