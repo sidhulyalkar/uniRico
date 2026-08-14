@@ -118,14 +118,39 @@ This checklist is used to freeze a uniRico release candidate before submission.
 - [ ] HUD does not obscure important targets.
 - [ ] Canvas remains centered and aspect-correct.
 
-## Source repository
+## Public source repository
 
 - [ ] Public GitHub repository is accessible.
 - [ ] README accurately describes the submitted build.
-- [ ] Readable source is available publicly.
+- [ ] README banner / presentation renders correctly on GitHub.
+- [ ] `src/` readable development mirror is present.
+- [ ] `src/index.html` loads the readable runtime files in the documented dependency order.
+- [ ] `src/levels.js` contains the same campaign data as the submitted behavior.
+- [ ] Readable runtime is split into state / physics / rendering / HUD / input responsibilities.
+- [ ] `docs/SOURCE_GUIDE.md` explains compact identifiers and level-data keys.
+- [ ] `docs/ARCHITECTURE.md` explains major engineering decisions and system reuse.
+- [ ] No README or documentation links point at deleted / nonexistent files.
+- [ ] Readable source JavaScript passes syntax validation.
+- [ ] Readable source is browser-smoke-tested before final submission.
+- [ ] Any difference between readable source and the submitted compact artifact is documented.
 - [ ] Build / packaging instructions are documented if a build step exists.
 - [ ] Submitted artifact can be traced to a tagged commit.
 - [ ] Release tag matches the game version.
+
+## Readable-source drift check
+
+Before the final tag, compare the human-readable mirror against the root runtime:
+
+- [ ] Same 40 level names / order.
+- [ ] Same target bounce requirements and motion parameters.
+- [ ] Same field rigs and environmental mechanics.
+- [ ] Same scoring / star thresholds.
+- [ ] Same encoded solution data.
+- [ ] Same controls and menu behavior.
+- [ ] Same save / persistence behavior.
+- [ ] Same theme-critical rendering behavior.
+
+The readable mirror exists to explain the competition code, not to become a second game.
 
 ## Final freeze
 
@@ -140,6 +165,7 @@ ZIP bytes:
 SHA-256:
 Chrome version tested:
 Firefox version tested:
+Readable-source smoke test:
 Test date:
 ```
 
