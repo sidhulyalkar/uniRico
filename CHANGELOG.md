@@ -2,6 +2,29 @@
 
 All notable changes to **uniRico** are documented here.
 
+## Repository showcase / readability pass — 2026-08-13
+
+### Public source readability
+
+- Added a runnable `src/` development mirror alongside the compact root `index.html`.
+- Split campaign data into `src/levels.js` with documented field keys and target tuples.
+- Split the runtime into focused files for core state, physics, environment rendering, entity rendering, HUD / menus, and UI / input.
+- Added `docs/SOURCE_GUIDE.md` with a descriptive map for compact runtime symbols, globals, data shapes, rendering order, and common edit locations.
+- Updated `docs/ARCHITECTURE.md` to document the relationship between human-readable source and the byte-conscious competition artifact.
+- Preserved compact identifiers in the readable mirror where that improves traceability to the shipped build rather than creating a second divergent implementation.
+
+### Repository presentation
+
+- Rebuilt the main README as a full project showcase covering the game fantasy, play loop, mechanics, architecture, readable source, level encoding, release discipline, and technical design.
+- Replaced the old README banner with a custom exact 3:1 `docs/banner.svg` featuring the unicorn, rainbow ricochet path, puzzle geometry, and grumpy-to-happy cloud transformation.
+- Added a Mermaid architecture diagram and a recommended source-reading path.
+- Made the repository layout and competition-vs-development source roles explicit.
+
+### Release discipline
+
+- Kept the compact root `index.html` unchanged during this documentation/source-readability pass.
+- Kept the frozen v0.3.0 ZIP size checkpoint documented separately from the expanded public source tree.
+
 ## v0.3.0
 
 ### Readability
