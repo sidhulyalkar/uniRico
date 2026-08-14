@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">uniRico</title>
+  <desc id="desc">Rainbow ricochet puzzle game with a unicorn, clouds, prisms and rainbows.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#173f73"/>
+      <stop offset="1" stop-color="#7693bd"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="420" rx="30" fill="url(#sky)"/>
+  <g opacity=".8" fill="#fff">
+    <circle cx="84" cy="80" r="3"/><circle cx="205" cy="54" r="2"/><circle cx="995" cy="76" r="3"/><circle cx="1104" cy="132" r="2"/><circle cx="910" cy="202" r="2"/><circle cx="270" cy="177" r="2"/>
+  </g>
+  <g fill="none" stroke-linecap="round" filter="url(#glow)">
+    <path d="M300 300 Q600 -20 900 300" stroke="#ff5f6d" stroke-width="20"/>
+    <path d="M318 300 Q600 4 882 300" stroke="#ffd85a" stroke-width="18"/>
+    <path d="M336 300 Q600 28 864 300" stroke="#78e85f" stroke-width="18"/>
+    <path d="M354 300 Q600 52 846 300" stroke="#58e4d4" stroke-width="18"/>
+    <path d="M372 300 Q600 76 828 300" stroke="#5a91ef" stroke-width="18"/>
+    <path d="M390 300 Q600 100 810 300" stroke="#b06bea" stroke-width="18"/>
+  </g>
+  <g fill="#fff" opacity=".96">
+    <circle cx="210" cy="314" r="56"/><circle cx="260" cy="302" r="72"/><circle cx="320" cy="320" r="50"/><rect x="170" y="315" width="190" height="60" rx="30"/>
+    <circle cx="870" cy="314" r="56"/><circle cx="930" cy="301" r="74"/><circle cx="995" cy="320" r="54"/><rect x="825" y="315" width="220" height="60" rx="30"/>
+  </g>
+  <g transform="translate(100 245)">
+    <ellipse cx="56" cy="46" rx="44" ry="27" fill="#fff"/>
+    <circle cx="78" cy="30" r="25" fill="#fff"/>
+    <path d="M88 10 117 28 87 29Z" fill="#ffe06e"/>
+    <path d="M69 9 77 -10 84 10Z" fill="#f7a4c6"/>
+    <circle cx="88" cy="27" r="4" fill="#574665"/>
+    <path d="M16 42 Q-12 25 -24 42" stroke="#ff6fa7" stroke-width="8" fill="none"/>
+    <path d="M16 50 Q-12 33 -24 50" stroke="#ffd65d" stroke-width="8" fill="none"/>
+    <path d="M16 58 Q-12 41 -24 58" stroke="#65e373" stroke-width="8" fill="none"/>
+    <path d="M16 66 Q-12 49 -24 66" stroke="#57a8f3" stroke-width="8" fill="none"/>
+  </g>
+  <g transform="translate(920 225)">
+    <circle cx="45" cy="46" r="34" fill="#626b82"/><circle cx="76" cy="42" r="40" fill="#626b82"/><circle cx="108" cy="48" r="30" fill="#626b82"/><rect x="16" y="47" width="120" height="37" rx="18" fill="#626b82"/>
+    <path d="M48 48 62 54M104 48 90 54" stroke="#34394b" stroke-width="6" stroke-linecap="round"/>
+    <path d="M66 71 Q77 62 89 71" fill="none" stroke="#34394b" stroke-width="5"/>
+  </g>
+  <path d="M190 280 390 230 500 274 720 190 920 276" fill="none" stroke="#fff" stroke-width="8" opacity=".9" stroke-dasharray="3 12" stroke-linecap="round"/>
+  <g font-family="Trebuchet MS,Arial,sans-serif" text-anchor="middle">
+    <text x="600" y="155" fill="#fff" font-size="96" font-weight="800" letter-spacing="3">uniRico</text>
+    <text x="600" y="210" fill="#ffd5e8" font-size="30" font-weight="700" letter-spacing="5">RAINBOW RICOCHET</text>
+    <text x="600" y="355" fill="#fff" font-size="21" opacity=".9">AIM THE HORN · BEND THE RAINBOW · FIX THE SKY</text>
+  </g>
+</svg>
