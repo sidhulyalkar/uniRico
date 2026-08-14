@@ -1,16 +1,18 @@
 # 🦄🌈 uniRico
 
-**A tiny rainbow-ricochet puzzle game about a magical unicorn, grumpy storm clouds, and fixing the sky one impossible shot at a time.**
-
-Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
+<p align="center">
+  <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
+</p>
 
 <p align="center">
-  <img src="docs/cover.jpg" alt="uniRico cover art" width="900">
+  <strong>A tiny rainbow-ricochet puzzle game about a magical unicorn, grumpy storm clouds, and fixing the sky one impossible shot at a time.</strong>
 </p>
 
 <p align="center">
   <strong>THE SKY GOT GRUMPY · YOU HAVE A HORN · FIX IT</strong>
 </p>
+
+Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
 
 ## ✨ What is uniRico?
 
@@ -26,7 +28,7 @@ The core fantasy is deliberately simple:
 
 **v0.3.0**
 
-The current version contains:
+The current prototype contains:
 
 - 40 handcrafted puzzle levels
 - A procedural unicorn launcher drawn entirely with Canvas
@@ -46,7 +48,7 @@ The current version contains:
 - Local best scores, stars, shots, and completion records
 - Level select
 - Help tools including aim hints, mirrored demonstrations, and full solution playback
-- No external runtime assets or libraries
+- No external runtime libraries or downloaded assets
 
 The game is intentionally a single self-contained HTML file at runtime.
 
@@ -79,7 +81,7 @@ This keeps navigation readable while allowing the playfield itself to remain una
 
 ## 🌈 Thematic systems
 
-The original physics vocabulary has been translated into one coherent sky-magic world.
+The game's physics vocabulary is translated into one coherent sky-magic world.
 
 | Gameplay function | uniRico presentation |
 |---|---|
@@ -108,39 +110,21 @@ Later levels combine this rule with moving geometry and continuous forces. The r
 
 The 40-level campaign gradually layers mechanics rather than introducing them all at once. Early levels establish reflection and timing; later levels combine portals, wind, gravity, spin, charge, resonance, moving targets, and reduced trajectory foresight.
 
-## 📸 Screenshots
-
-### Main menu
-
-![uniRico main menu](docs/screenshots/menu.jpg)
-
-### Multi-system puzzle
-
-![uniRico complex gameplay](docs/screenshots/gameplay-complex.jpg)
-
-### Rainbow arches and cloud targets
-
-![uniRico portal gameplay](docs/screenshots/gameplay-portal.jpg)
-
 ## 🗂️ Repository layout
 
 ```text
 uniRico/
-├── index.html                         # Complete playable v0.3.0 game
+├── index.html                         # Complete playable v0.3.0 prototype
 ├── README.md
 ├── CHANGELOG.md
 ├── .gitignore
-├── docs/
-│   ├── cover.jpg
-│   └── screenshots/
-│       ├── menu.jpg
-│       ├── gameplay-complex.jpg
-│       └── gameplay-portal.jpg
-├── releases/
-│   └── uniRico-v0.3.0-js13k.zip      # Frozen 13KB-class release artifact
-└── scripts/
-    └── check-size.mjs                 # Checks archive against the 13 KiB limit
+└── docs/
+    ├── banner.svg
+    ├── ARCHITECTURE.md
+    └── COMPETITION_CHECKLIST.md
 ```
+
+The current runtime is single-file by design. The public documentation explains the compact structures and mechanic keys used inside the competition-oriented source.
 
 ## 🚀 Running locally
 
@@ -158,28 +142,23 @@ python3 -m http.server 8000
 
 Then open `http://localhost:8000`.
 
-The game has no package dependencies, build framework, external font, sprite sheet, image dependency, or network requirement.
+The game has no package dependencies, build framework, external font dependency, sprite sheet, or required network service.
 
 ## 📦 js13kGames size target
 
 The standard js13kGames archive ceiling is **13 KiB = 13,312 bytes**.
 
-Current frozen v0.3.0 archive:
+The locally frozen v0.3.0 competition archive currently measures:
 
 ```text
-releases/uniRico-v0.3.0-js13k.zip
 13,155 bytes
 157 bytes remaining
 SHA-256: 1588b481c786939a99dd360409b42eb425889cec1b04fc52ba66acf7b9c5264e
 ```
 
-Run the local size check with:
+The repository tracks the game source and development documentation. The exact ZIP intended for submission should be frozen separately and attached to a tagged release once the final Desktop candidate is selected.
 
-```bash
-node scripts/check-size.mjs
-```
-
-The repository contains readable project documentation and the exact compact runtime artifact separately so development history does not need to fit inside the competition ZIP.
+See [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md) for the full release gate.
 
 ## 🧬 Technical approach
 
@@ -198,6 +177,8 @@ The trajectory preview and live projectile use the same simulation rules. That i
 
 Level data is compact and declarative. Shared field rigs are reused across advanced levels to conserve bytes while still allowing combinations of moving walls, portals, gusts, gravity, slow zones, acceleration, spin, charge, barriers, resonance gates, and hazards.
 
+For a deeper walkthrough, see [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
 ## 🎨 Visual direction
 
 The visual design aims for **cute clarity rather than decorative overload**:
@@ -213,11 +194,11 @@ The game should look magical without making the player decode the interface.
 
 ## 🧪 Release checks
 
-Before freezing a competition build, the release candidate should pass:
+Before freezing a competition build, the candidate should pass:
 
 1. Exact ZIP size check
 2. `index.html` at archive root
-3. No external resource requests
+3. No external runtime resource requests
 4. Chrome smoke test
 5. Firefox smoke test
 6. No console errors
@@ -227,6 +208,8 @@ Before freezing a competition build, the release candidate should pass:
 10. Local record persistence check
 11. Resize / different desktop window size check
 12. SHA-256 freeze of the exact submitted archive
+
+The expanded checklist lives in [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md).
 
 ## 🛣️ Direction
 
@@ -238,6 +221,7 @@ The current design priorities are:
 - preserve meaningful difficulty instead of turning the game into a visual toy
 - use every byte for mechanics, feedback, or clarity
 - keep the final Desktop submission comfortably inside the js13kGames limit
+- maintain a readable public development history while keeping the shipped artifact tiny
 
 ## 🏆 Built for js13kGames 2026
 
