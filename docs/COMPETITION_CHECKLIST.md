@@ -1,172 +1,64 @@
-# js13kGames 2026 Desktop Release Checklist
+# js13kGames 2026 Desktop release checklist
 
-This checklist is used to freeze a uniRico release candidate before submission.
+Use this checklist to freeze a uniRico candidate.
 
-## Category and theme
+## Package
 
-- [ ] Submit in the **Desktop** category.
-- [ ] Keep the **Unicorns and Rainbows** theme obvious in the first few seconds of play.
-- [ ] Make sure the theme remains tied to the central mechanic, not only the title screen or decoration.
-
-## Archive
-
-- [ ] Final ZIP is **≤ 13,312 bytes**.
-- [ ] `index.html` exists at the root of the ZIP.
-- [ ] Archive extracts cleanly.
-- [ ] The exact uploaded archive is retained locally and hashed.
-
-## Runtime independence
-
-- [ ] No external JavaScript.
-- [ ] No external CSS.
-- [ ] No external fonts.
-- [ ] No remote images.
-- [ ] No remote audio.
-- [ ] No fetch / XHR / WebSocket dependency for the Desktop build.
-- [ ] Game remains playable without an internet connection after extraction.
+- [ ] ZIP is ≤ 13,312 bytes.
+- [ ] Root contains exactly `index.html` for the submitted Desktop artifact.
+- [ ] No remote scripts, styles, fonts, images, audio, fetch/XHR, or required network service.
+- [ ] Archive extracts and launches offline.
+- [ ] SHA-256 is recorded for the exact uploaded ZIP.
 
 ## Browser gate
 
-### Chrome
+- [ ] Latest Chrome: menu, play, fire, complete, pause, Help, Levels, Restart, sound toggle, path toggle.
+- [ ] Latest Firefox: same flow.
+- [ ] No console errors in either browser.
+- [ ] Web Audio unlocks only after interaction and does not duplicate transports.
 
-- [ ] Launch from extracted archive.
-- [ ] Main menu renders correctly.
-- [ ] Start a level.
-- [ ] Fire and ricochet a shot.
-- [ ] Complete a level.
-- [ ] Open Levels.
-- [ ] Open Help.
-- [ ] Restart a level.
-- [ ] Toggle sound and path preview.
-- [ ] Confirm no console errors.
+## Physics gate
 
-### Firefox
+- [ ] 40/40 encoded solutions pass.
+- [ ] Fast target contacts do not tunnel.
+- [ ] Future-cloud hits fail explicitly rather than appearing ignored.
+- [ ] Moving prism high-speed crossing regression passes.
+- [ ] Moving wall sweeping into the projectile regression passes.
+- [ ] Tangential wall velocity does not corrupt tangential projectile velocity.
+- [ ] Post-impact separation prevents sticky repeat bounces.
+- [ ] Prediction remains trustworthy across moving walls, portals, wind, gravity, and spin.
 
-- [ ] Launch from extracted archive.
-- [ ] Main menu renders correctly.
-- [ ] Start a level.
-- [ ] Fire and ricochet a shot.
-- [ ] Complete a level.
-- [ ] Open Levels.
-- [ ] Open Help.
-- [ ] Restart a level.
-- [ ] Toggle sound and path preview.
-- [ ] Confirm no console errors.
+## Audio gate
 
-## Campaign smoke test
+- [ ] Aim state is quicker/lighter than live-shot state.
+- [ ] Flight transport slows with additional reflection weight.
+- [ ] Swing/tempo spread remains measurable.
+- [ ] Sub, mid-bass, snare transient, hats, and pitched stabs all synthesize.
+- [ ] Oscillator starts/stops remain balanced in regression test.
+- [ ] Muting creates no new voices.
+- [ ] Human mix test confirms music does not bury bounce/portal/failure/success SFX.
 
-- [ ] Verify Levels 1–5 for onboarding and mechanic readability.
-- [ ] Verify at least one portal level.
-- [ ] Verify at least one wind level.
-- [ ] Verify at least one gravity / moonbow level.
-- [ ] Verify spin.
-- [ ] Verify charge / magnetism.
-- [ ] Verify timed storm barriers.
-- [ ] Verify resonance / aurora behavior.
-- [ ] Verify an advanced multi-system level.
-- [ ] Verify Level 40 and final completion state.
+## Campaign/readability gate
 
-## Prediction correctness
+- [ ] Levels 1–19 teach single systems clearly.
+- [ ] Levels 20–30 provide understandable mixed-system practice.
+- [ ] Levels 31–40 remain challenging but readable.
+- [ ] Active lock order, bounce requirement, and dark-cloud silhouettes are visible at common desktop sizes.
+- [ ] `src/` readable mirror matches current campaign and behavior.
+- [ ] `docs/SOURCE_GUIDE.md` and `docs/ARCHITECTURE.md` match current source layout.
+- [ ] Exact submission ZIP is attached to the release candidate and matches the frozen expected SHA-256.
 
-- [ ] White trajectory preview uses the same physics model as the live rainbow.
-- [ ] Reflections in the preview match live reflections.
-- [ ] Moving prisms are handled consistently.
-- [ ] Portal timing matches.
-- [ ] Wind / gravity / spin curves match closely enough to be trustworthy.
-- [ ] No visible trajectory-extension bug at prism contact.
-
-## Theme readability
-
-- [ ] Unicorn is recognizable at normal desktop play size.
-- [ ] Horn direction clearly communicates aiming.
-- [ ] Live projectile reads as a rainbow with a fading tail.
-- [ ] Active grumpy cloud is easy to identify.
-- [ ] Successful cloud restoration is visually obvious.
-- [ ] Prism walls are distinguishable from decorative rainbows.
-- [ ] Rainbow arches read as portals.
-- [ ] Wind is readable as moving magical air / cloud gusts.
-- [ ] Hazard clouds are distinguishable from target clouds.
-- [ ] White trajectory remains visible on every background area.
-
-## Navigation
-
-- [ ] `PLAY` is obvious.
-- [ ] `LEVELS` is obvious.
-- [ ] `PAUSED` menu uses familiar terms.
-- [ ] `HELP` explains assistance clearly.
-- [ ] `SHOW AIM` behaves as labeled.
-- [ ] `WATCH MIRRORED SHOT` behaves as labeled.
-- [ ] `WATCH SOLUTION` behaves as labeled.
-- [ ] `R` reliably restarts the current level.
-- [ ] `M` / `Esc` reliably enters and leaves the menu.
-
-## Persistence
-
-- [ ] Complete a level and reload.
-- [ ] Best score persists.
-- [ ] Stars persist.
-- [ ] Last level selection persists.
-- [ ] Corrupt / missing local storage does not prevent startup.
-
-## Desktop layout
-
-- [ ] 1920×1080 window.
-- [ ] 1440×900 window.
-- [ ] 1366×768 window.
-- [ ] Narrow desktop window.
-- [ ] High-DPI display.
-- [ ] HUD does not obscure important targets.
-- [ ] Canvas remains centered and aspect-correct.
-
-## Public source repository
-
-- [ ] Public GitHub repository is accessible.
-- [ ] README accurately describes the submitted build.
-- [ ] README banner / presentation renders correctly on GitHub.
-- [ ] `src/` readable development mirror is present.
-- [ ] `src/index.html` loads the readable runtime files in the documented dependency order.
-- [ ] `src/levels.js` contains the same campaign data as the submitted behavior.
-- [ ] Readable runtime is split into state / physics / rendering / HUD / input responsibilities.
-- [ ] `docs/SOURCE_GUIDE.md` explains compact identifiers and level-data keys.
-- [ ] `docs/ARCHITECTURE.md` explains major engineering decisions and system reuse.
-- [ ] No README or documentation links point at deleted / nonexistent files.
-- [ ] Readable source JavaScript passes syntax validation.
-- [ ] Readable source is browser-smoke-tested before final submission.
-- [ ] Any difference between readable source and the submitted compact artifact is documented.
-- [ ] Build / packaging instructions are documented if a build step exists.
-- [ ] Submitted artifact can be traced to a tagged commit.
-- [ ] Release tag matches the game version.
-
-## Readable-source drift check
-
-Before the final tag, compare the human-readable mirror against the root runtime:
-
-- [ ] Same 40 level names / order.
-- [ ] Same target bounce requirements and motion parameters.
-- [ ] Same field rigs and environmental mechanics.
-- [ ] Same scoring / star thresholds.
-- [ ] Same encoded solution data.
-- [ ] Same controls and menu behavior.
-- [ ] Same save / persistence behavior.
-- [ ] Same theme-critical rendering behavior.
-
-The readable mirror exists to explain the competition code, not to become a second game.
-
-## Final freeze
-
-Record the final submission values here:
+## v0.8.0 frozen candidate
 
 ```text
-Version:
-Commit:
-Tag:
-ZIP filename:
-ZIP bytes:
-SHA-256:
-Chrome version tested:
-Firefox version tested:
-Readable-source smoke test:
-Test date:
+Version: v0.8.0
+ZIP bytes: 13,272
+Bytes free: 40
+SHA-256: e08b939e78159dfd9288becb0aec273c96d8af896df46e6118ad2fd073847e2e
+Automated solution test: PASS 40/40
+Moving-wall regression: PASS
+Audio regression: PASS
+Chrome manual version tested:
+Firefox manual version tested:
+Final test date:
 ```
-
-Once these values are frozen, do not rebuild or recompress the archive before uploading. A different compression tool can change the byte count even when the contained source is identical.

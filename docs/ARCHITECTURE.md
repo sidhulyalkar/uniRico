@@ -1,417 +1,65 @@
-# uniRico Architecture
+# uniRico Architecture — v0.8.0
 
-uniRico is intentionally engine-free. The competition-oriented game is a single HTML file containing the Canvas renderer, input handling, physics simulation, level data, procedural audio, menus, scoring, persistence, and assistance tools.
+uniRico is an engine-free 2D precision puzzle game built around a 960×600 logical world, a custom fixed-step projectile simulation, procedural Canvas art, procedural Web Audio, compact declarative levels, and a deterministic 13KB release pipeline.
 
-The public repository now exposes the same architecture in a **readable source mirror** under `src/`, so the tiny runtime can remain size-conscious without making the project opaque to other developers.
+## Design constraints
 
----
-
-## Design goals
-
-The implementation is optimized around six constraints:
-
-1. **Tiny archive size** for js13kGames.
-2. **Deterministic projectile behavior** so trajectory prediction and the live shot agree.
-3. **High mechanic reuse** so advanced levels combine systems without duplicating code.
-4. **Procedural presentation** so unicorns, clouds, prisms, particles, rainbows, and audio do not require external assets.
-5. **Fast browser iteration** with no framework or runtime dependency.
-6. **Readable public source** that explains how the byte-conscious artifact is structured.
-
----
-
-## Two representations
-
-### Competition-oriented build
-
-```text
-index.html
-```
-
-Everything is folded into a single file for compression and straightforward packaging.
-
-### Readable source mirror
-
-```text
-src/
-├── index.html
-├── style.css
-├── levels.js
-└── runtime/
-    ├── core.js
-    ├── physics.js
-    ├── render-world.js
-    ├── render-entities.js
-    ├── render-hud.js
-    └── ui.js
-```
-
-The readable source preserves compact runtime identifiers where that makes comparison with the shipping artifact safer, while documentation supplies descriptive names and subsystem boundaries.
-
-See [`SOURCE_GUIDE.md`](SOURCE_GUIDE.md) for the detailed symbol map.
-
----
+The architecture is shaped by four competing requirements: the shipped ZIP must stay under 13,312 bytes; trajectory prediction must agree with live physics; the 40-level campaign needs enough reusable systems to create real depth; and the public source should remain understandable despite the compact artifact.
 
 ## Runtime flow
 
 ```text
-Pointer / keyboard input
-        ↓
-Game state + menu state
-        ↓
-Fixed-step projectile simulation
-        ↓
-Level mechanic fields
-        ↓
-Ordered cloud-target validation
-        ↓
-Canvas rendering + procedural audio
-        ↓
-Scoring / persistence / assistance
+Pointer / keyboard
+      ↓
+Game + menu state ─────────────→ adaptive audio transport
+      ↓
+Fixed-step update
+      ↓
+Projectile physics ← level data / moving field rigs
+      ↓
+Ordered cloud resolution
+      ↓
+Canvas rendering + particles + HUD
+      ↓
+localStorage records / progression
 ```
 
-A more concrete code path for a normal shot is:
+## Logical world and timing
 
-```text
-$U / $3          input + fire
-   ↓
-$i               create projectile
-   ↓
-$Q               fixed simulation update
-   ↓
-$7               advance live shot / target sequence
-   ↓
-_f               one projectile physics tick
-   ↓
-Z / _e / $O ...  reflections, walls, portals, fields
-   ↓
-$C               draw rainbow ribbon
-   ↓
-win / $4         success or failure
-```
+All level geometry lives in a stable 960×600 coordinate system. The Canvas scales to the browser window and pointer coordinates are transformed back into logical space. Simulation advances in ~16.667 ms fixed steps inside `requestAnimationFrame`, preventing normal render-rate variation from directly changing projectile behavior.
 
----
+## Shared simulation for prediction and reality
 
-## Logical world coordinates
+The white trajectory guide advances a simulated projectile through the same `_f()` physics step used by the live rainbow. Side effects such as particles and sound are disabled for simulation, but walls, portals, continuous forces, hazards, and moving geometry follow the same model.
 
-The game uses a **960 × 600** logical playfield.
+## Moving target collision
 
-The browser canvas scales this world to the available viewport while preserving aspect ratio. Pointer events are transformed back into logical world coordinates before gameplay logic sees them.
+Cloud targets can move while the projectile moves. Endpoint-only checks allowed fast shots to pass through small targets between simulation samples, so target contact is evaluated as relative segment motion over the full tick. Portal teleports are exempted from that sweep so a discontinuous jump never becomes a fake collision line across the map.
 
-This keeps:
+## Moving prism collision
 
-- level geometry
-- collision detection
-- trajectory prediction
-- rendering
-- target positions
+A moving prism is treated as a swept relative-motion expanded AABB. The engine computes the earliest face crossing in wall-relative coordinates, reflects only the normal velocity component using the wall surface velocity, then moves the projectile slightly outside the face. This prevents sticky repeat collisions, wall dragging, and incorrect end-cap ejections.
 
-independent of the actual desktop window resolution.
+## Ordered cloud locks
 
----
+Each target tuple contains a required reflection count. Only the active target can advance the sequence. Contact with a later unresolved cloud explicitly fails with `WRONG CLOUD · NEXT N`, eliminating ambiguous no-op collisions.
 
-## Fixed-step simulation
+The renderer reinforces ordering with active halos, numbered badges, `NEXT`, bounce text, and a connector toward the following target.
 
-The browser renders through `requestAnimationFrame`, but gameplay advances in approximately **16.667 ms fixed steps** accumulated from real frame time.
+## Campaign structure
 
-This avoids tying projectile behavior directly to frame rate and helps keep the simulation stable across different machines.
+Levels 1–19 teach individual mechanics. Levels 20–30 are a mixed-system bridge with larger targets and longer previews. Levels 31–40 restore the dense multi-target endgame. Shared `F0...F9` rigs let advanced levels reuse mechanical environments rather than repeat large arrays.
 
-`runtime/ui.js` owns the animation driver. `runtime/physics.js` owns the fixed simulation update.
+## Procedural soundtrack
 
----
+The v0.8 soundtrack is a state machine layered on a recursive timer rather than a fixed BPM loop.
 
-## Projectile model
+During aiming, four bars move across roughly 122–138 BPM before swing. The arrangement is lighter and syncopated. When a shot is live, the transport drops to roughly 94–106 BPM before bounce-dependent slowdown while increasing voice density. Alternating sixteenth delays create swing, bar-specific masks vary bass and percussion placement, and occasional transition accents keep the phrase from feeling identical every loop.
 
-A live shot stores a compact state vector containing, conceptually:
+The bass voice separates a filtered saw/square mid layer from a clean sine sub so low frequencies survive filter sweeps. Kicks, snares, hats, stabs, risers, and game SFX are all synthesized from short-lived oscillators.
 
-- position and previous position
-- velocity
-- reflection count
-- current target index
-- portal cooldown / hold state
-- spin
-- charge polarity
-- one-shot field bookkeeping
-- age
-- recent path history
+## Source/release split
 
-Each fixed tick applies continuous fields, movement, collisions, state transitions, hazards, and target validation.
+The root and `src/` are optimized for human inspection. The one-file competition package is frozen separately, identified by byte count and SHA-256, and should be attached to the final tagged GitHub Release rather than mixed into the readable source tree.
 
-The central step function lives in `runtime/physics.js` as `_f` in the compact naming scheme.
-
----
-
-## Prediction uses the same physics
-
-The white trajectory preview is not generated by a separate approximation.
-
-The renderer creates a simulated projectile and advances it through the **same projectile-step function** as the live shot, with gameplay side effects disabled.
-
-That is one of the most important correctness choices in uniRico. A precision ricochet game becomes frustrating very quickly if its guide describes a different world than the projectile actually inhabits.
-
-Harder levels reduce the preview simulation budget rather than changing the physics.
-
----
-
-## Exact-bounce cloud rule
-
-Targets specify an exact required reflection count.
-
-When the projectile reaches the active cloud, the accumulated bounce count is checked against the target requirement. A correct hit advances the ordered cloud sequence. An incorrect count rejects the shot.
-
-The underlying rule is numerical, but the theme translates it into an emotional objective:
-
-```text
-abstract lock requirement
-        ↓
-grumpy cloud
-        ↓
-correct rainbow route
-        ↓
-happy cloud
-```
-
-That mapping is a core part of the game design, not just presentation.
-
----
-
-## Level encoding
-
-Each level is a compact object. Common fields are:
-
-| Key | Meaning |
-|---|---|
-| `n` | level name |
-| `p` | unicorn / launcher position |
-| `t` | ordered cloud target definitions |
-| `m` | maximum allowed reflections |
-| `q` | trajectory-preview budget |
-| `w` | prism / wall geometry |
-| `o` | rainbow-arch portal pairs |
-| `f` | wind / gust fields |
-| `z` | slow / dream-cloud zones |
-| `a` | acceleration / stardust zones |
-| `g` | gravity / moonbow fields |
-| `s` | spin fields |
-| `c` | charge fields |
-| `k` | magnetic force fields |
-| `b` | timed storm barriers |
-| `r` | speed-sensitive resonance gates |
-| `v` | hazardous storm / void cores |
-
-Missing arrays mean that mechanic is absent from the level.
-
-The readable campaign data lives in [`../src/levels.js`](../src/levels.js).
-
----
-
-## Target encoding
-
-A target is stored approximately as:
-
-```text
-[x, y, requiredBounces, motionType, amplitude, speed, phase, radius]
-```
-
-Only the values needed by a target have to be supplied.
-
-That lets stationary early-game clouds and complex moving late-game clouds share one code path.
-
----
-
-## Shared motion system
-
-Moving objects use one compact periodic-motion helper. Different motion modes produce horizontal, vertical, circular, and compound periodic paths.
-
-The same representation can animate:
-
-- targets
-- reflective prisms
-- portal endpoints
-
-This is a recurring js13k design pattern in the codebase: spend bytes on a general primitive, then parameterize it many different ways.
-
----
-
-## Reusable field rigs
-
-Late levels reuse `F0...F9` environment bundles rather than restating every field definition.
-
-A shared rig can contain a moving prism, portal pair, wind region, slow zone, accelerator, gravity well, spin zone, storm barrier, charge field, magnetic field, resonance gate, and hazard. A level spreads that rig into its own object and supplies its unique launcher / target sequence.
-
-This has two benefits:
-
-1. **compression** — repeated structures cost less;
-2. **design coherence** — recurring environments become recognizable puzzle motifs.
-
----
-
-## Field systems
-
-### Wind
-
-Wind regions continuously add to projectile velocity while the shot is inside the region.
-
-### Dream-cloud slow zones
-
-Slow zones scale movement distance per tick instead of permanently rewriting velocity.
-
-### Stardust acceleration
-
-Acceleration regions multiply velocity on entry. Bookkeeping prevents the multiplier from being applied on every frame while the projectile remains inside the region.
-
-### Spin
-
-Spin fields add angular rotation to the velocity vector. Once acquired, curvature can persist and compound.
-
-### Charge and magnetism
-
-Charge zones assign polarity. Magnetic fields then curve a charged projectile according to polarity, field sign, and distance.
-
-### Moonbow gravity
-
-Gravity fields attract the projectile toward a point with distance-dependent strength.
-
-### Rainbow-arch portals
-
-Portal pairs relocate the projectile between endpoints. A cooldown prevents immediate ping-pong re-entry. Some variants temporarily hold the projectile to a moving endpoint before release.
-
-### Timed storm barriers
-
-Barrier geometry alternates between collidable and passable states using a compact period / duty-cycle representation.
-
-### Aurora resonance gates
-
-Resonance regions validate projectile speed against a permitted range. Entering at the wrong speed fails the shot.
-
----
-
-## Rendering architecture
-
-All runtime art is procedural Canvas drawing.
-
-The readable rendering source is split by responsibility:
-
-### `render-world.js`
-
-- twilight sky
-- atmospheric clouds
-- sparkles
-- prisms
-- rainbow arches
-- wind curls
-- dream-cloud regions
-- moonbow / gravity effects
-- magical charge and spin fields
-- storm barriers
-- aurora gates
-- hazards
-
-### `render-entities.js`
-
-- grumpy / happy cloud targets
-- unicorn launcher
-- white trajectory predictor
-- learned solution traces
-- live rainbow projectile
-- fading six-band trail
-- particles and floating feedback
-
-### `render-hud.js`
-
-- in-game information panels
-- main menu
-- pause menu
-- level select
-- completion screens
-- Help / solution-assistance UI
-
-### `ui.js`
-
-- frame composition order
-- `requestAnimationFrame` loop
-- pointer input
-- keyboard shortcuts
-- menu-state transitions
-
----
-
-## Rainbow projectile trail
-
-The live shot records recent path points. Rendering walks over recent path segments and draws multiple narrow offset bands with different spectral hues and fading alpha.
-
-The result is a ribbon rather than a single colored line.
-
-The visual states intentionally mean different things:
-
-- **white dotted path** = possible future
-- **rainbow ribbon** = committed live shot
-- **faint trace** = remembered / learned route
-
-That separation improves readability in a game where trajectory history matters.
-
----
-
-## Procedural cloud targets
-
-Active targets are gray cloud characters with angry expressions and an outer highlight.
-
-Successful ordered hits advance the target state and trigger colorful feedback. Cleared clouds render as happy white clouds.
-
-This replaces abstract numbered circles with a visual objective the player understands emotionally before reading text.
-
----
-
-## Audio
-
-Audio is generated using Web Audio oscillators and gain envelopes.
-
-There are no audio files. Small differences in waveform, frequency, decay, and timing provide feedback for:
-
-- firing
-- bouncing
-- portals
-- target hits
-- success
-- failure
-
-The audio helpers live in `runtime/core.js`.
-
----
-
-## Scoring and persistence
-
-Each level records local performance including:
-
-- star rating
-- time
-- shot count
-- score
-- solution-assistance state
-
-Progress is stored in `localStorage`, and the top HUD aggregates stars and score across the campaign.
-
----
-
-## Assistance system
-
-The game contains three levels of help:
-
-1. **Show Aim** — point the horn toward the encoded solution angle.
-2. **Watch Mirrored Shot** — demonstrate the maneuver in mirrored form for practice.
-3. **Watch Solution** — simulate the true encoded solution and leave a trace.
-
-The solution representation is packed into a small encoded payload containing angle and timing information.
-
----
-
-## Why keep the shipping build single-file?
-
-For a normal web game, a modular source tree is more conventional. For js13k, the shipping artifact benefits from aggressive compression, repeated-token reuse, and minimal file overhead.
-
-The repository now makes that tradeoff explicit:
-
-> **`src/` is optimized for humans. Root `index.html` is optimized for the byte budget.**
-
-Future gameplay work should ideally be reasoned about and documented in the readable mirror, then folded into the compact runtime before a release is frozen.
-
-A post-jam build pipeline could automate that transformation. During the competition, the current approach keeps the relationship between the readable source and tiny artifact easy to inspect without introducing a heavy toolchain.
+This prevents the public repo from forcing developers to learn from the byte-golfed file while still keeping the submission artifact traceable.

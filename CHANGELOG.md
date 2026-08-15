@@ -1,73 +1,83 @@
 # Changelog
 
-All notable changes to **uniRico** are documented here.
+## v0.8.0 — Grooved bullet-time soundtrack
 
-## Repository showcase / readability pass — 2026-08-13
+- Reverse the v0.7 pacing relationship: aiming is quicker, live shots are deliberately slower and heavier.
+- Aim state now moves across roughly 122–138 BPM bar values before swing.
+- Flight state moves across roughly 94–106 BPM before bounce-dependent slowdown.
+- Add alternating sixteenth-note swing so the transport no longer lands on an even mechanical grid.
+- Add four different planning-state bass masks and four different pitched-stab masks.
+- Add syncopated triangle stabs for a funkier melodic response.
+- Add occasional short filtered wah-bass answers during flight.
+- Retain independent kick masks, layered sharp snares, irregular hats, deep sub, wobble bass, and phrase-end transitions.
+- Make additional reflections slightly slow the music rather than accelerate it.
+- Expand audio regression coverage to verify inverse state tempo, swing/tempo spread, groove timbres, density, and oscillator cleanup.
 
-### Public source readability
+## v0.7.0 — Dynamic music states
 
-- Added a runnable `src/` development mirror alongside the compact root `index.html`.
-- Split campaign data into `src/levels.js` with documented field keys and target tuples.
-- Split the runtime into focused files for core state, physics, environment rendering, entity rendering, HUD / menus, and UI / input.
-- Added `docs/SOURCE_GUIDE.md` with a descriptive map for compact runtime symbols, globals, data shapes, rendering order, and common edit locations.
-- Updated `docs/ARCHITECTURE.md` to document the relationship between human-readable source and the byte-conscious competition artifact.
-- Preserved compact identifiers in the readable mirror where that improves traceability to the shipped build rather than creating a second divergent implementation.
+- Replaced the fixed ~140 BPM music clock with an adaptive recursive transport.
+- Aim/pre-shot music now runs as a sparse ~104–112 BPM half-time pattern, leaving room to read the trajectory.
+- Live rainbow shots jump into a denser ~150–167 BPM dubstep/trap pattern.
+- Bounce count adds small tempo pressure during flight, while alternating bars vary pacing further.
+- Firing a shot triggers an immediate sub/drop accent and resets the flight phrase.
+- Returning to a non-flight state immediately switches back to the sparse planning pattern.
+- Non-flight states retain the calmer ~104–112 BPM transport.
+- Master sound toggle still prevents new audio nodes while muted.
 
-### Repository presentation
+## v0.6.0
 
-- Rebuilt the main README as a full project showcase covering the game fantasy, play loop, mechanics, architecture, readable source, level encoding, release discipline, and technical design.
-- Replaced the old README banner with a custom exact 3:1 `docs/banner.svg` featuring the unicorn, rainbow ricochet path, puzzle geometry, and grumpy-to-happy cloud transformation.
-- Added a Mermaid architecture diagram and a recommended source-reading path.
-- Made the repository layout and competition-vs-development source roles explicit.
+### Procedural bass-music redesign
 
-### Release discipline
+- Expand the soundtrack from a 16-step loop into a 64-step / four-bar arrangement at ~140 BPM.
+- Add four evolving bass phrases and independent per-bar kick masks.
+- Split bass into a filtered saw/square mid-bass plus a clean sine sub one octave lower.
+- Add multiple wobble / growl filter-resonance shapes.
+- Add a deeper four-bar downbeat sub boom.
+- Layer the half-time snare with a sharper high-frequency transient.
+- Add final-bar trap hat rolls, randomized digital ticks, and rare offbeat bass yelps.
+- Add a rising transition sweep and phrase-ending octave/glitch fill.
+- Preserve the live-projectile call-response bass accent.
+- Keep one sequencer timer, finite oscillator lifetimes, autoplay-safe startup, and the existing master `S` audio toggle.
+- Extend audio regression testing across a full 64-step macro-pattern, including sub/high-frequency coverage and upward transition sweeps.
 
-- Kept the compact root `index.html` unchanged during this documentation/source-readability pass.
-- Kept the frozen v0.3.0 ZIP size checkpoint documented separately from the expanded public source tree.
+## v0.5.0
+
+### Procedural soundtrack
+
+- Added a fully procedural Web Audio background track with no external audio assets.
+- Runs a compact 16-step sequence at ~140 BPM.
+- Added filtered dual-oscillator bass with resonant low-pass sweeps for a wobble / dubstep character.
+- Added sub-kick accents, half-time snare/clap hits, and bright hats.
+- Bass root shifts subtly with level progression.
+- Adds a small bass fill while a rainbow projectile is in flight.
+- Music starts only after Web Audio is unlocked by a user interaction.
+- Existing `S` sound toggle controls both music and gameplay SFX.
+- Notes are short-lived and explicitly stopped to prevent oscillator accumulation.
+
+## v0.4.1
+
+- Replace moving-wall endpoint-overlap collision with swept relative-motion AABB collision.
+- Reflect velocity in the moving wall frame using the wall normal velocity.
+- Preserve tangential velocity across moving-prism impacts.
+- Separate the projectile just outside the contacted face to prevent sticky repeat collisions.
+- Detect high-speed wall crossings that previously could tunnel through thin prisms.
+- Add dedicated moving-wall regression tests.
+- Revalidate all 40 encoded solution trajectories.
+
+## v0.4.0
+
+- Fix cloud-lock tunneling with swept relative-motion collision detection.
+- Add explicit wrong-order cloud feedback.
+- Add active-lock `NEXT` badge, stronger order markers, and next-lock connector.
+- Add white outlines around unresolved dark target, hazard, and active storm clouds.
+- Shift the sky toward a warmer blue-violet gradient for contrast.
+- Rebuild Levels 20–30 into a gentler mixed-mechanic bridge.
+- Increase target radii and preview budgets through the bridge campaign.
+- Make next-level keyboard testing use `LEVELS.length` instead of a hard-coded final index.
+- Preserve all 40 encoded solution trajectories and endgame stages.
 
 ## v0.3.0
 
-### Readability
-
-- Reworked the gameplay background into a darker twilight-blue gradient so white guides, clouds, sparkles, and rainbow effects read more clearly.
-- Strengthened the trajectory preview and several low-contrast environmental indicators.
-- Increased solution-trace contrast.
-
-### Navigation clarity
-
-- Renamed the level-select screen to `LEVELS`.
-- Replaced themed menu labels with familiar navigation language where clarity matters.
-- Replaced the old Echo naming with a simpler `HELP` screen.
-- Added clear assistance labels: `SHOW AIM`, `WATCH MIRRORED SHOT`, and `WATCH SOLUTION`.
-- Renamed the learned trace to `SOLUTION PATH`.
-- Simplified the pause screen to `PAUSED`.
-
-### Theme and presentation retained
-
-- Procedural unicorn launcher.
-- Fading six-band rainbow projectile.
-- Angry gray cloud targets that become happy when cleared.
-- Rainbow arches, prisms, wind, dream clouds, moonbow gravity, magical spin/charge fields, storm barriers, and aurora-style resonance elements.
-- 40-level physics campaign, scoring, stars, records, and assistance tools.
-
-### Gameplay
-
-- Physics, level data, scoring, and progression remain compatible with the v0.2.0 campaign.
-
-## v0.2.0
-
-### Full thematic redesign
-
-- Reframed the game around unicorns, rainbows, clouds, wind, prisms, and sky magic.
-- Replaced the generic projectile presentation with a rainbow projectile and fading multicolor tail.
-- Turned numbered lock targets into grumpy storm clouds that visually become happy after successful hits.
-- Reworked major field and obstacle renderers to feel native to the sky-magic theme.
-- Added a softer, cloud-shaped interface and more sparkly procedural feedback.
-
-## v0.1.0
-
-### First uniRico prototype
-
-- Established the unicorn launcher and rainbow-ricochet identity.
-- Rethemed the 40-level campaign around spectrum, cloud, prism, and rainbow language.
-- Added chromatic projectile feedback and themed completion effects.
+- Darker background and higher-contrast trajectory presentation.
+- Simplified menu terminology.
+- Reworked Help naming and navigation.
