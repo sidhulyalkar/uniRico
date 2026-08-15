@@ -1,88 +1,9 @@
-/**
- * uniRico runtime: cloud targets, unicorn, prediction, trails, and particles.
- */
+/** Readable runtime module: target ordering cues, unicorn, trajectory, rainbow trail. */
+// Cloud targets and ordering cues
+function $H(){let l=O(),a=B?B.i:0;if(l.t[a+1]){let q=tp(l.t[a],J),n=tp(l.t[a+1],J);X.setLineDash([4,9]);X.lineWidth=2;X.strokeStyle='#fff6';X.beginPath();X.moveTo(q[0],q[1]);X.lineTo(n[0],n[1]);X.stroke();X.setLineDash([])}l.t.forEach((t,i)=>{$G(t[0],t[1],t[3],t[4],t[5],t[6]);let q=tp(t,J),d=B&&i<B.i,on=i===a||!B&&i===0,r=Math.max(21,t[7]||16)*(1+Math.sin(J*.08+i)*.04),c=d?'#fffdf6':on?'#6d687d':'#827f94';if(!d)Cld(q[0],q[1],r+3,'#fff');if(on&&!d){X.lineWidth=4;K(q[0],q[1],r+14,'#fff',1);X.lineWidth=2;K(q[0],q[1],r+21,'#ffd7f0aa',1)}Cld(q[0],q[1],r,c,d?1:-1);if(d)for(let z=0;z<4;z++)K(q[0]-r+z*r*.7,q[1]+r*.55,2,`hsl(${z*90},95%,66%)`);if(!(F===7&&ek==1)){let y=q[1]-r-14;K(q[0],y,10,on?'#fff':'#ffffffcc');X.fillStyle='#655775';X.font='bold 10px sans-serif';X.textAlign='center';X.textBaseline='middle';X.fillText(i+1,q[0],y);if(on&&!d){X.fillStyle='#fff';X.font='bold 8px sans-serif';X.fillText('NEXT',q[0],y-16)}X.fillStyle='#fff';X.font='bold 9px sans-serif';X.fillText(t[2]+' BOUNCE'+(t[2]==1?'':'S'),q[0],q[1]+r+12)}})}
+function $N(){let p=O().p,a=Math.atan2($e[1]-p[1],$e[0]-p[0]);X.save();X.translate(p[0],p[1]);X.rotate(a);K(-18,5,14,'#fff');K(-7,-3,11,'#fff');K(-3,-8,5,'#fff');X.fillStyle='#ffd66a';X.beginPath();X.moveTo(0,-9);X.lineTo(22,-4);X.lineTo(-1,-1);X.fill();X.fillStyle='#f7a4c5';X.beginPath();X.moveTo(-10,-12);X.lineTo(-5,-21);X.lineTo(-1,-11);X.fill();K(-1,-6,2,'#4c4260');K(3,-1,3,'#f2a5bf');X.strokeStyle='#8a7398';X.lineWidth=2;X.beginPath();X.moveTo(-24,13);X.lineTo(-24,20);X.moveTo(-10,13);X.lineTo(-10,20);X.stroke();for(let i=0;i<4;i++){X.strokeStyle=`hsl(${i*82},95%,68%)`;X.lineWidth=3;X.beginPath();X.moveTo(-29,-4+i*4);X.quadraticCurveTo(-42,-15+i*5,-48,-2+i*4);X.stroke()}X.restore()}
+function $J(){if(!$a||B||F!==1)return;let p=O().p,dx=$e[0]-p[0],dy=$e[1]-p[1],q=Math.hypot(dx,dy);if(q<4)return;let b=$i(Math.atan2(dy,dx),7),pts=[],N=O().q||300;for(let i=0;i<N;i++){if(i%4==0)pts.push([b.x,b.y,i/N]);let z=_f(b,J+i,1);if(z<0)break}X.lineWidth=3;X.setLineDash([2,8]);X.beginPath();pts.forEach((p,i)=>i?X.lineTo(p[0],p[1]):X.moveTo(p[0],p[1]));X.strokeStyle='#fff';X.stroke();X.setLineDash([])}
+function ghost(){if($l.length>1){X.lineWidth=2;X.setLineDash([3,7]);X.beginPath();$l.forEach((p,i)=>i?X.lineTo(p[0],p[1]):X.moveTo(p[0],p[1]));X.strokeStyle=_==2?'#fffc':'#f4a5ffbb';X.stroke();X.setLineDash([])}X.setLineDash([6,7]);$q.forEach((g,j)=>{if(g.length<2)return;X.strokeStyle=`hsla(${320-j*60},70%,70%,${.18/(j+1)})`;X.lineWidth=2-j*.4;X.beginPath();g.forEach((p,i)=>i?X.lineTo(p[0],p[1]):X.moveTo(p[0],p[1]));X.stroke()});X.setLineDash([])}
+function $C(){if(!B)return;let a=Math.max(0,B.$a.length-42);for(let i=a;i<B.$a.length-1;i+=2){let p=B.$a[i],n=B.$a[i+1],dx=n[0]-p[0],dy=n[1]-p[1],m=Math.hypot(dx,dy)||1,f=(i-a)/42;for(let z=0;z<6;z++){let o=(z-2.5)*1.25,u=-dy/m*o,v=dx/m*o;X.strokeStyle=`hsla(${z*55},100%,65%,${.08+f*.62})`;X.lineWidth=2;X.beginPath();X.moveTo(p[0]+u,p[1]+v);X.lineTo(n[0]+u,n[1]+v);X.stroke()}}for(let i=0;i<5;i++)K(B.x+Math.cos(J*.16+i*T/5)*8,B.y+Math.sin(J*.16+i*T/5)*8,2,`hsl(${i*72+J*5},100%,68%)`);K(B.x,B.y,7,`hsl(${J*7%360},100%,72%)`);K(B.x,B.y,3,'#fff');if(B.spin){X.lineWidth=2;X.beginPath();X.arc(B.x,B.y,12,J*.12,J*.12+P*1.2*(B.spin>0?1:-1));X.strokeStyle='#d77cff';X.stroke()}if(B.h){X.lineWidth=2;K(B.x,B.y,16+Math.sin(J*.2)*3,'#ff8fddaa',1)}}
+function fx(){for(let p of $g){let a=p[4]/42;K(p[0],p[1],2.4,`hsla(${p[5]},95%,67%,${a})`);if(p[4]%5<1){X.fillStyle=`rgba(255,255,255,${a})`;X.fillRect(p[0]-4,p[1],8,1);X.fillRect(p[0],p[1]-4,1,8)}}for(let w of $r){X.globalAlpha=w[3]/45;X.fillStyle=`hsl(${w[4]},80%,55%)`;X.font='bold 16px sans-serif';X.textAlign='center';X.fillText(w[2],w[0],w[1]);X.globalAlpha=1}}
 
-function $H() { let l = O(), a = B ? B.i : 0; l.t.forEach((t, i) => { $G(t[0], t[1], t[3], t[4], t[5], t[6]); let q = tp(t, J), d = B && i < B.i, on = i === a || !B && i === 0, r = Math.max(21, t[7] || 16) * (1 + Math.sin(J * .08 + i) * .04), c = d ? '#fffdf6' : on ? '#747b8e' : '#939aaa'; if (on && !d) {
-    X.lineWidth = 3;
-    K(q[0], q[1], r + 13, '#fffc', 1);
-} Cld(q[0], q[1], r, c, d ? 1 : -1); if (d)
-    for (let z = 0; z < 4; z++)
-        K(q[0] - r + z * r * .7, q[1] + r * .55, 2, `hsl(${z * 90},95%,66%)`); if (!(F === 7 && ek == 1)) {
-    X.fillStyle = '#625b78cc';
-    X.font = 'bold 9px sans-serif';
-    X.textAlign = 'center';
-    X.textBaseline = 'middle';
-    X.fillText(i + 1, q[0], q[1] - r - 12);
-    X.fillText(t[2], q[0], q[1] + r + 10);
-} }); }
-
-function $N() { let p = O().p, a = Math.atan2($e[1] - p[1], $e[0] - p[0]); X.save(); X.translate(p[0], p[1]); X.rotate(a); K(-18, 5, 14, '#fff'); K(-7, -3, 11, '#fff'); K(-3, -8, 5, '#fff'); X.fillStyle = '#ffd66a'; X.beginPath(); X.moveTo(0, -9); X.lineTo(22, -4); X.lineTo(-1, -1); X.fill(); X.fillStyle = '#f7a4c5'; X.beginPath(); X.moveTo(-10, -12); X.lineTo(-5, -21); X.lineTo(-1, -11); X.fill(); K(-1, -6, 2, '#4c4260'); K(3, -1, 3, '#f2a5bf'); X.strokeStyle = '#8a7398'; X.lineWidth = 2; X.beginPath(); X.moveTo(-24, 13); X.lineTo(-24, 20); X.moveTo(-10, 13); X.lineTo(-10, 20); X.stroke(); for (let i = 0; i < 4; i++) {
-    X.strokeStyle = `hsl(${i * 82},95%,68%)`;
-    X.lineWidth = 3;
-    X.beginPath();
-    X.moveTo(-29, -4 + i * 4);
-    X.quadraticCurveTo(-42, -15 + i * 5, -48, -2 + i * 4);
-    X.stroke();
-} X.restore(); }
-
-function $J() { if (!$a || B || F !== 1)
-    return; let p = O().p, dx = $e[0] - p[0], dy = $e[1] - p[1], q = Math.hypot(dx, dy); if (q < 4)
-    return; let b = $i(Math.atan2(dy, dx), 7), pts = [], N = O().q || 300; for (let i = 0; i < N; i++) {
-    if (i % 4 == 0)
-        pts.push([b.x, b.y, i / N]);
-    let z = _f(b, J + i, 1);
-    if (z < 0)
-        break;
-} X.lineWidth = 3; X.setLineDash([2, 8]); X.beginPath(); pts.forEach((p, i) => i ? X.lineTo(p[0], p[1]) : X.moveTo(p[0], p[1])); X.strokeStyle = '#fff'; X.stroke(); X.setLineDash([]); }
-
-function ghost() { if ($l.length > 1) {
-    X.lineWidth = 2;
-    X.setLineDash([3, 7]);
-    X.beginPath();
-    $l.forEach((p, i) => i ? X.lineTo(p[0], p[1]) : X.moveTo(p[0], p[1]));
-    X.strokeStyle = _ == 2 ? '#fffc' : '#f4a5ffbb';
-    X.stroke();
-    X.setLineDash([]);
-} X.setLineDash([6, 7]); $q.forEach((g, j) => { if (g.length < 2)
-    return; X.strokeStyle = `hsla(${320 - j * 60},70%,70%,${.18 / (j + 1)})`; X.lineWidth = 2 - j * .4; X.beginPath(); g.forEach((p, i) => i ? X.lineTo(p[0], p[1]) : X.moveTo(p[0], p[1])); X.stroke(); }); X.setLineDash([]); }
-
-function $C() { if (!B)
-    return; let a = Math.max(0, B.$a.length - 42); for (let i = a; i < B.$a.length - 1; i += 2) {
-    let p = B.$a[i], n = B.$a[i + 1], dx = n[0] - p[0], dy = n[1] - p[1], m = Math.hypot(dx, dy) || 1, f = (i - a) / 42;
-    for (let z = 0; z < 6; z++) {
-        let o = (z - 2.5) * 1.25, u = -dy / m * o, v = dx / m * o;
-        X.strokeStyle = `hsla(${z * 55},100%,65%,${.08 + f * .62})`;
-        X.lineWidth = 2;
-        X.beginPath();
-        X.moveTo(p[0] + u, p[1] + v);
-        X.lineTo(n[0] + u, n[1] + v);
-        X.stroke();
-    }
-} for (let i = 0; i < 5; i++)
-    K(B.x + Math.cos(J * .16 + i * T / 5) * 8, B.y + Math.sin(J * .16 + i * T / 5) * 8, 2, `hsl(${i * 72 + J * 5},100%,68%)`); K(B.x, B.y, 7, `hsl(${J * 7 % 360},100%,72%)`); K(B.x, B.y, 3, '#fff'); if (B.spin) {
-    X.lineWidth = 2;
-    X.beginPath();
-    X.arc(B.x, B.y, 12, J * .12, J * .12 + P * 1.2 * (B.spin > 0 ? 1 : -1));
-    X.strokeStyle = '#d77cff';
-    X.stroke();
-} if (B.h) {
-    X.lineWidth = 2;
-    K(B.x, B.y, 16 + Math.sin(J * .2) * 3, '#ff8fddaa', 1);
-} }
-
-function fx() { for (let p of $g) {
-    let a = p[4] / 42;
-    K(p[0], p[1], 2.4, `hsla(${p[5]},95%,67%,${a})`);
-    if (p[4] % 5 < 1) {
-        X.fillStyle = `rgba(255,255,255,${a})`;
-        X.fillRect(p[0] - 4, p[1], 8, 1);
-        X.fillRect(p[0], p[1] - 4, 1, 8);
-    }
-} for (let w of $r) {
-    X.globalAlpha = w[3] / 45;
-    X.fillStyle = `hsl(${w[4]},80%,55%)`;
-    X.font = 'bold 16px sans-serif';
-    X.textAlign = 'center';
-    X.fillText(w[2], w[0], w[1]);
-    X.globalAlpha = 1;
-} }
