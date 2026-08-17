@@ -1,264 +1,210 @@
-# 🦄🌈 uniRico
+# 🦄🌈 uniRico v0.10.0
 
 <p align="center">
   <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
 </p>
 
 <p align="center">
-  <strong>A 13KB rainbow-ricochet puzzle game about a magical unicorn, grumpy storm clouds, impossible trajectories, and a procedurally synthesized bass soundtrack.</strong>
+  <strong>A 13KB rainbow-ricochet puzzle game where a magical unicorn bends rainbows through a sky full of prisms, portals, gravity, wind, and grumpy clouds.</strong>
 </p>
 
 <p align="center">
   <strong>THE SKY GOT GRUMPY · YOU HAVE A HORN · FIX IT</strong>
 </p>
 
-<p align="center">
-  Built for <strong>js13kGames 2026</strong> · Theme: <strong>Unicorns and Rainbows</strong> · Target category: <strong>Desktop</strong>
-</p>
+Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
 
----
+## v0.10.0 — cleaner sky, orchestral calm, dubstep launch
 
-## ✨ What is uniRico?
+This release focuses on making the playfield easier to read while giving the soundtrack a stronger relationship to the player's decision cycle.
 
-**uniRico** is a precision HTML5 Canvas puzzle game where a tiny unicorn fires a rainbow through a magical sky. The rainbow can ricochet from moving prisms, bend through wind and gravity, pass through rainbow arches, inherit spin or charge, cross timing gates, and thread ordered cloud locks.
+### Cleaner in-level presentation
 
-> **Aim horn → fire rainbow → bend the trajectory → cheer up the clouds.**
+The two large Canvas HUD ovals are gone as permanent fixtures.
 
-The presentation is cute. The simulation underneath it becomes a compact little machine. Later levels ask the player to reason about moving geometry, portal timing, persistent projectile state, exact bounce counts, and interacting force fields while the soundtrack changes with the state of the shot.
+- The **level name + tagline** now appear in one centered introduction card at the start of a level.
+- That card remains fully visible, then fades away after roughly **3.5 seconds**, leaving the playfield unobstructed.
+- The previous right-side white objective oval has been removed completely.
+- `NEXT X/X · NEED X BOUNCES` now lives inside the persistent cream/yellow top HUD, centered beneath level, time, shots, stars, and score.
+- The objective row updates immediately when a cloud is cleared or when a failed attempt resets the chain.
 
----
+The result is a much less crowded arena once the player has oriented themselves.
 
-## 🔊 Current release: v0.8.0
+### Two musical worlds
 
-v0.8.0 is the current public candidate and combines the gameplay reliability work from v0.4.x with the procedural music system developed through v0.5–v0.8.
+The procedural soundtrack now deliberately separates **thinking** from **commitment**.
 
-### State-aware bass music
+**Before the shot:** a slower orchestral-style planning bed runs around the mid-70 BPM range. Long sine and triangle voices overlap into four-bar harmonic motion, with no kick/snare grid competing with trajectory planning.
 
-The soundtrack is synthesized entirely with Web Audio. There are no samples, music files, external synths, or network requests.
+**After firing:** the music snaps into the procedural dubstep engine. The shot state retains the deep root sub, irregular kicks, sharp half-time snare, wobble/formant bass, yoi-style answers, hats, risers, growls, swing, and phrase-end stutters introduced by Wobble Warfare.
 
-**Aiming is quicker and funkier.** The planning state moves across roughly **122–138 BPM** before swing, using syncopated filtered bass pops, pitched triangle stabs, off-beat hats, and lighter ghost-snare punctuation.
+This creates a deliberate musical arc:
 
-**A live rainbow shot drops into heavier musical slow motion.** Flight moves across roughly **94–106 BPM** before bounce-dependent slowdown. The arrangement becomes denser rather than faster: deeper sub, wobble bass, harder kicks, layered snares, syncopated melodic answers, irregular hats, and phrase-end transitions.
+```text
+study the sky → calm harmonic space → click → bass drop → rainbow chaos
+```
 
-Every bar has its own base tempo, alternating sixteenth notes receive about 12% swing, and additional reflections slightly slow the flight groove. The result is a soundtrack that breathes with the play loop instead of sitting behind it as a fixed metronome.
+The music is still generated entirely through Web Audio. There are **no music files, samples, libraries, or network assets**.
 
-### Reliable cloud locks and moving prisms
+## Gameplay
 
-Two collision problems found during playtesting are now handled explicitly:
+Aim the unicorn's horn, fire a rainbow, and reach each active cloud with exactly the required number of reflections. Later levels combine:
 
-- **Cloud tunneling:** fast shots use swept relative-motion contact against moving targets instead of endpoint-only sampling.
-- **Moving-wall dragging:** moving prisms use swept point-vs-expanded-AABB collision in the wall's moving frame, reflect only the collision-axis velocity, and separate the projectile just outside the contacted face.
+- moving targets and moving prisms
+- rainbow-arch portals
+- wind fields
+- dream-cloud slow zones
+- stardust accelerators
+- moonbow gravity
+- spin
+- charge and magnetic polarity
+- pulsing storm barriers
+- resonance-speed gates
+- dark hazards
 
-Future clouds struck out of order now fail with explicit `WRONG CLOUD · NEXT N` feedback rather than silently ignoring the contact.
+The campaign contains **40 levels**. Levels 20–30 form a gentler mixed-mechanic bridge so players practice interacting systems before the final ten levels become dense multi-system machines.
 
-### Stronger objective readability
+## Readability and feedback
 
-Unresolved dark clouds have bright white silhouettes against the warmer blue-violet sky. The active cloud gets a stronger halo, numbered badge, `NEXT` label, direct bounce requirement, and a dotted connector toward the following unresolved target. The HUD repeats the current order and bounce requirement.
+Target order is deliberately redundant:
 
-### A smoother 40-level difficulty curve
+- the active cloud has the strongest outline and `NEXT` badge;
+- unresolved dark clouds have a white silhouette for contrast;
+- a subtle connector points toward the next unresolved target;
+- the top HUD states the current target number and required bounce count;
+- hitting a future cloud first produces explicit wrong-order feedback.
 
-Levels 1–19 introduce individual systems. Levels 20–30 now form a deliberate mixed-mechanic bridge with larger targets and longer prediction windows before Levels 31–40 return to the dense endgame chains.
+Cloud contact and moving-wall contact use swept collision tests so small moving targets and thin moving prisms cannot be skipped between simulation ticks.
 
----
-
-## 🎮 Controls
+## Controls
 
 | Input | Action |
 |---|---|
-| Mouse / pointer | Aim the unicorn horn |
-| Click / tap | Fire the rainbow |
+| Mouse / pointer | Aim |
+| Click / tap | Fire |
 | `M` / `Esc` | Pause / menu |
 | `R` | Restart level |
 | `H` | Help |
 | `P` | Toggle trajectory preview |
-| `S` | Toggle soundtrack + SFX |
-| `[` / `]` | Previous / next level during development/testing |
-| `Space` / `Enter` | Continue after level completion |
+| `S` | Toggle music + SFX |
+| `[` / `]` | Previous / next level during development |
+| `Space` / `Enter` | Continue after completion |
 
----
-
-## ☁️ The theme is the game language
-
-The goal is not to paste unicorn art over an unrelated physics game. The mechanics themselves are translated into one sky-magic vocabulary.
-
-| Gameplay function | uniRico presentation |
-|---|---|
-| Launcher | Unicorn + glowing horn |
-| Projectile | Fading six-band rainbow |
-| Ordered targets | Grumpy storm clouds → happy clouds |
-| Reflectors | Rainbow-edged prisms |
-| Portals | Rainbow arches |
-| Wind | Cloud gusts / magical currents |
-| Slow fields | Dream clouds |
-| Acceleration | Stardust / sunburst magic |
-| Gravity | Moonbow fields |
-| Spin | Swirling unicorn magic |
-| Charge / polarity | Magical charge fields |
-| Timed barriers | Storm walls / lightning |
-| Resonance | Aurora gates |
-| Hazards | Dark storm-cloud / night-sky cores |
-| Prediction | Bright white dotted trajectory |
-| Live shot | Rainbow ribbon |
-| Learned solution | Faint solution trace |
-
----
-
-## 🧠 Puzzle architecture
-
-Every active target contains a required bounce count. A shot only advances the ordered sequence when it reaches the active cloud with exactly that number of reflections.
-
-The campaign composes this rule with shared systems rather than writing unique logic for every level. One periodic-motion primitive can animate targets, prisms, and portal endpoints. One projectile step powers both the real rainbow and the trajectory predictor. Reusable `F0...F9` field rigs let the late campaign combine many mechanics without repeating environment data.
-
-A target tuple is:
+## Repository layout
 
 ```text
-[x, y, requiredBounces, motionMode, amplitude, speed, phase, radius]
+uniRico/
+├── index.html                         # Readable browser entry point
+├── README.md
+├── CHANGELOG.md
+├── src/
+│   ├── index.html
+│   ├── style.css
+│   ├── levels.js
+│   └── runtime/
+│       ├── core.js
+│       ├── audio.js
+│       ├── physics.js
+│       ├── render-world.js
+│       ├── render-entities.js
+│       ├── render-hud.js
+│       └── ui.js
+├── tests/
+│   ├── solution-smoke.js
+│   ├── moving-wall-collision.js
+│   ├── audio-sequencer.js
+│   ├── module-load.js
+│   └── hud-layout.js
+├── tools/
+│   └── build_js13k_zip.py
+└── docs/
+    ├── banner.svg
+    ├── SOURCE_GUIDE.md
+    ├── ARCHITECTURE.md
+    └── COMPETITION_CHECKLIST.md
 ```
 
-Common level keys include `w` walls, `o` portals, `f` wind, `z` slow zones, `a` accelerators, `g` gravity, `s` spin, `c` charge, `k` polarity, `b` barriers, `r` resonance gates, and `v` hazards.
+The readable source is split by responsibility. The actual js13k artifact is rebuilt separately as a single self-contained `index.html` and compressed into a deterministic ZIP.
 
----
+## Audio architecture
 
-## 🔍 Readable source and exact competition artifact
-
-The repository deliberately exposes two forms of the game.
-
-### Human-readable runtime
-
-The root page and `src/` load the v0.8.0 runtime as separate classic scripts:
+The soundtrack uses one recursive transport rather than a fixed interval. Each transport tick looks at live game state:
 
 ```text
-src/
-├── levels.js
-├── style.css
-└── runtime/
-    ├── core.js
-    ├── audio.js
-    ├── physics.js
-    ├── render-world.js
-    ├── render-entities.js
-    ├── render-hud.js
-    └── ui.js
+no projectile
+    ↓
+slow orchestral planning phrase
+
+projectile alive
+    ↓
+procedural dubstep drop
+    ↓
+wobble / formant / yoi phrase selection
+    ↓
+reflection count subtly changes pacing
 ```
 
-This is the version to study and modify.
+Every oscillator has an explicit stop time. Muting audio prevents new synthesis voices from being created. Browser autoplay rules are respected by creating/resuming the AudioContext only after normal player interaction.
 
-### Byte-conscious competition artifact
-
-The js13k candidate remains a separate frozen one-file ZIP rather than being mixed into the readable source tree. The public repository records the exact byte count and SHA-256 below, while the final uploaded archive should be attached to a tagged GitHub Release once the competition candidate is frozen.
-
-That keeps the repository focused:
-
-```text
-src/            learnable implementation
-tests/          behavioral regressions
-docs/           architecture and release notes
-index.html      readable browser entry point
-```
-
----
-
-## 🧬 Runtime map
-
-```mermaid
-flowchart LR
-    Input[Pointer + Keyboard] --> State[Game / Menu State]
-    State --> Audio[Adaptive Web Audio Transport]
-    State --> Sim[Fixed-Step Projectile Simulation]
-    Levels[Declarative Level Data] --> Sim
-    Sim --> Fields[Prisms · Wind · Portals · Gravity · Spin · Charge]
-    Fields --> Locks[Ordered Cloud Locks]
-    Sim --> Render[Canvas Renderer]
-    Locks --> Render
-    Render --> FX[Rainbow Trails · Clouds · Sparkles]
-    State --> Save[localStorage Records]
-```
-
-The trajectory preview uses the same projectile physics path as the live shot, which is essential for a game where the player is making decisions from predicted motion.
-
----
-
-## 🚀 Run locally
-
-No package manager or build framework is needed for development play:
+## Running locally
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Open:
+Then open:
 
 ```text
 http://localhost:8000/
 ```
 
-The readable development shell is also available at:
+For the readable source shell directly:
 
 ```text
 http://localhost:8000/src/
 ```
 
----
+## Validation
 
-## 🧪 Regression suite
+v0.10.0 is covered by automated regression checks for:
 
-The release source includes three focused Node tests:
+- all **40/40 encoded solution trajectories**
+- high-speed and moving-prism swept collisions
+- moving-wall reflection in the wall's own reference frame
+- post-impact separation / anti-sticking behavior
+- the orchestral-vs-dubstep tempo-state transition
+- Web Audio oscillator lifecycle and mute gating
+- deep sub, high-frequency percussion, formant filters, and transition automation
+- HUD objective placement and update logic
+- the disappearing level-intro card
+- removal of the old right-side objective oval
+- JavaScript syntax for every readable runtime module
+- exact js13k archive structure and size
 
-```bash
-node tests/solution-smoke.js
-node tests/moving-wall-collision.js
-node tests/audio-sequencer.js
-```
+A final human **current Chrome + current Firefox** gameplay/audio pass remains part of the release checklist before official submission.
 
-The current v0.8.0 source passes:
-
-- **40/40 encoded solution trajectories**
-- moving-prism swept-collision regressions
-- aim-state vs. flight-state tempo inversion
-- swing and bar-level timing variation
-- bass/sub/high-frequency synthesis coverage
-- finite oscillator start/stop lifecycle
-- soundtrack mute gating
-
-Final human Chrome and Firefox playtesting of the exact frozen ZIP remains a separate submission gate.
-
----
-
-## 📦 js13k size checkpoint
-
-The locally frozen v0.8.0 competition candidate currently measures:
+## Current js13k candidate
 
 ```text
-HTML:   35,324 bytes
-ZIP:    13,272 / 13,312 bytes
-Free:   40 bytes
-SHA256: e08b939e78159dfd9288becb0aec273c96d8af896df46e6118ad2fd073847e2e
+13,291 / 13,312 bytes
+21 bytes remaining
+SHA-256: 7198d7e13f5f5f4dbaab983f77c404956b9c42b98b5f641d80b88075976ecb23
 ```
 
----
+The competition ZIP contains exactly one root-level `index.html`.
 
-## 📚 Learn from the code
+## Engineering idea
 
-Recommended reading order:
+uniRico gets most of its complexity through reuse rather than asset count:
 
-1. [`docs/SOURCE_GUIDE.md`](docs/SOURCE_GUIDE.md)
-2. [`src/levels.js`](src/levels.js)
-3. [`src/runtime/core.js`](src/runtime/core.js)
-4. [`src/runtime/audio.js`](src/runtime/audio.js)
-5. [`src/runtime/physics.js`](src/runtime/physics.js)
-6. rendering modules under `src/runtime/`
-7. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-8. the frozen one-file competition artifact only after the readable version makes sense
-
----
-
-## 🏆 Built for js13kGames 2026
-
-uniRico is being developed for the **Desktop** category of **js13kGames 2026**, themed **Unicorns and Rainbows**.
+- one deterministic projectile simulation powers both the live shot and trajectory preview;
+- one compact motion primitive animates targets, prisms, and portal endpoints;
+- reusable field rigs create dense late-game environments;
+- procedural Canvas rendering replaces sprites;
+- procedural Web Audio replaces music and SFX assets;
+- compact tuples encode the 40-level campaign.
 
 The tiny build is the constraint. **This repository is the explanation.**
-
----
 
 <p align="center">
   🦄 <strong>Aim the horn. Bend the rainbow. Fix the sky.</strong> 🌈

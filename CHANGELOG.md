@@ -1,5 +1,31 @@
 # Changelog
 
+## v0.10.0 — Clean Flight Deck + Orchestral Planning
+
+- Replace the two permanent Canvas HUD cards with a single temporary level-introduction card.
+- Show `LEVEL XX · NAME` plus the gameplay tagline at level start, then fade the card after roughly 3.5 seconds.
+- Remove the right-side white objective oval entirely.
+- Add a centered `NEXT X/X · NEED X BOUNCES` row inside the persistent cream top HUD.
+- Refresh the objective row on cloud progression and failed-shot reset.
+- Replace the pre-shot electronic groove with a slower four-bar orchestral-style harmonic bed built from overlapping sine and triangle voices.
+- Keep the Wobble Warfare dubstep engine for live shots, creating an immediate calm-to-drop state transition on fire.
+- Preserve swept moving-cloud and moving-prism collision behavior and the Levels 20–30 teaching bridge.
+- Add HUD-layout regression coverage and update adaptive-audio tests for the new slower-planning / faster-flight relationship.
+- Revalidate all 40 encoded solution trajectories.
+- Freeze the deterministic candidate at 13,291 bytes, leaving 21 bytes beneath the 13,312-byte ceiling.
+
+## v0.9.0 — Wobble Warfare
+
+- Retune the procedural soundtrack around a stronger 45–65 Hz clean sub fundamental.
+- Add compact multi-rate wobble behavior through per-note filter timing and resonance variation.
+- Add high-Q band-pass formant bass for a talking / vowel-style drop bar.
+- Add yoi-style resonant call-and-response stabs.
+- Harden the half-time snare with a short high-frequency transient and brighter hats.
+- Add a stronger sub impact, bar transition riser, phrase-end growl hit, and final-bar stutter timing.
+- Preserve the faster planning groove and slower live-shot pocket introduced in v0.8.0.
+- Preserve finite oscillator lifetimes, one recursive audio transport, browser autoplay-safe startup, and the master `S` mute toggle.
+- Keep the final deterministic js13k archive at 13,306 bytes, leaving 6 bytes of formal headroom.
+
 ## v0.8.0 — Grooved bullet-time soundtrack
 
 - Reverse the v0.7 pacing relationship: aiming is quicker, live shots are deliberately slower and heavier.

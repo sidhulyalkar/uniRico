@@ -1,10 +1,10 @@
-# uniRico Architecture — v0.8.0
+# uniRico Architecture — v0.10.0
 
 uniRico is an engine-free 2D precision puzzle game built around a 960×600 logical world, a custom fixed-step projectile simulation, procedural Canvas art, procedural Web Audio, compact declarative levels, and a deterministic 13KB release pipeline.
 
 ## Design constraints
 
-The architecture is shaped by four competing requirements: the shipped ZIP must stay under 13,312 bytes; trajectory prediction must agree with live physics; the 40-level campaign needs enough reusable systems to create real depth; and the public source should remain understandable despite the compact artifact.
+The architecture balances four pressures: the shipped ZIP must stay under 13,312 bytes; trajectory prediction must agree with live physics; the 40-level campaign needs reusable systems with real depth; and the public source should remain understandable despite the compact artifact.
 
 ## Runtime flow
 
@@ -19,7 +19,7 @@ Projectile physics ← level data / moving field rigs
       ↓
 Ordered cloud resolution
       ↓
-Canvas rendering + particles + HUD
+Canvas world + transient intro + HTML HUD
       ↓
 localStorage records / progression
 ```
@@ -44,7 +44,15 @@ A moving prism is treated as a swept relative-motion expanded AABB. The engine c
 
 Each target tuple contains a required reflection count. Only the active target can advance the sequence. Contact with a later unresolved cloud explicitly fails with `WRONG CLOUD · NEXT N`, eliminating ambiguous no-op collisions.
 
-The renderer reinforces ordering with active halos, numbered badges, `NEXT`, bounce text, and a connector toward the following target.
+The renderer reinforces ordering with active halos, numbered badges, bounce text, and a connector toward the following target. The persistent HTML HUD also carries `NEXT X/X · NEED X BOUNCES` as a centered second row.
+
+## Clean HUD lifecycle
+
+v0.10 separates orientation information from persistent gameplay information.
+
+At level start, the Canvas renders one centered introduction card containing the level number, name, and gameplay tagline. The card is time-limited to about 3.5 seconds and fades during its final second. After that, the arena is unobstructed.
+
+Persistent state belongs to the cream HTML HUD: level, elapsed time, shot count, stars, score, and the active cloud requirement. The old permanent right-side objective oval is gone.
 
 ## Campaign structure
 
@@ -52,14 +60,33 @@ Levels 1–19 teach individual mechanics. Levels 20–30 are a mixed-system brid
 
 ## Procedural soundtrack
 
-The v0.8 soundtrack is a state machine layered on a recursive timer rather than a fixed BPM loop.
+The v0.10 soundtrack uses one recursive state-aware transport rather than separate song players.
 
-During aiming, four bars move across roughly 122–138 BPM before swing. The arrangement is lighter and syncopated. When a shot is live, the transport drops to roughly 94–106 BPM before bounce-dependent slowdown while increasing voice density. Alternating sixteenth delays create swing, bar-specific masks vary bass and percussion placement, and occasional transition accents keep the phrase from feeling identical every loop.
+When no projectile exists, the transport runs a slow mid-70-BPM orchestral-style planning bed. Long sine and triangle voices form sparse four-bar harmonic movement with no kick/snare grid, leaving sonic room for trajectory reading.
 
-The bass voice separates a filtered saw/square mid layer from a clean sine sub so low frequencies survive filter sweeps. Kicks, snares, hats, stabs, risers, and game SFX are all synthesized from short-lived oscillators.
+When the player fires, the same transport switches immediately into the denser Wobble Warfare dubstep arrangement at roughly 96–114 BPM before swing and reflection weighting. The shot state uses a clean root sub, filtered saw/square wobble layers, high-Q band-pass formant voices, yoi-style response stabs, irregular kicks, sharp half-time snares, hats, risers, growls, and a phrase-end stutter.
 
-## Source/release split
+Every oscillator is short-lived and receives an explicit stop time. The master `S` toggle prevents new voices from being created while muted. Web Audio is initialized only after normal player interaction to respect autoplay rules.
 
-The root and `src/` are optimized for human inspection. The one-file competition package is frozen separately, identified by byte count and SHA-256, and should be attached to the final tagged GitHub Release rather than mixed into the readable source tree.
+## Readable-source split
 
-This prevents the public repo from forcing developers to learn from the byte-golfed file while still keeping the submission artifact traceable.
+The public source loads in this order:
+
+```text
+src/levels.js
+src/runtime/core.js
+src/runtime/audio.js
+src/runtime/physics.js
+src/runtime/render-world.js
+src/runtime/render-entities.js
+src/runtime/render-hud.js
+src/runtime/ui.js
+```
+
+This mirrors the conceptual architecture while preserving compact identifiers where they make comparison with the shipping build easier.
+
+## Release pipeline
+
+`tools/build_js13k_zip.py` creates a deterministic Zopfli-compressed archive containing exactly one root-level `index.html`, verifies the extracted bytes, reports the archive size, and prints SHA-256.
+
+The current v0.10.0 frozen candidate is 13,291 bytes, leaving 21 bytes below the 13,312-byte ceiling. The exact submission artifact should be attached to the final tagged release after current Chrome and Firefox manual verification.

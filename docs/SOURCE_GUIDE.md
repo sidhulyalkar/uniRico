@@ -1,117 +1,135 @@
-# uniRico v0.8.0 Source Guide
+# uniRico v0.10.0 Source Guide
 
-This guide maps the readable public source to the compact release artifact. The competition build uses terse identifiers and packed tuples for compression; the public `src/` tree keeps those identifiers where useful for parity, but separates responsibilities into files and documents the meaning explicitly.
+The shipping game is byte-conscious, but its architecture is straightforward when read as separate systems.
 
-## Recommended reading order
+## Runtime pipeline
 
-1. `src/levels.js`
-2. `src/runtime/core.js`
-3. `src/runtime/audio.js`
-4. `src/runtime/physics.js`
-5. `src/runtime/render-world.js`
-6. `src/runtime/render-entities.js`
-7. `src/runtime/render-hud.js`
-8. `src/runtime/ui.js`
-9. `docs/ARCHITECTURE.md`
+```text
+pointer / keyboard
+      ↓
+game + menu state
+      ↓
+fixed-step projectile simulation
+      ↓
+fields / walls / portals / hazards
+      ↓
+swept ordered-cloud collision
+      ↓
+Canvas feedback + Web Audio
+```
 
-## Runtime modules
-
-### `core.js`
-Owns shared canvas/DOM references, game state, coordinate transforms, persistence, level/attempt reset, score calculation, shared periodic motion, target/wall/portal position helpers, and the swept moving-target contact helper.
-
-### `audio.js`
-Owns the procedural Web Audio system. `tk()` is the adaptive recursive transport, `ms()` is the 64-step musical arranger, `mu()` is the filtered mid-bass + clean sub voice, and `$j()` is the compact one-shot oscillator used for percussion and gameplay SFX.
-
-Aiming uses higher bar tempos than flight. Flight becomes slower as reflection count rises. Alternating sixteenth delays introduce swing, while bar-specific masks prevent a mechanically identical loop.
-
-### `physics.js`
-Owns projectile reflection, swept moving-prism collision, barriers, portals, one-shot fields, fixed-step projectile advance, target-order resolution, win/fail transitions, assistance playback, and the fixed simulation update.
-
-The moving-wall fix evaluates projectile motion relative to wall motion across the entire tick. Reflection occurs in the moving wall's normal frame, and the projectile is separated just outside the contacted face.
-
-### Rendering modules
-`render-world.js` draws environmental systems. `render-entities.js` draws cloud ordering cues, unicorn, prediction, rainbow trail, particles, and traces. `render-hud.js` draws status panels, level select, Help, pause, and completion overlays.
-
-### `ui.js`
-Composes the frame, maintains the fixed-step accumulator, handles pointer/keyboard state transitions, and starts the game loop.
-
-## Compact level keys
+## Level keys
 
 | Key | Meaning |
 |---|---|
 | `n` | level name |
 | `p` | unicorn position |
-| `t` | ordered target tuples |
-| `m` | maximum reflection allowance |
-| `q` | prediction simulation budget |
-| `w` | reflective walls / prisms |
-| `o` | rainbow-arch portals |
-| `f` | wind fields |
-| `z` | dream-cloud slow zones |
-| `a` | accelerator zones |
-| `g` | gravity wells |
+| `t` | ordered cloud targets |
+| `m` | maximum bounce allowance |
+| `q` | trajectory preview budget |
+| `w` | prism walls |
+| `o` | rainbow portals |
+| `f` | wind |
+| `z` | slow dream clouds |
+| `a` | accelerators |
+| `g` | gravity / moonbow wells |
 | `s` | spin fields |
-| `c` | charge fields |
-| `k` | polarity / magnetic fields |
 | `b` | timed storm barriers |
+| `c` | charge zones |
+| `k` | magnetic/polarity fields |
 | `r` | resonance speed gates |
 | `v` | hazards |
 
-Target tuples use:
+Targets use:
 
 ```text
 [x, y, requiredBounces, motionMode, amplitude, speed, phase, radius]
 ```
 
-## Important compact symbols
+## v0.10 HUD lifecycle
+
+The persistent cream HTML HUD owns campaign-level information: level index, elapsed time, shots, stars, score, and the current ordered-cloud requirement. `#next` is updated by `$0()` whenever an attempt resets or advances.
+
+The Canvas HUD function `$8()` is intentionally transient. For approximately the first 3.5 seconds of active play it draws one centered level-introduction card containing the level name and tagline. The card fades away, and there is no permanent right-side objective oval.
+
+## v0.10 music state machine
+
+`audio.js` uses one recursive transport (`tk`) and chooses its arrangement from whether `B`, the live projectile, exists.
+
+- **Planning (`B == null`)**: slow harmonic motion using long sine/triangle voices and no drum grid.
+- **Flight (`B != null`)**: the Wobble Warfare four-bar dubstep phrase with sub, kicks, sharp snare, hats, wobble/formant bass, yoi responses, transitions, and reflection-weighted pacing.
+
+The state transition requires no separate song player: the next transport tick sees the new projectile state and changes both tempo and orchestration.
+
+## Important compact functions
 
 | Symbol | Role |
 |---|---|
-| `$x` | resize canvas / DPR |
-| `$L` | pointer → logical-world coordinates |
-| `$w` | shared periodic motion |
 | `tp` | moving target position |
 | `wp` | moving wall position |
 | `pp` | portal endpoint position |
-| `hit` | swept relative-motion target contact |
-| `_i` | unlock/resume Web Audio |
-| `tk` | adaptive music transport |
-| `ms` | state-aware 64-step arrangement |
-| `mu` | sub + filtered mid-bass voice |
-| `$j` | compact one-shot synth/SFX |
-| `Z` | reflect projectile |
-| `_e` | swept moving-wall collision |
-| `_f` | one projectile physics tick |
-| `$7` | live-shot + ordered-cloud progression |
+| `hit` | swept projectile-vs-moving-cloud collision |
+| `_f` | one projectile physics step |
+| `$7` | ordered cloud hit progression |
+| `$H` | cloud rendering / ordering cues |
+| `$J` | trajectory preview |
+| `$C` | live rainbow projectile |
 | `$Q` | fixed simulation update |
-| `$H` | cloud targets and order cues |
-| `$N` | unicorn renderer |
-| `$J` | trajectory prediction |
-| `$C` | live rainbow ribbon |
-| `$K` | menu/overlay renderer |
-| `$U` | pointer action dispatcher |
 
-## Collision invariants
+## v0.4 collision fix
 
-Three invariants matter for reliable play:
+The old target check was effectively:
 
-1. A fast projectile cannot tunnel through a moving cloud merely because neither endpoint lies inside its radius.
-2. A moving prism collision is resolved at the earliest relative-time face crossing rather than by testing only the final overlap.
-3. Portal teleportation is not treated as a physical swept segment through the intervening map.
+```text
+is projectile position inside target circle after this tick?
+```
 
-Those are covered by the solution and moving-wall regression tests.
+That could miss a tiny cloud when a fast shot crossed the entire circle between ticks.
 
-## Music invariants
+The new `hit()` helper works in **relative motion space**. It subtracts target movement from projectile movement and finds the closest point on that relative segment to the target origin. A hit is registered whenever the segment crosses the effective target radius.
 
-The soundtrack is state-aware but must remain browser-safe:
+Portal jumps are deliberately excluded from segment sweeping, because teleportation is not physical travel between the portal endpoints.
 
-- one recursive transport timer;
-- AudioContext starts only after user interaction;
-- every oscillator has an explicit stop time;
-- `S` gates both music and SFX;
-- no new voices are emitted while muted;
-- no external audio files or libraries.
+## Ordering semantics
 
-## Release parity
+Only the active cloud may advance the chain. If a future unresolved cloud is physically hit first, the attempt now reports the mistake instead of silently ignoring the contact. Already-completed happy clouds remain harmless to pass through.
 
-The readable runtime and frozen standalone build should agree on campaign data, physics, target ordering, scoring, controls, audio behavior, persistence, and visual state transitions. The exact competition ZIP is frozen separately and should be attached to the final tagged GitHub Release; this guide describes the public source used to reason about that artifact.
+## Campaign progression
+
+The current campaign uses target count as an additional teaching lever:
+
+```text
+1–19   mostly one-lock lessons
+20     first full mixed field
+21–25  two-lock practice
+26–30  three-lock practice
+31–40  advanced chains
+```
+
+This keeps the mechanical vocabulary rich without forcing a six-to-nine-lock precision chain immediately after the tutorial material.
+
+## Procedural soundtrack (v0.10.0)
+
+The soundtrack is generated in `src/runtime/audio.js`; there is still no audio asset file. v0.10.0 combines a sparse orchestral planning bed with the dubstep-specific synthesis developed in Wobble Warfare: stronger sub fundamentals, variable-rate resonant wobble sweeps, high-Q band-pass formants, yoi-style response stabs, and sharper half-time percussion.
+
+- `_i()` creates / resumes `AudioContext` and starts exactly one adaptive transport timer.
+- `$j()` is the short one-shot oscillator used by game SFX, drums, digital ticks, and transition sweeps. Its final argument controls the end/start pitch ratio, allowing either downward percussion sweeps or upward risers.
+- `mu()` is the bass voice. A saw/square mid-bass passes through a resonant filter while a sine at the musical root bypasses the filter as the clean sub. The `w` bitfield selects waveform, wobble timing/resonance, and optional band-pass formant mode.
+- `ms()` advances either the sparse planning pattern or the dense 64-step / four-bar flight arrangement, depending on whether a rainbow is live.
+- `mt` stores the single recursive timer so repeated game SFX cannot accidentally create multiple music transports.
+- `mb` is the music step counter.
+
+The transport reschedules every sixteenth note. Planning uses a slower mid-70-BPM harmonic pulse with long overlapping sine/triangle voices and no drum grid. A live rainbow switches into a denser ~96–114-BPM dubstep pocket; reflections slightly weight that pocket further. Alternating step delays add swing. The flight arrangement still uses one encoded 64-character bass phrase and compact bitmasks, which is cheaper than a conventional note/event object graph while allowing state, bar, groove, and transition variation.
+
+The flight bar structure is intentionally asymmetric:
+
+```text
+bar 1  establish groove
+bar 2  busier variation + rising transition
+bar 3  lower-root/heavier formant response phrase
+bar 4  denser hats + glitch ending
+```
+
+Small low-probability digital and bass accents introduce controlled randomness while leaving the core phrase recognizable. The live rainbow also triggers an immediate sub/drop accent on fire, linking soundtrack activity to gameplay without changing the deterministic physics simulation.
+
+Browser autoplay rules are respected because `_i()` is first reached through normal user-triggered game audio. Setting `$y` false makes music and SFX synthesis return before creating new audio nodes.
