@@ -1,8 +1,8 @@
-# uniRico v0.10.0 readable source
+# uniRico v0.12.0 readable source
 
 The readable source mirrors the standalone competition build while keeping systems split by responsibility.
 
-Load order:
+## Load order
 
 ```text
 levels.js
@@ -15,8 +15,8 @@ runtime/render-hud.js
 runtime/ui.js
 ```
 
-`index.html` in this directory runs the readable build. The root `index.html` is the repository entry point, while the single-file size-conscious artifact is rebuilt by `tools/build_js13k_zip.py` for the js13k ZIP.
+The split is designed for inspection rather than bundling. All modules are classic scripts and share the same small runtime state used by the one-file competition artifact.
 
-The music is state-aware: planning uses a slow orchestral harmonic bed; firing switches immediately into the procedural wobble/formant dubstep transport.
+The live HTML HUD intentionally contains only elapsed time and the active `NEXT / NEED` requirement. The level name and tagline are drawn by `render-hud.js` as a bottom-centered transient title card for roughly 3.5 seconds, then disappear.
 
-The persistent cream HUD carries the current `NEXT X/X · NEED X BOUNCES` requirement. The Canvas only shows the level name and tagline briefly at level start, then fades that card away so the arena stays clean.
+See `../docs/SOURCE_GUIDE.md` for the compact-symbol map and system walkthrough.

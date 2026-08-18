@@ -1,4 +1,4 @@
-# 🦄🌈 uniRico v0.11.0
+# 🦄🌈 uniRico v0.12.0
 
 <p align="center">
   <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
@@ -13,6 +13,19 @@
 </p>
 
 Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
+
+## v0.12.0 — bottom level reveal
+
+The transient level introduction now lives at the **bottom-center of the arena** instead of competing with the live HUD at the top. The card is intentionally more opaque and more typographically prominent because it disappears after roughly 3.5 seconds.
+
+- wider 460×64 bottom-center presentation card
+- near-solid warm-white background with a crisp white edge
+- larger 18px bold level title for immediate orientation
+- stronger 11px tagline beneath it
+- full visibility for the opening beat, then the existing one-second fade
+- minimal top HUD remains timer + `NEXT X/X · NEED X BOUNCES` only
+
+This keeps the top edge reserved for live information while turning the level name into a short, deliberate title-card moment.
 
 ## v0.11.0 — minimal flight HUD
 
@@ -44,7 +57,7 @@ The main menu continues to show total stars and score, and the completion screen
 
 ### Music and physics retained
 
-v0.11.0 keeps the v0.10 musical split intact: slower orchestral planning before a shot and the denser Wobble Warfare dubstep engine once the rainbow launches. Swept moving-cloud and moving-prism collision fixes, the 40-level campaign, and the Levels 20–30 teaching bridge are unchanged.
+v0.12.0 keeps the v0.10 musical split intact: slower orchestral planning before a shot and the denser Wobble Warfare dubstep engine once the rainbow launches. Swept moving-cloud and moving-prism collision fixes, the 40-level campaign, and the Levels 20–30 teaching bridge are unchanged.
 
 ## Gameplay
 
@@ -163,7 +176,7 @@ http://localhost:8000/src/
 
 ## Validation
 
-v0.11.0 is covered by automated regression checks for:
+v0.12.0 is covered by automated regression checks for:
 
 - all **40/40 encoded solution trajectories**
 - high-speed and moving-prism swept collisions
@@ -183,9 +196,9 @@ A final human **current Chrome + current Firefox** gameplay/audio pass remains p
 ## Current js13k candidate
 
 ```text
-13,227 / 13,312 bytes
-85 bytes remaining
-SHA-256: 0491d53468f83a89a27f13f6899a40d76e008781c4d9360bf36ee4cbdddba032
+13,223 / 13,312 bytes
+89 bytes remaining
+SHA-256: 6b0c68495781d7b8f5c0e897d8f4ba1bf97ae96a8861c62f57aa24814ef87dcb
 ```
 
 The competition ZIP contains exactly one root-level `index.html`.

@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.12.0 — Bottom Level Reveal
+
+- Move the transient level name/tagline card from the upper arena to bottom-center.
+- Increase the title to 18px bold and the tagline to 11px bold for a clearer level-opening moment.
+- Increase the card to 460×64 with a near-solid warm-white fill and crisp white outline.
+- Preserve the existing ~3.5-second lifecycle and final one-second fade.
+- Preserve the minimal live HUD, pause stats, orchestral planning bed, dubstep shot state, physics, and 40-level campaign.
+- Add HUD regression assertions for bottom placement, stronger opacity, and larger typography.
+- Revalidate the full 40-level solution, moving-prism, modular-load, and adaptive-audio regression suite.
+- Freeze the deterministic candidate at 13,223 bytes, leaving 89 bytes beneath the 13,312-byte ceiling.
+
 ## v0.11.0 — Minimal Flight HUD
 
 - Reduce the live HUD to only the timer and `NEXT X/X · NEED X BOUNCES`.
