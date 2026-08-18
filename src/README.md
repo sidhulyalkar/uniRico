@@ -1,8 +1,6 @@
-# uniRico v0.12.0 readable source
+# uniRico v0.13.0 readable source
 
-The readable source mirrors the standalone competition build while keeping systems split by responsibility.
-
-## Load order
+The readable source mirrors the standalone competition build while separating systems by responsibility.
 
 ```text
 levels.js
@@ -15,8 +13,8 @@ runtime/render-hud.js
 runtime/ui.js
 ```
 
-The split is designed for inspection rather than bundling. All modules are classic scripts and share the same small runtime state used by the one-file competition artifact.
+`levels.js` now encodes the mechanic-driven v0.13 campaign. A visible interactive element is expected to be traversed/collided with by the encoded route, except the documented full-height portal gate walls in Levels 3, 13, and 15.
 
-The live HTML HUD intentionally contains only elapsed time and the active `NEXT / NEED` requirement. The level name and tagline are drawn by `render-hud.js` as a bottom-centered transient title card for roughly 3.5 seconds, then disappear.
+`tests/solution-smoke.js` performs real target-by-target completion validation. `tests/mechanic-coverage.js` verifies intended-route mechanic coverage and specifically protects Level 20's wind + spin + prism mix.
 
-See `../docs/SOURCE_GUIDE.md` for the compact-symbol map and system walkthrough.
+`src/index.html` runs this readable build. The package root `index.html` is the one-file size-conscious js13k artifact.

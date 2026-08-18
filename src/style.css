@@ -1,8 +1,8 @@
-/* uniRico v0.11.0 readable stylesheet */
+/* uniRico v0.13.0 readable stylesheet */
 html,body{margin:0;height:100%;overflow:hidden;background:#283e73;color:#655979;font:12px ui-rounded,"Trebuchet MS",sans-serif}
 canvas{width:100vw;height:100vh;display:block;touch-action:none;cursor:crosshair}
 #hud{position:fixed;pointer-events:none;user-select:none;top:8px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:6px 12px;border:1px solid #ffffffc9;background:#fffde6bd;border-radius:18px;white-space:nowrap;letter-spacing:.06em;box-shadow:0 3px 12px #1f275333}
 #hud i{width:4px;height:4px;border-radius:50%;background:#c99bea}
 #time{font-weight:800;color:#695878;font-variant-numeric:tabular-nums}
-#next{color:#8f779a;font-size:9px;letter-spacing:.08em}
+#next{color:#8f779a;font-size:9px}
 @media(max-width:620px){#hud{top:5px;gap:7px;padding:5px 9px;font-size:9px}#next{font-size:8px}}

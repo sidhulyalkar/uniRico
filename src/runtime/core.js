@@ -1,5 +1,5 @@
-/** uniRico v0.11.0 readable runtime module. */
-const C=document.querySelector('#c'),X=C.getContext('2d'),U={h:document.querySelector('#hud'),t:document.querySelector('#time'),n:document.querySelector('#next')},W=960,H=600,P=Math.PI,T=P*2,Q='KIJJLJJJOIJHJJGJLNKSRTRRPUUURPUUTSPUVUQV',E=atob('IB9A3XQD8NMAALHRAM7g2MZiAAAg0AAAAACwzQAAAABdyitkwtC5GrkagHDC0N1ZK2Q5iwAAQmBdyqvUuRqAcMLQ3VkrZDmLAABCYKvUuRo=');let R=Math.random,$V=1,L=0,$d=0,$t=0,$n=0,F=0,$h=0,$e=[800,300],B=null,$q=[],$g=[],$r=[],$c=0,$k=0,$a=1,$y=1,$F,J=0,Y=0,$s=0,$m=0,V=[],$W=0,$l=[],_=0,ek=0,et=0,ee=0,mt,mb=0;
+/** uniRico v0.13.0 readable runtime module. */
+const C=document.querySelector('#c'),X=C.getContext('2d'),U={h:document.querySelector('#hud'),t:document.querySelector('#time'),n:document.querySelector('#next')},W=960,H=600,P=Math.PI,T=P*2,Q='KIJJLJJJOIJHJJGJLNKSRTRRPUUURPUUTSPUVUQV',E=atob('IB9A3XQD8NMAALHRAM7g2EDOQM4g0AAAAACwzQAAAABdyitkwtAAAF3KwtArZIBw3Vm5GgAAwtBdyitkuRqAcMLQ3Vmr1DmLAABCYKvUuRo=');let R=Math.random,$V=1,L=0,$d=0,$t=0,$n=0,F=0,$h=0,$e=[800,300],B=null,$q=[],$g=[],$r=[],$c=0,$k=0,$a=1,$y=1,$F,J=0,Y=0,$s=0,$m=0,V=[],$W=0,$l=[],_=0,ek=0,et=0,ee=0,mt,mb=0;
 // Geometry and collision helpers
 const cl=(v,a,b)=>v<a?a:v>b?b:v,D=(a,b,c,d)=>Math.hypot(a-c,b-d),I=(x,y,r)=>x>r[0]&&x<r[0]+r[2]&&y>r[1]&&y<r[1]+r[3],hit=(b,t,n)=>{let q=tp(t,n),r=(t[7]||16)+6;if(b.pc==11)return D(b.x,b.y,q[0],q[1])<r;let p=tp(t,n-1),x=b.ox-p[0],y=b.oy-p[1],u=b.x-q[0]-x,v=b.y-q[1]-y,z=cl(-(x*u+y*v)/(u*u+v*v||1),0,1);return Math.hypot(x+u*z,y+v*z)<r};
 // Persistence and boot state
