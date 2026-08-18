@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.13.0 — Mechanic-Driven Campaign
+
+- Rebuild all 40 levels around a strict mechanic-use invariant: visible interactive systems must be used by the intended solution or serve as explicit gate geometry.
+- Redesign Level 20 `FIRST MIX` into a required wind + spin + prism two-lock circuit.
+- Prune decorative hazards, barriers, fields, and prism segments that did not affect intended solutions.
+- Rebuild Levels 9, 10, 11, and 15 to eliminate moving-prism, storm-barrier, polarity, and portal bypasses found during design audit.
+- Strengthen late full-spectrum gravity and magnetic stages so charge/polarity materially shape the route.
+- Rebuild ordered cloud targets directly along validated mechanic-dependent trajectories.
+- Establish explicit difficulty tiers: 2-lock bridge at 20–25, 3-lock chains at 26–30, 4-lock advanced levels at 31–35, 5-lock endgame at 36–39, and a 6-lock finale.
+- Make trajectory-preview budget monotonically non-increasing across all 40 levels.
+- Replace the old weak solution smoke test with true target-by-target completion validation.
+- Add `tests/mechanic-coverage.js` so unused visible mechanics fail local regression testing.
+- Run broad aim/delay and dense intended-neighborhood bypass audits with no sampled winning route skipping a required mechanic.
+- Preserve v0.12 HUD, collision, and orchestral-to-dubstep audio behavior.
+- Freeze the deterministic candidate at 12,522 bytes, leaving 790 bytes under the 13,312-byte ceiling.
+
 ## v0.12.0 — Bottom Level Reveal
 
 - Move the transient level name/tagline card from the upper arena to bottom-center.
