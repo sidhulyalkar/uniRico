@@ -1,4 +1,4 @@
-# uniRico v0.10.0 Source Guide
+# uniRico v0.11.0 Source Guide
 
 The shipping game is byte-conscious, but its architecture is straightforward when read as separate systems.
 
@@ -46,13 +46,15 @@ Targets use:
 [x, y, requiredBounces, motionMode, amplitude, speed, phase, radius]
 ```
 
-## v0.10 HUD lifecycle
+## v0.11 HUD lifecycle
 
-The persistent cream HTML HUD owns campaign-level information: level index, elapsed time, shots, stars, score, and the current ordered-cloud requirement. `#next` is updated by `$0()` whenever an attempt resets or advances.
+The live HTML HUD is deliberately minimal: it contains only `#time` and `#next`. `$0()` refreshes the objective whenever a level resets or target order advances, while the fixed-step loop updates the timer. `ui.js` hides the entire live HUD whenever the game is paused or showing menu/help/completion states.
 
-The Canvas HUD function `$8()` is intentionally transient. For approximately the first 3.5 seconds of active play it draws one centered level-introduction card containing the level name and tagline. The card fades away, and there is no permanent right-side objective oval.
+Campaign statistics are still computed in `$2()`, but they are presented on the main menu, completion screens, and the pause stats section rather than occupying the playfield.
 
-## v0.10 music state machine
+The Canvas HUD function `$8()` remains intentionally transient. For approximately the first 3.5 seconds of active play it draws one centered level-introduction card containing the level name and tagline, then fades away.
+
+## v0.10+ music state machine
 
 `audio.js` uses one recursive transport (`tk`) and chooses its arrangement from whether `B`, the live projectile, exists.
 
@@ -108,9 +110,9 @@ The current campaign uses target count as an additional teaching lever:
 
 This keeps the mechanical vocabulary rich without forcing a six-to-nine-lock precision chain immediately after the tutorial material.
 
-## Procedural soundtrack (v0.10.0)
+## Procedural soundtrack (v0.10+ retained in v0.11.0)
 
-The soundtrack is generated in `src/runtime/audio.js`; there is still no audio asset file. v0.10.0 combines a sparse orchestral planning bed with the dubstep-specific synthesis developed in Wobble Warfare: stronger sub fundamentals, variable-rate resonant wobble sweeps, high-Q band-pass formants, yoi-style response stabs, and sharper half-time percussion.
+The soundtrack is generated in `src/runtime/audio.js`; there is still no audio asset file. v0.11.0 combines a sparse orchestral planning bed with the dubstep-specific synthesis developed in Wobble Warfare: stronger sub fundamentals, variable-rate resonant wobble sweeps, high-Q band-pass formants, yoi-style response stabs, and sharper half-time percussion.
 
 - `_i()` creates / resumes `AudioContext` and starts exactly one adaptive transport timer.
 - `$j()` is the short one-shot oscillator used by game SFX, drums, digital ticks, and transition sweeps. Its final argument controls the end/start pitch ratio, allowing either downward percussion sweeps or upward risers.
@@ -121,15 +123,15 @@ The soundtrack is generated in `src/runtime/audio.js`; there is still no audio a
 
 The transport reschedules every sixteenth note. Planning uses a slower mid-70-BPM harmonic pulse with long overlapping sine/triangle voices and no drum grid. A live rainbow switches into a denser ~96–114-BPM dubstep pocket; reflections slightly weight that pocket further. Alternating step delays add swing. The flight arrangement still uses one encoded 64-character bass phrase and compact bitmasks, which is cheaper than a conventional note/event object graph while allowing state, bar, groove, and transition variation.
 
-The flight bar structure is intentionally asymmetric:
+The bar structure is intentionally asymmetric:
 
 ```text
 bar 1  establish groove
 bar 2  busier variation + rising transition
-bar 3  lower-root/heavier formant response phrase
-bar 4  denser hats + glitch ending
+bar 3  lower-root/heavier drop phrase
+bar 4  denser trap hats + glitch ending
 ```
 
-Small low-probability digital and bass accents introduce controlled randomness while leaving the core phrase recognizable. The live rainbow also triggers an immediate sub/drop accent on fire, linking soundtrack activity to gameplay without changing the deterministic physics simulation.
+Small low-probability digital and bass accents introduce controlled randomness while leaving the core phrase recognizable. The live rainbow also triggers a call-response bass fill at a fixed step, linking soundtrack activity to gameplay without changing the deterministic physics simulation.
 
 Browser autoplay rules are respected because `_i()` is first reached through normal user-triggered game audio. Setting `$y` false makes music and SFX synthesis return before creating new audio nodes.

@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.11.0 — Minimal Flight HUD
+
+- Reduce the live HUD to only the timer and `NEXT X/X · NEED X BOUNCES`.
+- Remove `UNI:RICO`, level count, shot count, total stars, and total score from the persistent gameplay overlay.
+- Replace the large cream status capsule with a much smaller, lightly translucent single-line pill.
+- Hide the live HUD entirely while paused, in Help, on level select, and on menu/completion screens.
+- Keep the existing 3.5-second level name/tagline intro card for transient orientation.
+- Add a pause-screen stats section containing level name, current time, current shot count, cumulative stars, and cumulative score.
+- Reposition pause actions so the new stats remain readable without crowding the menu.
+- Update HUD/module regression tests to enforce the minimal live-information contract and pause/menu hiding behavior.
+- Revalidate all 40 encoded solutions, moving-prism collision tests, and adaptive orchestral/dubstep audio regression.
+- Freeze the deterministic candidate at 13,227 bytes, leaving 85 bytes beneath the 13,312-byte ceiling.
+
 ## v0.10.0 — Clean Flight Deck + Orchestral Planning
 
 - Replace the two permanent Canvas HUD cards with a single temporary level-introduction card.

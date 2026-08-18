@@ -1,4 +1,4 @@
-# 🦄🌈 uniRico v0.10.0
+# 🦄🌈 uniRico v0.11.0
 
 <p align="center">
   <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
@@ -14,37 +14,37 @@
 
 Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
 
-## v0.10.0 — cleaner sky, orchestral calm, dubstep launch
+## v0.11.0 — minimal flight HUD
 
-This release focuses on making the playfield easier to read while giving the soundtrack a stronger relationship to the player's decision cycle.
+This release removes almost everything from the persistent in-level interface so the puzzle field stays visible, especially on late levels with targets near the top edge.
 
-### Cleaner in-level presentation
+### Only the two live facts that matter
 
-The two large Canvas HUD ovals are gone as permanent fixtures.
-
-- The **level name + tagline** now appear in one centered introduction card at the start of a level.
-- That card remains fully visible, then fades away after roughly **3.5 seconds**, leaving the playfield unobstructed.
-- The previous right-side white objective oval has been removed completely.
-- `NEXT X/X · NEED X BOUNCES` now lives inside the persistent cream/yellow top HUD, centered beneath level, time, shots, stars, and score.
-- The objective row updates immediately when a cloud is cleared or when a failed attempt resets the chain.
-
-The result is a much less crowded arena once the player has oriented themselves.
-
-### Two musical worlds
-
-The procedural soundtrack now deliberately separates **thinking** from **commitment**.
-
-**Before the shot:** a slower orchestral-style planning bed runs around the mid-70 BPM range. Long sine and triangle voices overlap into four-bar harmonic motion, with no kick/snare grid competing with trajectory planning.
-
-**After firing:** the music snaps into the procedural dubstep engine. The shot state retains the deep root sub, irregular kicks, sharp half-time snare, wobble/formant bass, yoi-style answers, hats, risers, growls, swing, and phrase-end stutters introduced by Wobble Warfare.
-
-This creates a deliberate musical arc:
+During play, the HUD is now a single compact translucent pill containing only:
 
 ```text
-study the sky → calm harmonic space → click → bass drop → rainbow chaos
+00:08.6  ·  NEXT 1/3 · NEED 2 BOUNCES
 ```
 
-The music is still generated entirely through Web Audio. There are **no music files, samples, libraries, or network assets**.
+The permanent HUD no longer shows the game logo, level counter, shot count, total stars, or total score. The pill is roughly one third of the old width and one third of its height, with a lighter border/background so it obscures far less of the arena. It also disappears completely whenever the game is paused, on the level-select screen, or in Help/menu states.
+
+The existing level-introduction card remains: `LEVEL XX · NAME` plus the short gameplay tagline appears at level start and fades away after roughly **3.5 seconds**. This keeps orientation information transient rather than permanently occupying the arena.
+
+### Stats moved where they belong
+
+The pause screen now becomes the compact stats surface. It shows:
+
+- current level number + name
+- current level timer
+- current shot count
+- cumulative stars
+- cumulative score
+
+The main menu continues to show total stars and score, and the completion screen still exposes time, shots, score, and best result. Nothing was removed from the player's records; it was simply moved out of the aiming view.
+
+### Music and physics retained
+
+v0.11.0 keeps the v0.10 musical split intact: slower orchestral planning before a shot and the denser Wobble Warfare dubstep engine once the rainbow launches. Swept moving-cloud and moving-prism collision fixes, the 40-level campaign, and the Levels 20–30 teaching bridge are unchanged.
 
 ## Gameplay
 
@@ -113,10 +113,7 @@ uniRico/
 │   ├── solution-smoke.js
 │   ├── moving-wall-collision.js
 │   ├── audio-sequencer.js
-│   ├── module-load.js
 │   └── hud-layout.js
-├── tools/
-│   └── build_js13k_zip.py
 └── docs/
     ├── banner.svg
     ├── SOURCE_GUIDE.md
@@ -166,7 +163,7 @@ http://localhost:8000/src/
 
 ## Validation
 
-v0.10.0 is covered by automated regression checks for:
+v0.11.0 is covered by automated regression checks for:
 
 - all **40/40 encoded solution trajectories**
 - high-speed and moving-prism swept collisions
@@ -186,9 +183,9 @@ A final human **current Chrome + current Firefox** gameplay/audio pass remains p
 ## Current js13k candidate
 
 ```text
-13,291 / 13,312 bytes
-21 bytes remaining
-SHA-256: 7198d7e13f5f5f4dbaab983f77c404956b9c42b98b5f641d80b88075976ecb23
+13,227 / 13,312 bytes
+85 bytes remaining
+SHA-256: 0491d53468f83a89a27f13f6899a40d76e008781c4d9360bf36ee4cbdddba032
 ```
 
 The competition ZIP contains exactly one root-level `index.html`.
