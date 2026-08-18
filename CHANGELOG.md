@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.14.0 — Mechanic Echoes
+
+- Replace the generic level-intro tagline with a data-driven list of the mechanics actually present in each puzzle.
+- Show `MOVING CLOUD` on motion-only lessons and compact mechanic combinations such as `PRISM · WIND · SPIN` on mixed stages.
+- Add one-per-shot mechanic interaction echoes: floating label, five-spark burst, and a tiny pitch-coded blip when a live rainbow first activates a system.
+- Cover prisms, portals, wind, dream zones, accelerators, gravity, spin, storm barriers, charge, magnetism, resonance, and void hazards.
+- Suppress all mechanic echoes in prediction / Help simulation so feedback never changes deterministic physics or pollutes tutorial traces.
+- Add a `PERFECT PATH!` completion title and higher resolving chime for first-shot clears.
+- Add mechanic-feedback regression coverage for Level 20's `PRISM · WIND · SPIN` briefing, once-per-shot behavior, particles, and simulation silence.
+- Revalidate all 40 true solutions, mechanic coverage, moving-wall collisions, HUD behavior, modular load, and adaptive audio.
+- Freeze the deterministic candidate at 12,802 bytes, leaving 510 bytes beneath the 13,312-byte ceiling.
+
 ## v0.13.0 — Mechanic-Driven Campaign
 
 - Rebuild all 40 levels around a strict mechanic-use invariant: visible interactive systems must be used by the intended solution or serve as explicit gate geometry.
@@ -11,7 +23,7 @@
 - Establish explicit difficulty tiers: 2-lock bridge at 20–25, 3-lock chains at 26–30, 4-lock advanced levels at 31–35, 5-lock endgame at 36–39, and a 6-lock finale.
 - Make trajectory-preview budget monotonically non-increasing across all 40 levels.
 - Replace the old weak solution smoke test with true target-by-target completion validation.
-- Add `tests/mechanic-coverage.js` so unused visible mechanics fail local regression testing.
+- Add `tests/mechanic-coverage.js` so unused visible mechanics fail CI-style local testing.
 - Run broad aim/delay and dense intended-neighborhood bypass audits with no sampled winning route skipping a required mechanic.
 - Preserve v0.12 HUD, collision, and orchestral-to-dubstep audio behavior.
 - Freeze the deterministic candidate at 12,522 bytes, leaving 790 bytes under the 13,312-byte ceiling.
@@ -26,6 +38,7 @@
 - Add HUD regression assertions for bottom placement, stronger opacity, and larger typography.
 - Revalidate the full 40-level solution, moving-prism, modular-load, and adaptive-audio regression suite.
 - Freeze the deterministic candidate at 13,223 bytes, leaving 89 bytes beneath the 13,312-byte ceiling.
+
 
 ## v0.11.0 — Minimal Flight HUD
 

@@ -2,10 +2,10 @@
 
 ## Package
 
-- [x] ZIP ≤ 13,312 bytes: **12,522 bytes**.
+- [x] ZIP ≤ 13,312 bytes: **12,802 bytes**.
 - [x] Submitted archive contains exactly one root-level `index.html`.
 - [x] No required external scripts, styles, fonts, images, audio files, or network services.
-- [x] SHA-256 recorded: `fdab16071f5212635cd07a9193a9ee538eee94469de5c9efcea29f08cdeb89ad`.
+- [x] SHA-256 recorded: `035c105cdcfa333cc2e38eb86dc964b2c7a400b3ed85055b8e9b4573dbba15a5`.
 
 ## Campaign gate
 
@@ -37,6 +37,9 @@
 - [x] Oscillator lifecycle/mute regressions pass.
 - [x] Live HUD contains only timer + current objective.
 - [x] Bottom level title is transient and disappears after ~3.5 seconds.
+- [x] Level title mechanic legend is generated from actual level data.
+- [x] Mechanic echoes fire once per live shot and stay silent during prediction/solution simulation.
+- [x] First-shot completion receives `PERFECT PATH!` presentation without changing scoring.
 
 ## Final human browser gate
 

@@ -1,4 +1,4 @@
-# 🦄🌈 uniRico v0.13.0
+# 🦄🌈 uniRico v0.14.0
 
 <p align="center">
   <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
@@ -12,7 +12,32 @@
 
 Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
 
-## v0.13.0 — mechanic-driven campaign
+## v0.14.0 — Mechanic Echoes
+
+v0.13 made every visible mechanic matter. v0.14 makes that rule **legible while you play**.
+
+The temporary level card no longer wastes its second line on generic controls. It now names the actual systems present in that puzzle, for example:
+
+```text
+LEVEL 20 · FIRST MIX
+PRISM · WIND · SPIN
+```
+
+That vocabulary is generated directly from level data, so the title card doubles as a compact pre-flight briefing without adding permanent HUD clutter. Moving-target lessons identify `MOVING CLOUD`; levels with multiple systems expose the exact mechanic set before the card fades away.
+
+### Reactive mechanic echoes
+
+The first time a live rainbow activates a mechanic during a shot, the game now answers with a brief floating label, a five-spark burst, and a tiny pitched triangle blip. `WIND`, `SPIN`, `MOON`, `CHARGE`, `MAGNET`, `AURORA`, `ARCH`, `PRISM`, and the other systems therefore announce themselves **at the moment cause becomes effect**.
+
+Each mechanic can echo only once per shot, so later levels do not become a cloud of repeated labels. Prediction and Help simulations suppress these effects entirely, preserving deterministic physics and preventing fake tutorial feedback.
+
+### Perfect Path
+
+Completing a level on the first shot now earns a small presentation reward: the result card reads **PERFECT PATH!** and the completion chime resolves higher. It adds satisfaction without changing scoring, physics, or the campaign solution space.
+
+A number of proposed polish ideas were already present before this release: wall/portal/cloud/completion SFX, a six-band projectile trail, failed-shot ghost paths, screen shake/flash, the `R` restart hotkey, and level numbers. v0.14 spends the recovered byte budget on the missing piece instead: **teaching the player what each mechanic just did.**
+
+## v0.13.0 foundation — mechanic-driven campaign
 
 The entire 40-level campaign has been re-audited around one rule:
 
@@ -121,6 +146,7 @@ uniRico/
 ├── tests/
 │   ├── solution-smoke.js
 │   ├── mechanic-coverage.js
+│   ├── mechanic-feedback.js
 │   ├── moving-wall-collision.js
 │   ├── audio-sequencer.js
 │   ├── module-load.js
@@ -150,7 +176,7 @@ http://localhost:8000/src/
 
 ## Validation
 
-v0.13.0 is covered by automated and design-audit checks for:
+v0.14.0 is covered by automated and design-audit checks for:
 
 - **40/40 encoded solutions truly complete every ordered target**
 - every visible mechanic instance is traversed/collided with by the intended route, except explicitly documented portal gates
@@ -163,6 +189,8 @@ v0.13.0 is covered by automated and design-audit checks for:
 - orchestral-to-dubstep audio state switching
 - oscillator cleanup / mute gating
 - minimal HUD and transient bottom title card
+- generated mechanic legends and one-shot interaction echoes
+- mechanic-feedback suppression during simulation
 - JavaScript syntax across readable modules
 - exact one-file ZIP structure and integrity
 
@@ -171,12 +199,12 @@ A final human pass in **current Chrome + current Firefox** remains the last rele
 ## Current js13k candidate
 
 ```text
-12,522 / 13,312 bytes
-790 bytes remaining
-SHA-256: fdab16071f5212635cd07a9193a9ee538eee94469de5c9efcea29f08cdeb89ad
+12,802 / 13,312 bytes
+510 bytes remaining
+SHA-256: 035c105cdcfa333cc2e38eb86dc964b2c7a400b3ed85055b8e9b4573dbba15a5
 ```
 
-The campaign cleanup actually recovered substantial compressed space because unused fields, hazards, and prism segments were removed instead of merely hiding them.
+v0.14 deliberately spends part of v0.13's recovered space on moment-to-moment comprehension and feedback while retaining more than 500 bytes of headroom.
 
 ## Engineering idea
 

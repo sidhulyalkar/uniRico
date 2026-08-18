@@ -1,4 +1,4 @@
-# uniRico Architecture — v0.13.0
+# uniRico Architecture — v0.14.0
 
 uniRico is an engine-free 2D precision puzzle game built around a 960×600 logical world, fixed-step projectile simulation, procedural Canvas rendering, procedural Web Audio, compact declarative levels, and a deterministic 13KB release pipeline.
 
@@ -42,7 +42,7 @@ The campaign now has a source-level design invariant:
 
 The only explicit impact exemptions are full-height portal gate walls on Levels 3, 13, and 15. They are still necessary because they prevent ordinary traversal between the two sides of the arena.
 
-Development audits additionally search both broad aim/delay grids and dense neighborhoods around the intended solution. The frozen v0.13 candidate has no sampled winning route that bypasses a required mechanic.
+Development audits additionally search both broad aim/delay grids and dense neighborhoods around the intended solution. The v0.14 campaign retains the v0.13 mechanic-driven geometry and has no sampled winning route that bypasses a required mechanic.
 
 ## Difficulty architecture
 
@@ -82,6 +82,16 @@ Only the active cloud may advance the chain. Hitting a future unresolved cloud g
 
 Persistent play UI contains only elapsed time and the active `NEXT/NEED` requirement. A bottom-centered level title card appears for roughly 3.5 seconds and fades. Level identity, shots, stars, and total score live on pause/menu/completion surfaces.
 
+## Mechanic-legibility layer
+
+v0.14 uses one compact mechanic vocabulary for both pre-flight briefing and live cause/effect feedback. `MK` stores the compact level keys and `MN` stores their player-facing names. `ml(level)` scans actual level data and builds the second line of the transient title card, so a stage such as Level 20 announces `PRISM · WIND · SPIN` without maintaining a separate tutorial table.
+
+The projectile also carries a small interaction bitmask. `mi(ball, mechanicIndex, sim)` runs only on the first live activation of each mechanic in a shot and emits a short floating label, five particles, and a pitch-coded triangle blip. Continuous fields can therefore be sampled every fixed step without spamming feedback.
+
+When `sim=1`, `mi()` is silent and does not mutate the feedback bitmask. Prediction, Help/Solution playback, mechanic-coverage testing, and the true-solution regression continue to share the same physics without presentation side effects.
+
+First-shot completion adds one presentation-only reward: `PERFECT PATH!` plus a higher resolving chime. Scoring and physics remain unchanged.
+
 ## Soundtrack
 
 One recursive Web Audio transport changes orchestration based on live projectile state.
@@ -106,10 +116,10 @@ src/runtime/ui.js
 
 The public source is readable and modular. The competition package is a separate one-file artifact generated with deterministic Zopfli ZIP packaging.
 
-## Frozen v0.13.0 candidate
+## Frozen v0.14.0 candidate
 
 ```text
-12,522 / 13,312 bytes
-790 bytes remaining
-SHA-256: fdab16071f5212635cd07a9193a9ee538eee94469de5c9efcea29f08cdeb89ad
+12,802 / 13,312 bytes
+510 bytes remaining
+SHA-256: 035c105cdcfa333cc2e38eb86dc964b2c7a400b3ed85055b8e9b4573dbba15a5
 ```

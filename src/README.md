@@ -1,4 +1,4 @@
-# uniRico v0.13.0 readable source
+# uniRico v0.14.0 readable source
 
 The readable source mirrors the standalone competition build while separating systems by responsibility.
 
@@ -15,6 +15,8 @@ runtime/ui.js
 
 `levels.js` now encodes the mechanic-driven v0.13 campaign. A visible interactive element is expected to be traversed/collided with by the encoded route, except the documented full-height portal gate walls in Levels 3, 13, and 15.
 
-`tests/solution-smoke.js` performs real target-by-target completion validation. `tests/mechanic-coverage.js` verifies intended-route mechanic coverage and specifically protects Level 20's wind + spin + prism mix.
+`tests/solution-smoke.js` performs real target-by-target completion validation. `tests/mechanic-coverage.js` verifies intended-route mechanic coverage and specifically protects Level 20's wind + spin + prism mix. `tests/mechanic-feedback.js` protects the new data-driven level briefing and once-per-shot cause/effect echoes.
 
 `src/index.html` runs this readable build. The package root `index.html` is the one-file size-conscious js13k artifact.
+
+The transient title card now derives its mechanic legend from `MK` / `MN` in `core.js`. `mi()` in `physics.js` emits the first live interaction echo for each mechanic bit and stays silent when `sim` is enabled.

@@ -1,4 +1,4 @@
-# uniRico v0.13.0 Source Guide
+# uniRico v0.14.0 Source Guide
 
 The shipping game is byte-conscious, but the readable source is split into familiar responsibilities.
 
@@ -67,6 +67,20 @@ Older smoke testing only checked that Help/Solution mode returned to the play st
 
 This verifies actual completion for all 40 encoded routes.
 
+## v0.14 mechanic vocabulary and feedback
+
+`core.js` defines one compact key/name vocabulary shared by presentation and live feedback:
+
+```text
+w o f z a g s b c k r v
+↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+PRISM ARCH WIND DREAM BOOST MOON SPIN STORM CHARGE MAGNET AURORA VOID
+```
+
+`ml(level)` scans the current level and builds the second line of the transient title card. Motion-only target lessons add `MOVING CLOUD`. This means the level briefing is generated from the same data that drives physics rather than maintained as a second hand-written tutorial table.
+
+`mi(ball, mechanicIndex, sim)` is the live cause/effect hook. The projectile carries a small bitmask `u`; on the first activation of a mechanic during a real shot, `mi()` records the bit and emits a floating name, five particles, and a small pitched blip. Repeated ticks through continuous fields stay silent. When `sim` is true, `mi()` does nothing, so trajectory prediction and Help/Solution playback remain deterministic and visually clean.
+
 ## Important compact functions
 
 | Symbol | Role |
@@ -81,6 +95,8 @@ This verifies actual completion for all 40 encoded routes.
 | `$J` | trajectory preview |
 | `$C` | live rainbow projectile |
 | `$Q` | fixed simulation update |
+| `ml` | build the transient mechanic briefing |
+| `mi` | once-per-shot live mechanic echo |
 
 ## HUD
 
