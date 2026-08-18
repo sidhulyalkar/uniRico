@@ -6,7 +6,7 @@ const noop=()=>{},grad=()=>({addColorStop:noop});
 const ctx2d={beginPath:noop,arc:noop,fill:noop,stroke:noop,fillRect:noop,strokeRect:noop,moveTo:noop,lineTo:noop,quadraticCurveTo:noop,roundRect:noop,save:noop,restore:noop,translate:noop,rotate:noop,scale:noop,setTransform:noop,clearRect:noop,setLineDash:noop,fillText:noop,createRadialGradient:grad,createLinearGradient:grad};
 const canvas={getContext:()=>ctx2d,getBoundingClientRect:()=>({width:960,height:600,left:0,top:0}),addEventListener:noop};
 const els={};
-const document={querySelector:s=>s==='#c'?canvas:(els[s]??={textContent:''})};
+const document={querySelector:s=>s==='#c'?canvas:(els[s]??={textContent:'',style:{}})};
 let timers=0,timerFn=null,lastDelay=0,delays=[],osc=0,starts=0,stops=0,filters=0,bandpasses=0,resumes=0,upRamps=0,lowStarts=0,highStarts=0,filterPeaks=[],triangles=0,squares=0;
 const param=()=>({value:0,setValueAtTime(v){this.value=v;if(v<90)lowStarts++;if(v>1800)highStarts++},exponentialRampToValueAtTime(v){if(v>this.value)upRamps++;this.value=v}});
 const node=()=>({connect(n){return n}});
@@ -22,36 +22,26 @@ const sandbox={console,document,localStorage:{},innerWidth:960,innerHeight:600,d
 sandbox.window.window=sandbox.window;sandbox.window.webkitAudioContext=FakeAudioContext;
 vm.createContext(sandbox);vm.runInContext(js,sandbox,{timeout:1000});
 const assert=(c,m)=>{if(!c)throw Error(m)};
-
 sandbox.AUD.start();sandbox.AUD.start();
 assert(timers===1,'music transport started more than once');
 assert(lastDelay===120,'unexpected initial audio unlock delay');
-
-// Aim should be the slower orchestral planning bed.
 sandbox.AUD.aim();let before=osc,mark=delays.length;
 for(let i=0;i<32;i++)sandbox.AUD.tick();
 const aimVoices=osc-before,aimDelays=delays.slice(mark),aimMin=Math.min(...aimDelays),aimMax=Math.max(...aimDelays),aimAvg=aimDelays.reduce((a,b)=>a+b,0)/aimDelays.length;
 assert(aimAvg>170,'aim state is not the slower orchestral bed');
 assert(aimMax-aimMin>20,'aim state has insufficient harmonic pacing variation');
 assert(aimVoices>0,'aim state produced no music');
-
-// Firing should snap into a quicker, denser dubstep pocket.
 sandbox.AUD.flight(0);before=osc;mark=delays.length;
 for(let i=0;i<32;i++)sandbox.AUD.tick();
 const flightVoices=osc-before,flightDelays=delays.slice(mark),flightMin=Math.min(...flightDelays),flightMax=Math.max(...flightDelays),flightAvg=flightDelays.reduce((a,b)=>a+b,0)/flightDelays.length;
 assert(flightAvg<aimAvg-35,'flight state did not accelerate out of orchestral planning mode');
 assert(flightMax-flightMin>20,'flight state has insufficient swing/tempo variation');
 assert(flightVoices>aimVoices,'flight arrangement should be sonically denser than the orchestral bed');
-
-// More reflections should make the bullet-time pocket even weightier, not faster.
 sandbox.AUD.flight(4);mark=delays.length;for(let i=0;i<8;i++)sandbox.AUD.tick();
 const bounceAvg=delays.slice(mark).reduce((a,b)=>a+b,0)/8;
 assert(bounceAvg>flightAvg*.98,'reflection pacing unexpectedly accelerated');
-
-// Real fire still needs a strong immediate sub drop.
 sandbox.AUD.aim();before=osc;sandbox.AUD.fire();
 assert(osc-before>=3,'shot launch did not create the immediate drop/firing accent');
-
 assert(filters>0,'expected filtered bass voices');
 assert(starts===stops,'oscillator nodes were not all scheduled to stop');
 assert(upRamps>0,'no upward filter/riser automation was scheduled');
@@ -61,7 +51,6 @@ assert(filterPeaks.some(f=>f.Q.value>=18),'bass timbre did not reach aggressive 
 assert(bandpasses>0,'no band-pass formant / yoi bass voices were scheduled');
 assert(triangles>0,'no pitched funky triangle stabs were scheduled');
 assert(squares>0,'no sharp square-wave percussion/stabs were scheduled');
-
 before=osc;sandbox.AUD.off();for(let i=0;i<8;i++)sandbox.AUD.tick();assert(osc===before,'audio nodes created while master sound disabled');
 sandbox.AUD.on();assert(resumes>0,'AudioContext never resumed');
 console.log(JSON.stringify({status:'PASS',aimAvg,aimMin,aimMax,flightAvg,flightMin,flightMax,bounceAvg,aimVoices,flightVoices,timers,oscillators:osc,filters,starts,stops,triangles,squares,bandpasses,upRamps,lowStarts,highStarts,resumes}));

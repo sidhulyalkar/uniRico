@@ -3,10 +3,10 @@ const files=['../src/levels.js','../src/runtime/core.js','../src/runtime/audio.j
 const noop=()=>{},grad=()=>({addColorStop:noop});
 const ctx={beginPath:noop,arc:noop,fill:noop,stroke:noop,fillRect:noop,strokeRect:noop,moveTo:noop,lineTo:noop,quadraticCurveTo:noop,roundRect:noop,save:noop,restore:noop,translate:noop,rotate:noop,scale:noop,setTransform:noop,clearRect:noop,setLineDash:noop,fillText:noop,createRadialGradient:grad,createLinearGradient:grad};
 const canvas={getContext:()=>ctx,getBoundingClientRect:()=>({width:960,height:600,left:0,top:0}),addEventListener:noop};
-const els={};const document={querySelector:s=>s==='#c'?canvas:(els[s]??={textContent:''})};
+const els={};const document={querySelector:s=>s==='#c'?canvas:(els[s]??={textContent:'',style:{}})};
 const sandbox={console,document,localStorage:{},innerWidth:960,innerHeight:600,devicePixelRatio:1,addEventListener:noop,requestAnimationFrame:noop,setTimeout:()=>1,Math,atob:s=>Buffer.from(s,'base64').toString('binary'),window:{}};sandbox.window=sandbox;
 vm.createContext(sandbox);
 for(const file of files) vm.runInContext(fs.readFileSync(path.join(__dirname,file),'utf8'),sandbox,{filename:file,timeout:1000});
-if(els['#level'].textContent!=='01/40')throw Error('modular source did not initialize the HUD');
+if(els['#time'].textContent!=='00:00.0')throw Error('modular source did not initialize timer');
 if(!/^NEXT 1\//.test(els['#next'].textContent))throw Error('modular source did not initialize objective row');
-console.log(JSON.stringify({status:'PASS',level:els['#level'].textContent,objective:els['#next'].textContent}));
+console.log(JSON.stringify({status:'PASS',time:els['#time'].textContent,objective:els['#next'].textContent}));
