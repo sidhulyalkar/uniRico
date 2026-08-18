@@ -1,76 +1,97 @@
-# uniRico Architecture — v0.12.0
+# uniRico Architecture — v0.13.0
 
-uniRico is an engine-free 2D precision puzzle game built around a 960×600 logical world, a custom fixed-step projectile simulation, procedural Canvas art, procedural Web Audio, compact declarative levels, and a deterministic 13KB release pipeline.
-
-## Design constraints
-
-The architecture balances four pressures: the shipped ZIP must stay under 13,312 bytes; trajectory prediction must agree with live physics; the 40-level campaign needs reusable systems with real depth; and the public source should remain understandable despite the compact artifact.
+uniRico is an engine-free 2D precision puzzle game built around a 960×600 logical world, fixed-step projectile simulation, procedural Canvas rendering, procedural Web Audio, compact declarative levels, and a deterministic 13KB release pipeline.
 
 ## Runtime flow
 
 ```text
 Pointer / keyboard
       ↓
-Game + menu state ─────────────→ adaptive audio transport
+Game + menu state ─────────────→ state-aware audio transport
       ↓
 Fixed-step update
       ↓
-Projectile physics ← level data / moving field rigs
+Projectile physics ← level data / reusable field rigs
       ↓
 Ordered cloud resolution
       ↓
-Canvas world + transient intro + HTML HUD
+Canvas world + transient level reveal
+      ↓
+Minimal HTML timer/objective HUD
       ↓
 localStorage records / progression
 ```
 
-## Logical world and timing
+## Shared simulation
 
-All level geometry lives in a stable 960×600 coordinate system. The Canvas scales to the browser window and pointer coordinates are transformed back into logical space. Simulation advances in ~16.667 ms fixed steps inside `requestAnimationFrame`, preventing normal render-rate variation from directly changing projectile behavior.
+The white trajectory predictor and live rainbow both use the same `_f()` physics step. Simulation mode suppresses audiovisual side effects but retains walls, portals, moving geometry, continuous forces, hazards, state changes, and bounce counting.
 
-## Shared simulation for prediction and reality
+## Collision reliability
 
-The white trajectory guide advances a simulated projectile through the same `_f()` physics step used by the live rainbow. Side effects such as particles and sound are disabled for simulation, but walls, portals, continuous forces, hazards, and moving geometry follow the same model.
+Moving targets use relative swept-segment collision so fast rainbows cannot tunnel through small cloud locks. Portal teleports are explicitly excluded from that sweep.
 
-## Moving target collision
+Moving prisms use swept point-vs-expanded-AABB collision in the wall's moving reference frame. The earliest contacted face is resolved, only the normal component is reflected using wall velocity, and the projectile is separated just outside the face. This prevents tunneling, sticky repeat contacts, wall dragging, and wrong-angle end-cap ejections.
 
-Cloud targets can move while the projectile moves. Endpoint-only checks allowed fast shots to pass through small targets between simulation samples, so target contact is evaluated as relative segment motion over the full tick. Portal teleports are exempted from that sweep so a discontinuous jump never becomes a fake collision line across the map.
+## v0.13 campaign invariant
 
-## Moving prism collision
+The campaign now has a source-level design invariant:
 
-A moving prism is treated as a swept relative-motion expanded AABB. The engine computes the earliest face crossing in wall-relative coordinates, reflects only the normal velocity component using the wall surface velocity, then moves the projectile slightly outside the face. This prevents sticky repeat collisions, wall dragging, and incorrect end-cap ejections.
+> Every visible interactive mechanic must be used by the intended route, or serve as required gate geometry.
+
+`tests/mechanic-coverage.js` executes each encoded route and records per-instance interaction with walls, portals, wind, slow zones, accelerators, gravity, spin, barriers, charge, magnetic fields, and resonance gates.
+
+The only explicit impact exemptions are full-height portal gate walls on Levels 3, 13, and 15. They are still necessary because they prevent ordinary traversal between the two sides of the arena.
+
+Development audits additionally search both broad aim/delay grids and dense neighborhoods around the intended solution. The frozen v0.13 candidate has no sampled winning route that bypasses a required mechanic.
+
+## Difficulty architecture
+
+Difficulty is not left to level numbering alone. Four independent levers are encoded in level data:
+
+1. **mechanic composition** grows from single-system lessons into linked systems;
+2. **ordered target count** increases from 1 to 6;
+3. **target radius** tightens from large tutorial locks to 6px finale locks;
+4. **trajectory-preview budget `q`** never increases as the campaign advances.
+
+Campaign tiers:
+
+```text
+01–08  fundamentals
+09–15  moving/timed/linked lessons
+16–19  first combinations
+20–25  two-lock mixed bridge
+26–30  three-lock chains
+31–35  four-lock advanced
+36–39  five-lock endgame
+40     six-lock full-spectrum finale
+```
+
+Reusable `F0...F9` rigs keep this progression affordable under the ZIP budget while letting later levels recombine known mechanical families.
 
 ## Ordered cloud locks
 
-Each target tuple contains a required reflection count. Only the active target can advance the sequence. Contact with a later unresolved cloud explicitly fails with `WRONG CLOUD · NEXT N`, eliminating ambiguous no-op collisions.
+Targets use:
 
-The renderer reinforces ordering with active halos, numbered badges, bounce text, and a connector toward the following target. The persistent HTML HUD is intentionally minimal and carries only elapsed time plus `NEXT X/X · NEED X BOUNCES`.
+```text
+[x, y, requiredBounces, motionMode, amplitude, speed, phase, radius]
+```
 
-## Clean HUD lifecycle
+Only the active cloud may advance the chain. Hitting a future unresolved cloud gives explicit `WRONG CLOUD · NEXT N` feedback. The renderer reinforces order with bright outlines, badges, bounce labels, and next-target guidance.
 
-v0.12 separates transient orientation from live decision information.
+## HUD lifecycle
 
-At level start, the Canvas renders one **bottom-centered** 460×64 introduction card containing the level number, name, and gameplay tagline. The card uses a near-solid warm-white fill, crisp white outline, 18px bold title, and 11px bold tagline. It remains fully readable for the opening beat, then fades during its final second and disappears after roughly 3.5 seconds.
+Persistent play UI contains only elapsed time and the active `NEXT/NEED` requirement. A bottom-centered level title card appears for roughly 3.5 seconds and fades. Level identity, shots, stars, and total score live on pause/menu/completion surfaces.
 
-The top HTML HUD stays tiny and persistent only during active play: elapsed time plus the active cloud requirement. Level identity, shots, cumulative stars, and score live in pause/menu/completion surfaces instead of covering puzzle geometry.
+## Soundtrack
 
-## Campaign structure
+One recursive Web Audio transport changes orchestration based on live projectile state.
 
-Levels 1–19 teach individual mechanics. Levels 20–30 are a mixed-system bridge with larger targets and longer previews. Levels 31–40 restore the dense multi-target endgame. Shared `F0...F9` rigs let advanced levels reuse mechanical environments rather than repeat large arrays.
+- No projectile: slower orchestral-style harmonic planning bed.
+- Projectile alive: Wobble Warfare dubstep with root sub, wobble/formant bass, yoi responses, irregular kicks, sharp half-time snare, hats, risers, growls, swing, and phrase transitions.
 
-## Procedural soundtrack
-
-The soundtrack uses one recursive state-aware transport rather than separate song players.
-
-When no projectile exists, the transport runs a slow mid-70-BPM orchestral-style planning bed. Long sine and triangle voices form sparse four-bar harmonic movement with no kick/snare grid, leaving sonic room for trajectory reading.
-
-When the player fires, the same transport switches immediately into the denser Wobble Warfare dubstep arrangement at roughly 96–114 BPM before swing and reflection weighting. The shot state uses a clean root sub, filtered saw/square wobble layers, high-Q band-pass formant voices, yoi-style response stabs, irregular kicks, sharp half-time snares, hats, risers, growls, and a phrase-end stutter.
-
-Every oscillator is short-lived and receives an explicit stop time. The master `S` toggle prevents new voices from being created while muted. Web Audio is initialized only after normal player interaction to respect autoplay rules.
+Oscillators are finite-lived and explicitly stopped. AudioContext initialization remains interaction-gated for browser autoplay compatibility.
 
 ## Readable-source split
-
-The public source loads in this order:
 
 ```text
 src/levels.js
@@ -83,10 +104,12 @@ src/runtime/render-hud.js
 src/runtime/ui.js
 ```
 
-This mirrors the conceptual architecture while preserving compact identifiers where they make comparison with the shipping build easier.
+The public source is readable and modular. The competition package is a separate one-file artifact generated with deterministic Zopfli ZIP packaging.
 
-## Release pipeline
+## Frozen v0.13.0 candidate
 
-`tools/build_js13k_zip.py` creates a deterministic Zopfli-compressed archive containing exactly one root-level `index.html`, verifies the extracted bytes, reports the archive size, and prints SHA-256.
-
-The current v0.12.0 frozen candidate is 13,223 bytes, leaving 89 bytes below the 13,312-byte ceiling. The exact submission artifact should be attached to the final tagged release after current Chrome and Firefox manual verification.
+```text
+12,522 / 13,312 bytes
+790 bytes remaining
+SHA-256: fdab16071f5212635cd07a9193a9ee538eee94469de5c9efcea29f08cdeb89ad
+```

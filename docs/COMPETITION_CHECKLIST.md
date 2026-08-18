@@ -1,64 +1,46 @@
 # js13kGames 2026 Desktop release checklist
 
-Use this checklist to freeze a uniRico candidate.
-
 ## Package
 
-- [ ] ZIP is ≤ 13,312 bytes.
-- [ ] Root contains exactly `index.html` for the submitted Desktop artifact.
-- [ ] No remote scripts, styles, fonts, images, audio, fetch/XHR, or required network service.
-- [ ] Archive extracts and launches offline.
-- [ ] SHA-256 is recorded for the exact uploaded ZIP.
+- [x] ZIP ≤ 13,312 bytes: **12,522 bytes**.
+- [x] Submitted archive contains exactly one root-level `index.html`.
+- [x] No required external scripts, styles, fonts, images, audio files, or network services.
+- [x] SHA-256 recorded: `fdab16071f5212635cd07a9193a9ee538eee94469de5c9efcea29f08cdeb89ad`.
 
-## Browser gate
+## Campaign gate
 
-- [ ] Latest Chrome: menu, play, fire, complete, pause, Help, Levels, Restart, sound toggle, path toggle.
-- [ ] Latest Firefox: same flow.
-- [ ] No console errors in either browser.
-- [ ] Web Audio unlocks only after interaction and does not duplicate transports.
+- [x] 40/40 encoded solutions truly complete every target chain.
+- [x] Every visible mechanic instance is used by the intended route or explicitly documented as portal gate geometry.
+- [x] Level 20 requires wall + wind + spin.
+- [x] Broad aim/delay bypass audit found no sampled win skipping required mechanics.
+- [x] Dense local aim/timing audit around each intended solution found no sampled bypass.
+- [x] Preview budget never increases from one level to the next.
+- [x] Levels 20–25 have at least two ordered locks.
+- [x] Levels 26–30 use three-lock chains.
+- [x] Levels 31–35 use four-lock chains.
+- [x] Levels 36–39 use five-lock chains.
+- [x] Level 40 uses six locks and seven interacting mechanic families.
 
 ## Physics gate
 
-- [ ] 40/40 encoded solutions pass.
-- [ ] Fast target contacts do not tunnel.
-- [ ] Future-cloud hits fail explicitly rather than appearing ignored.
-- [ ] Moving prism high-speed crossing regression passes.
-- [ ] Moving wall sweeping into the projectile regression passes.
-- [ ] Tangential wall velocity does not corrupt tangential projectile velocity.
-- [ ] Post-impact separation prevents sticky repeat bounces.
-- [ ] Prediction remains trustworthy across moving walls, portals, wind, gravity, and spin.
+- [x] Swept moving-target regression passes.
+- [x] Moving-prism high-speed crossing regression passes.
+- [x] Moving wall sweeping into projectile regression passes.
+- [x] Moving-frame reflection preserves tangential velocity.
+- [x] Post-impact separation prevents sticky repeat bounces.
+- [x] Wrong-order cloud contacts fail explicitly.
 
-## Audio gate
+## Audio / UI gate
 
-- [ ] Aim state is quicker/lighter than live-shot state.
-- [ ] Flight transport slows with additional reflection weight.
-- [ ] Swing/tempo spread remains measurable.
-- [ ] Sub, mid-bass, snare transient, hats, and pitched stabs all synthesize.
-- [ ] Oscillator starts/stops remain balanced in regression test.
-- [ ] Muting creates no new voices.
-- [ ] Human mix test confirms music does not bury bounce/portal/failure/success SFX.
+- [x] Planning state uses the slower orchestral bed.
+- [x] Live shot switches into the denser dubstep arrangement.
+- [x] Oscillator lifecycle/mute regressions pass.
+- [x] Live HUD contains only timer + current objective.
+- [x] Bottom level title is transient and disappears after ~3.5 seconds.
 
-## Campaign/readability gate
+## Final human browser gate
 
-- [ ] Levels 1–19 teach single systems clearly.
-- [ ] Levels 20–30 provide understandable mixed-system practice.
-- [ ] Levels 31–40 remain challenging but readable.
-- [ ] Active lock order, bounce requirement, and dark-cloud silhouettes are visible at common desktop sizes.
-- [ ] `src/` readable mirror matches current campaign and behavior.
-- [ ] `docs/SOURCE_GUIDE.md` and `docs/ARCHITECTURE.md` match current source layout.
-- [ ] Exact submission ZIP is attached to the release candidate and matches the frozen expected SHA-256.
-
-## v0.8.0 frozen candidate
-
-```text
-Version: v0.8.0
-ZIP bytes: 13,272
-Bytes free: 40
-SHA-256: e08b939e78159dfd9288becb0aec273c96d8af896df46e6118ad2fd073847e2e
-Automated solution test: PASS 40/40
-Moving-wall regression: PASS
-Audio regression: PASS
-Chrome manual version tested:
-Firefox manual version tested:
-Final test date:
-```
+- [ ] Current Chrome: complete representative early / bridge / endgame levels with no console errors.
+- [ ] Current Firefox: same flow.
+- [ ] Confirm Web Audio unlock and mix balance on real speakers/headphones.
+- [ ] Confirm no late-game cloud or mechanic is obscured at common desktop sizes.

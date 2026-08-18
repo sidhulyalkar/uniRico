@@ -1,93 +1,89 @@
-# 🦄🌈 uniRico v0.12.0
+# 🦄🌈 uniRico v0.13.0
 
 <p align="center">
   <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
 </p>
 
 <p align="center">
-  <strong>A 13KB rainbow-ricochet puzzle game where a magical unicorn bends rainbows through a sky full of prisms, portals, gravity, wind, and grumpy clouds.</strong>
+  <strong>A 13KB rainbow-ricochet puzzle game where a magical unicorn bends rainbows through prisms, portals, wind, gravity, spin, polarity, and grumpy clouds.</strong>
 </p>
 
-<p align="center">
-  <strong>THE SKY GOT GRUMPY · YOU HAVE A HORN · FIX IT</strong>
-</p>
+<p align="center"><strong>THE SKY GOT GRUMPY · YOU HAVE A HORN · FIX IT</strong></p>
 
 Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
 
-## v0.12.0 — bottom level reveal
+## v0.13.0 — mechanic-driven campaign
 
-The transient level introduction now lives at the **bottom-center of the arena** instead of competing with the live HUD at the top. The card is intentionally more opaque and more typographically prominent because it disappears after roughly 3.5 seconds.
+The entire 40-level campaign has been re-audited around one rule:
 
-- wider 460×64 bottom-center presentation card
-- near-solid warm-white background with a crisp white edge
-- larger 18px bold level title for immediate orientation
-- stronger 11px tagline beneath it
-- full visibility for the opening beat, then the existing one-second fade
-- minimal top HUD remains timer + `NEXT X/X · NEED X BOUNCES` only
+> **If an interactive object is visible in a level, the intended solution must use it or it must act as required gate geometry.**
 
-This keeps the top edge reserved for live information while turning the level name into a short, deliberate title-card moment.
+Earlier builds occasionally presented an intimidating collection of fields that a lucky direct bank shot could ignore. Level 20 exposed the problem most clearly. v0.13.0 removes that ambiguity. Decorative mechanics were pruned, important fields were repositioned or strengthened, and cloud locks were rebuilt along mechanic-dependent trajectories.
 
-## v0.11.0 — minimal flight HUD
+### Level 20 is now an actual mixed-system puzzle
 
-This release removes almost everything from the persistent in-level interface so the puzzle field stays visible, especially on late levels with targets near the top edge.
+`20 · FIRST MIX` requires the player to route through **spin + wind + prism reflection** in one ordered two-cloud chain. Broad aim sweeps and timing variations were audited to reject winning routes that bypass any of those systems.
 
-### Only the two live facts that matter
+### Difficulty now has an explicit curriculum
 
-During play, the HUD is now a single compact translucent pill containing only:
+| Levels | Design goal | Ordered locks | Assistance pressure |
+|---|---|---:|---|
+| 1–8 | learn one fundamental at a time | 1 | longest trajectory preview |
+| 9–15 | moving/timed/linked mechanic lessons | 1–2 | gradually shorter preview |
+| 16–19 | first real combinations | 2–3 | precision begins to matter |
+| 20–25 | two-lock mixed-system bridge | 2 | every displayed system is required |
+| 26–30 | multi-system chains | 3 | smaller targets + shorter preview |
+| 31–35 | advanced chains | 4 | 9px lock radii |
+| 36–39 | endgame sequences | 5 | 7px lock radii |
+| 40 | `FULL SPECTRUM` | 6 | 6px locks + seven interacting systems |
+
+The trajectory-preview budget is **monotonically non-increasing from Level 1 to Level 40**, so a later level never quietly hands back more predictive assistance than the level before it.
+
+## What the campaign teaches
+
+The mechanical vocabulary includes:
+
+- boundary and prism ricochets
+- moving prisms
+- timed storm barriers
+- rainbow-arch portals
+- wind fields
+- dream-cloud slow zones
+- stardust acceleration
+- moonbow gravity
+- persistent spin
+- charge + magnetic polarity
+- resonance / speed gates
+- ordered cloud locks with exact bounce requirements
+
+The systems are introduced individually, then linked into small circuits, then recombined into late-game trajectory machines.
+
+## Mechanic-use invariant
+
+The readable source now includes `tests/mechanic-coverage.js`. For every level it executes the encoded intended solution and records which interactive instances are actually touched or traversed. The test fails when a visible mechanic becomes unused.
+
+Three full-height walls are intentionally treated as **portal gate geometry** rather than impact surfaces. In Levels 3, 13, and 15 they prevent crossing the arena normally, making the portal itself mandatory.
+
+Development audits additionally swept broad aim/delay grids and dense neighborhoods around each intended solution. No sampled winning route bypassed a required mechanic in the final candidate.
+
+## Live presentation
+
+During active play the top HUD deliberately contains only:
 
 ```text
 00:08.6  ·  NEXT 1/3 · NEED 2 BOUNCES
 ```
 
-The permanent HUD no longer shows the game logo, level counter, shot count, total stars, or total score. The pill is roughly one third of the old width and one third of its height, with a lighter border/background so it obscures far less of the arena. It also disappears completely whenever the game is paused, on the level-select screen, or in Help/menu states.
+At level start, the level name and tagline appear in a bold bottom-centered card for roughly 3.5 seconds, then fade away. Campaign totals and shot statistics live on pause/menu/completion screens instead of covering puzzle geometry.
 
-The existing level-introduction card remains: `LEVEL XX · NAME` plus the short gameplay tagline appears at level start and fades away after roughly **3.5 seconds**. This keeps orientation information transient rather than permanently occupying the arena.
+## Music
 
-### Stats moved where they belong
+The soundtrack is generated entirely with Web Audio.
 
-The pause screen now becomes the compact stats surface. It shows:
+- **Planning:** slower orchestral-style harmonic bed with overlapping sine/triangle voices.
+- **Shot in flight:** procedural Wobble Warfare dubstep with clean sub, wobble/formant bass, yoi responses, sharp half-time snare, irregular kicks, hats, risers, growls, swing, and phrase transitions.
 
-- current level number + name
-- current level timer
-- current shot count
-- cumulative stars
-- cumulative score
-
-The main menu continues to show total stars and score, and the completion screen still exposes time, shots, score, and best result. Nothing was removed from the player's records; it was simply moved out of the aiming view.
-
-### Music and physics retained
-
-v0.12.0 keeps the v0.10 musical split intact: slower orchestral planning before a shot and the denser Wobble Warfare dubstep engine once the rainbow launches. Swept moving-cloud and moving-prism collision fixes, the 40-level campaign, and the Levels 20–30 teaching bridge are unchanged.
-
-## Gameplay
-
-Aim the unicorn's horn, fire a rainbow, and reach each active cloud with exactly the required number of reflections. Later levels combine:
-
-- moving targets and moving prisms
-- rainbow-arch portals
-- wind fields
-- dream-cloud slow zones
-- stardust accelerators
-- moonbow gravity
-- spin
-- charge and magnetic polarity
-- pulsing storm barriers
-- resonance-speed gates
-- dark hazards
-
-The campaign contains **40 levels**. Levels 20–30 form a gentler mixed-mechanic bridge so players practice interacting systems before the final ten levels become dense multi-system machines.
-
-## Readability and feedback
-
-Target order is deliberately redundant:
-
-- the active cloud has the strongest outline and `NEXT` badge;
-- unresolved dark clouds have a white silhouette for contrast;
-- a subtle connector points toward the next unresolved target;
-- the top HUD states the current target number and required bounce count;
-- hitting a future cloud first produces explicit wrong-order feedback.
-
-Cloud contact and moving-wall contact use swept collision tests so small moving targets and thin moving prisms cannot be skipped between simulation ticks.
+No audio files or external runtime assets are used.
 
 ## Controls
 
@@ -107,7 +103,7 @@ Cloud contact and moving-wall contact use swept collision tests so small moving 
 
 ```text
 uniRico/
-├── index.html                         # Readable browser entry point
+├── index.html
 ├── README.md
 ├── CHANGELOG.md
 ├── src/
@@ -124,9 +120,13 @@ uniRico/
 │       └── ui.js
 ├── tests/
 │   ├── solution-smoke.js
+│   ├── mechanic-coverage.js
 │   ├── moving-wall-collision.js
 │   ├── audio-sequencer.js
+│   ├── module-load.js
 │   └── hud-layout.js
+├── tools/
+│   └── build_js13k_zip.py
 └── docs/
     ├── banner.svg
     ├── SOURCE_GUIDE.md
@@ -134,27 +134,7 @@ uniRico/
     └── COMPETITION_CHECKLIST.md
 ```
 
-The readable source is split by responsibility. The actual js13k artifact is rebuilt separately as a single self-contained `index.html` and compressed into a deterministic ZIP.
-
-## Audio architecture
-
-The soundtrack uses one recursive transport rather than a fixed interval. Each transport tick looks at live game state:
-
-```text
-no projectile
-    ↓
-slow orchestral planning phrase
-
-projectile alive
-    ↓
-procedural dubstep drop
-    ↓
-wobble / formant / yoi phrase selection
-    ↓
-reflection count subtly changes pacing
-```
-
-Every oscillator has an explicit stop time. Muting audio prevents new synthesis voices from being created. Browser autoplay rules are respected by creating/resuming the AudioContext only after normal player interaction.
+The root source package contains the exact one-file competition candidate. `src/` is the readable modular mirror used by the public repository.
 
 ## Running locally
 
@@ -162,13 +142,7 @@ Every oscillator has an explicit stop time. Muting audio prevents new synthesis 
 python3 -m http.server 8000
 ```
 
-Then open:
-
-```text
-http://localhost:8000/
-```
-
-For the readable source shell directly:
+Readable modular build:
 
 ```text
 http://localhost:8000/src/
@@ -176,46 +150,44 @@ http://localhost:8000/src/
 
 ## Validation
 
-v0.12.0 is covered by automated regression checks for:
+v0.13.0 is covered by automated and design-audit checks for:
 
-- all **40/40 encoded solution trajectories**
-- high-speed and moving-prism swept collisions
-- moving-wall reflection in the wall's own reference frame
-- post-impact separation / anti-sticking behavior
-- the orchestral-vs-dubstep tempo-state transition
-- Web Audio oscillator lifecycle and mute gating
-- deep sub, high-frequency percussion, formant filters, and transition automation
-- HUD objective placement and update logic
-- the disappearing level-intro card
-- removal of the old right-side objective oval
-- JavaScript syntax for every readable runtime module
-- exact js13k archive structure and size
+- **40/40 encoded solutions truly complete every ordered target**
+- every visible mechanic instance is traversed/collided with by the intended route, except explicitly documented portal gates
+- broad + local aim/timing searches found no sampled winning mechanic bypasses
+- preview assistance never increases as the campaign advances
+- 2-lock bridge → 3-lock chains → 4-lock advanced → 5-lock endgame → 6-lock finale progression
+- swept moving-cloud collision
+- swept moving-prism collision and moving-frame reflection
+- anti-sticking post-impact separation
+- orchestral-to-dubstep audio state switching
+- oscillator cleanup / mute gating
+- minimal HUD and transient bottom title card
+- JavaScript syntax across readable modules
+- exact one-file ZIP structure and integrity
 
-A final human **current Chrome + current Firefox** gameplay/audio pass remains part of the release checklist before official submission.
+A final human pass in **current Chrome + current Firefox** remains the last release gate before official submission.
 
 ## Current js13k candidate
 
 ```text
-13,223 / 13,312 bytes
-89 bytes remaining
-SHA-256: 6b0c68495781d7b8f5c0e897d8f4ba1bf97ae96a8861c62f57aa24814ef87dcb
+12,522 / 13,312 bytes
+790 bytes remaining
+SHA-256: fdab16071f5212635cd07a9193a9ee538eee94469de5c9efcea29f08cdeb89ad
 ```
 
-The competition ZIP contains exactly one root-level `index.html`.
+The campaign cleanup actually recovered substantial compressed space because unused fields, hazards, and prism segments were removed instead of merely hiding them.
 
 ## Engineering idea
 
-uniRico gets most of its complexity through reuse rather than asset count:
+uniRico's complexity comes from composition:
 
-- one deterministic projectile simulation powers both the live shot and trajectory preview;
-- one compact motion primitive animates targets, prisms, and portal endpoints;
-- reusable field rigs create dense late-game environments;
-- procedural Canvas rendering replaces sprites;
-- procedural Web Audio replaces music and SFX assets;
-- compact tuples encode the 40-level campaign.
+- one fixed-step simulation powers both live shots and prediction;
+- one motion primitive animates targets, prisms, and portal endpoints;
+- reusable field rigs build advanced levels cheaply;
+- procedural Canvas replaces sprites;
+- procedural Web Audio replaces music assets;
+- compact tuples encode a full 40-level campaign;
+- regression tests protect the weird edge cases that emerge when all of those systems interact.
 
-The tiny build is the constraint. **This repository is the explanation.**
-
-<p align="center">
-  🦄 <strong>Aim the horn. Bend the rainbow. Fix the sky.</strong> 🌈
-</p>
+<p align="center">🦄 <strong>Aim the horn. Bend the rainbow. Fix the sky.</strong> 🌈</p>
