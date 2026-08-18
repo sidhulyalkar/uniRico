@@ -1,0 +1,15 @@
+const fs=require('fs'),vm=require('vm'),path=require('path');
+const files=['../src/levels.js','../src/runtime/core.js','../src/runtime/audio.js','../src/runtime/physics.js','../src/runtime/render-world.js','../src/runtime/render-entities.js','../src/runtime/render-hud.js','../src/runtime/ui.js'];
+let js=files.map(f=>fs.readFileSync(path.join(__dirname,f),'utf8')).join('\n');
+js=js.replace('$2();$0();_b()',`globalThis.FEEDBACK={legend:i=>ml(LEVELS[i]),probe:(i,sim=0)=>{let b=$i(0);mi(b,i,sim);mi(b,i,sim);return {mask:b.u,texts:$r.map(x=>x[2]),particles:$g.length}}};$2();$0()`);
+const noop=()=>{},grad=()=>({addColorStop:noop});
+const ctx={beginPath:noop,arc:noop,fill:noop,stroke:noop,fillRect:noop,strokeRect:noop,moveTo:noop,lineTo:noop,quadraticCurveTo:noop,roundRect:noop,save:noop,restore:noop,translate:noop,rotate:noop,scale:noop,setTransform:noop,clearRect:noop,setLineDash:noop,fillText:noop,createRadialGradient:grad,createLinearGradient:grad};
+const canvas={getContext:()=>ctx,getBoundingClientRect:()=>({width:960,height:600,left:0,top:0}),addEventListener:noop};const els={};const document={querySelector:s=>s==='#c'?canvas:(els[s]??={textContent:'',style:{}})};
+const sandbox={console,document,localStorage:{},innerWidth:960,innerHeight:600,devicePixelRatio:1,addEventListener:noop,requestAnimationFrame:noop,setTimeout:()=>1,Math,atob:s=>Buffer.from(s,'base64').toString('binary'),window:{}};sandbox.window=sandbox;
+vm.createContext(sandbox);vm.runInContext(js,sandbox,{timeout:1000});
+const assert=(c,m)=>{if(!c)throw Error(m)};
+assert(sandbox.FEEDBACK.legend(1)==='MOVING CLOUD','moving-target lesson legend regressed');
+assert(sandbox.FEEDBACK.legend(19)==='PRISM · WIND · SPIN','Level 20 mechanic legend must expose its required systems');
+let p=sandbox.FEEDBACK.probe(2);assert(p.mask===4,'interaction bit was not recorded');assert(p.texts.filter(x=>x==='WIND').length===1,'mechanic echo should fire only once per shot');assert(p.particles===5,'mechanic echo should emit a compact sparkle burst');
+let q=sandbox.FEEDBACK.probe(5,1);assert(q.mask===0,'simulation should not mutate mechanic-feedback state');assert(!q.texts.includes('MOON'),'simulation emitted visible mechanic feedback');
+console.log(JSON.stringify({status:'PASS',level20:sandbox.FEEDBACK.legend(19),once:p.texts.at(-1),simulationSilent:true}));

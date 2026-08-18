@@ -11,6 +11,8 @@ assert(/F===1&&Y<210/.test(js),'level intro is not time-limited');
 assert(/roundRect\(250,510,460,64,24\)/.test(js),'level intro is not bottom-centered');
 assert(/#fffdf8f7/.test(js),'level intro background is not sufficiently opaque');
 assert(/bold 18px sans-serif/.test(js)&&/bold 11px sans-serif/.test(js),'level intro typography is not prominent enough');
+assert(/fillText\(ml\(l\),W\/2,558\)/.test(js),'level intro should expose the active mechanic vocabulary');
+assert(!/AIM HORN · CLICK · CHEER THE CLOUDS/.test(js),'generic intro tagline survived mechanic-readout redesign');
 assert(/TOTAL '\+\$n\+'★ · SCORE/.test(js),'pause menu is missing cumulative stats');
 assert(/U\.h\.style\.display=F===1\|\|F===7/.test(js),'live HUD is not hidden outside gameplay');
 js=js.replace('$2();$0();_b()',`globalThis.HUDTEST={draw:$8,set:(f,y,i,l=0)=>{F=f;Y=y;L=l;B=i==null?null:{i};$0()},frame:_a};$2();$0();_b()`);
@@ -26,4 +28,4 @@ sandbox.HUDTEST.set(1,20,0,20);assert(/^NEXT 1\/2/.test(els['#next'].textContent
 sandbox.HUDTEST.set(1,20,1,20);assert(/^NEXT 2\/2/.test(els['#next'].textContent),'objective did not follow cloud progress');
 sandbox.HUDTEST.set(4,20,null,20);sandbox.HUDTEST.frame();assert(els['#hud'].style.display==='none','HUD should hide on pause');
 sandbox.HUDTEST.set(1,20,null,20);sandbox.HUDTEST.frame();assert(els['#hud'].style.display==='flex','HUD should return during play');
-console.log(JSON.stringify({status:'PASS',objective:els['#next'].textContent,liveHUD:'timer+objective only',intro:'bottom+opaque+large'}));
+console.log(JSON.stringify({status:'PASS',objective:els['#next'].textContent,liveHUD:'timer+objective only'}));
