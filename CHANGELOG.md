@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.17.1 — Bounce Badge Contrast Hotfix
+
+- Replace the white onboarding bounce badge with a dark plum badge and white numeral so the example value cannot disappear against pale highlights.
+- Apply the same dark-badge / white-number treatment to live cloud bounce requirements so the menu legend exactly matches gameplay.
+- Extend `tests/menu-rules.js` and `tests/target-language.js` to protect the contrast treatment.
+- Keep the white active-target ring and white unresolved-cloud order numbers unchanged, preserving the established visual grammar.
+
 ## v0.17.0 — Bottom Rules Ribbon
 
 - Move the opening cloud-language rules card to the bottom of the menu so it no longer interrupts the title / play hierarchy.
