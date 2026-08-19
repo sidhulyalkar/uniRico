@@ -15,6 +15,8 @@ assert(/fillText\(ml\(l\),W\/2,558\)/.test(js),'level intro should expose the ac
 assert(!/AIM HORN · CLICK · CHEER THE CLOUDS/.test(js),'generic intro tagline survived mechanic-readout redesign');
 assert(/TOTAL '\+\$n\+'★ · SCORE/.test(js),'pause menu is missing cumulative stats');
 assert(/WHITE RING = CURRENT CLOUD/.test(js)&&/3 ABOVE = EXACT BOUNCES/.test(js),'first-menu rules legend missing');
+assert(/roundRect\(270,448,420,96,20\)/.test(js),'first-menu rules legend should sit at the bottom');
+assert(/createLinearGradient\(270,0,690,0\)/.test(js),'first-menu rules legend should use a dark rainbow gradient');
 assert(/U\.h\.style\.display=F===1\|\|F===7/.test(js),'live HUD is not hidden outside gameplay');
 js=js.replace('$2();$0();_b()',`globalThis.HUDTEST={draw:$8,set:(f,y,i,l=0)=>{F=f;Y=y;L=l;B=i==null?null:{i};$0()},frame:_a};$2();$0();_b()`);
 const noop=()=>{},grad=()=>({addColorStop:noop});let cards=0;
