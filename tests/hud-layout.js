@@ -14,6 +14,7 @@ assert(/bold 18px sans-serif/.test(js)&&/bold 11px sans-serif/.test(js),'level i
 assert(/fillText\(ml\(l\),W\/2,558\)/.test(js),'level intro should expose the active mechanic vocabulary');
 assert(!/AIM HORN · CLICK · CHEER THE CLOUDS/.test(js),'generic intro tagline survived mechanic-readout redesign');
 assert(/TOTAL '\+\$n\+'★ · SCORE/.test(js),'pause menu is missing cumulative stats');
+assert(/WHITE RING = CURRENT CLOUD/.test(js)&&/3 ABOVE = EXACT BOUNCES/.test(js),'first-menu rules legend missing');
 assert(/U\.h\.style\.display=F===1\|\|F===7/.test(js),'live HUD is not hidden outside gameplay');
 js=js.replace('$2();$0();_b()',`globalThis.HUDTEST={draw:$8,set:(f,y,i,l=0)=>{F=f;Y=y;L=l;B=i==null?null:{i};$0()},frame:_a};$2();$0();_b()`);
 const noop=()=>{},grad=()=>({addColorStop:noop});let cards=0;
