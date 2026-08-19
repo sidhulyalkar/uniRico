@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.16.0 — First-Menu Rules Legend
+
+- Add a compact visual rules card to the initial menu so new players can immediately distinguish cloud order from bounce count.
+- Demonstrate the actual in-game grammar: white ring = current cloud, number inside cloud = order, badge above = exact required bounces.
+- Define a bounce as a wall / prism ricochet so the badge has an unambiguous meaning before Level 1 begins.
+- Move Play / Levels controls downward to preserve breathing room around the visual example.
+- Add `tests/menu-rules.js` and extend HUD regression coverage so the onboarding legend cannot silently regress.
+- Preserve the timer-only live HUD and all v0.15 ring-language behavior once play begins.
+- Freeze the deterministic candidate at 12,784 bytes, leaving 528 bytes beneath the 13,312-byte ceiling.
+
 ## v0.15.0 — Ring Language
 
 - Remove the persistent `NEXT X/X · NEED X BOUNCES` objective text from active play; the top HUD now contains only the timer.
