@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.17.0 — Bottom Rules Ribbon
+
+- Move the opening cloud-language rules card to the bottom of the menu so it no longer interrupts the title / play hierarchy.
+- Restore `PLAY · LEVEL` and `LEVELS` to their original centered positions.
+- Replace the pale onboarding card with a dark rainbow gradient panel for stronger contrast and a clearer one-time teaching moment.
+- Keep the exact same ring/order/bounce example and move the compact controls line beneath the rules ribbon.
+- Extend menu-layout regressions to lock the bottom placement, centered hitboxes, and dark rainbow treatment.
+- Freeze the deterministic candidate at 12,858 bytes, leaving 454 bytes beneath the 13,312-byte ceiling.
+
 ## v0.16.0 — First-Menu Rules Legend
 
 - Add a compact visual rules card to the initial menu so new players can immediately distinguish cloud order from bounce count.
@@ -8,7 +17,6 @@
 - Move Play / Levels controls downward to preserve breathing room around the visual example.
 - Add `tests/menu-rules.js` and extend HUD regression coverage so the onboarding legend cannot silently regress.
 - Preserve the timer-only live HUD and all v0.15 ring-language behavior once play begins.
-- Freeze the deterministic candidate at 12,784 bytes, leaving 528 bytes beneath the 13,312-byte ceiling.
 
 ## v0.15.0 — Ring Language
 
@@ -46,138 +54,68 @@
 - Make trajectory-preview budget monotonically non-increasing across all 40 levels.
 - Replace the old weak solution smoke test with true target-by-target completion validation.
 - Add `tests/mechanic-coverage.js` so unused visible mechanics fail CI-style local testing.
-- Run broad aim/delay and dense intended-neighborhood bypass audits with no sampled winning route skipping a required mechanic.
-- Preserve v0.12 HUD, collision, and orchestral-to-dubstep audio behavior.
-- Freeze the deterministic candidate at 12,522 bytes, leaving 790 bytes under the 13,312-byte ceiling.
 
-## v0.12.0 — Bottom Level Reveal
+## v0.12.0 — Bottom Reveal
 
-- Move the transient level name/tagline card from the upper arena to bottom-center.
-- Increase the title to 18px bold and the tagline to 11px bold for a clearer level-opening moment.
-- Increase the card to 460×64 with a near-solid warm-white fill and crisp white outline.
-- Preserve the existing ~3.5-second lifecycle and final one-second fade.
-- Preserve the minimal live HUD, pause stats, orchestral planning bed, dubstep shot state, physics, and 40-level campaign.
-- Add HUD regression assertions for bottom placement, stronger opacity, and larger typography.
-- Revalidate the full 40-level solution, moving-prism, modular-load, and adaptive-audio regression suite.
-- Freeze the deterministic candidate at 13,223 bytes, leaving 89 bytes beneath the 13,312-byte ceiling.
+- Move the transient level title card from the top of the arena to the bottom center.
+- Increase title / mechanic briefing typography and use a more opaque warm-white panel.
+- Preserve the timer-only live HUD at the top.
 
 ## v0.11.0 — Minimal Flight HUD
 
-- Reduce the live HUD to only the timer and `NEXT X/X · NEED X BOUNCES`.
-- Remove `UNI:RICO`, level count, shot count, total stars, and total score from the persistent gameplay overlay.
-- Replace the large cream status capsule with a much smaller, lightly translucent single-line pill.
-- Hide the live HUD entirely while paused, in Help, on level select, and on menu/completion screens.
-- Keep the existing 3.5-second level name/tagline intro card for transient orientation.
-- Add a pause-screen stats section containing level name, current time, current shot count, cumulative stars, and cumulative score.
-- Reposition pause actions so the new stats remain readable without crowding the menu.
-- Update HUD/module regression tests to enforce the minimal live-information contract and pause/menu hiding behavior.
-- Revalidate all 40 encoded solutions, moving-prism collision tests, and adaptive orchestral/dubstep audio regression.
-- Freeze the deterministic candidate at 13,227 bytes, leaving 85 bytes beneath the 13,312-byte ceiling.
+- Reduce the persistent live HUD to timer + objective information, then move cumulative stats into pause / completion surfaces.
+- Hide the live HUD outside active gameplay.
 
-## v0.10.0 — Clean Flight Deck + Orchestral Planning
+## v0.10.0 — Clean HUD + Dual-State Music
 
-- Replace the two permanent Canvas HUD cards with a single temporary level-introduction card.
-- Show `LEVEL XX · NAME` plus the gameplay tagline at level start, then fade the card after roughly 3.5 seconds.
-- Remove the right-side white objective oval entirely.
-- Add a centered `NEXT X/X · NEED X BOUNCES` row inside the persistent cream top HUD.
-- Refresh the objective row on cloud progression and failed-shot reset.
-- Replace the pre-shot electronic groove with a slower four-bar orchestral-style harmonic bed built from overlapping sine and triangle voices.
-- Keep the Wobble Warfare dubstep engine for live shots, creating an immediate calm-to-drop state transition on fire.
-- Preserve swept moving-cloud and moving-prism collision behavior and the Levels 20–30 teaching bridge.
-- Add HUD-layout regression coverage and update adaptive-audio tests for the new slower-planning / faster-flight relationship.
-- Revalidate all 40 encoded solution trajectories.
-- Freeze the deterministic candidate at 13,291 bytes, leaving 21 bytes beneath the 13,312-byte ceiling.
+- Replace permanent level-description panels with a transient level intro.
+- Remove the old right-side objective oval.
+- Add slower orchestral planning music and switch to procedural dubstep during shot flight.
 
 ## v0.9.0 — Wobble Warfare
 
-- Retune the procedural soundtrack around a stronger 45–65 Hz clean sub fundamental.
-- Add compact multi-rate wobble behavior through per-note filter timing and resonance variation.
-- Add high-Q band-pass formant bass for a talking / vowel-style drop bar.
-- Add yoi-style resonant call-and-response stabs.
-- Harden the half-time snare with a short high-frequency transient and brighter hats.
-- Add a stronger sub impact, bar transition riser, phrase-end growl hit, and final-bar stutter timing.
-- Preserve the faster planning groove and slower live-shot pocket introduced in v0.8.0.
-- Preserve finite oscillator lifetimes, one recursive audio transport, browser autoplay-safe startup, and the master `S` mute toggle.
-- Keep the final deterministic js13k archive at 13,306 bytes, leaving 6 bytes of formal headroom.
+- Add stronger root-frequency sub bass, formant / yoi bass modes, sharper percussion, and disruptive phrase transitions.
 
-## v0.8.0 — Grooved bullet-time soundtrack
+## v0.8.0 — Grooved Bullet Time
 
-- Reverse the v0.7 pacing relationship: aiming is quicker, live shots are deliberately slower and heavier.
-- Aim state now moves across roughly 122–138 BPM bar values before swing.
-- Flight state moves across roughly 94–106 BPM before bounce-dependent slowdown.
-- Add alternating sixteenth-note swing so the transport no longer lands on an even mechanical grid.
-- Add four different planning-state bass masks and four different pitched-stab masks.
-- Add syncopated triangle stabs for a funkier melodic response.
-- Add occasional short filtered wah-bass answers during flight.
-- Retain independent kick masks, layered sharp snares, irregular hats, deep sub, wobble bass, and phrase-end transitions.
-- Make additional reflections slightly slow the music rather than accelerate it.
-- Expand audio regression coverage to verify inverse state tempo, swing/tempo spread, groove timbres, density, and oscillator cleanup.
+- Invert the soundtrack pacing so aiming is quicker / funkier while projectile flight drops into a slower bass-heavy groove.
+- Add swing, bar-dependent tempo changes, funk stabs, and irregular percussion.
 
-## v0.7.0 — Dynamic music states
+## v0.7.0 — Adaptive Tempo
 
-- Replaced the fixed ~140 BPM music clock with an adaptive recursive transport.
-- Aim/pre-shot music now runs as a sparse ~104–112 BPM half-time pattern, leaving room to read the trajectory.
-- Live rainbow shots jump into a denser ~150–167 BPM dubstep/trap pattern.
-- Bounce count adds small tempo pressure during flight, while alternating bars vary pacing further.
-- Firing a shot triggers an immediate sub/drop accent and resets the flight phrase.
-- Returning to a non-flight state immediately switches back to the sparse planning pattern.
-- Non-flight states retain the calmer ~104–112 BPM transport.
-- Master sound toggle still prevents new audio nodes while muted.
+- Introduce state-aware music pacing and separate aim / flight arrangements.
 
-## v0.6.0
+## v0.6.0 — Chaotic Gaming Bass
 
-### Procedural bass-music redesign
+- Expand procedural music into a four-bar bass/trap arrangement with stronger sub, sharper snares, hats, and transitions.
 
-- Expand the soundtrack from a 16-step loop into a 64-step / four-bar arrangement at ~140 BPM.
-- Add four evolving bass phrases and independent per-bar kick masks.
-- Split bass into a filtered saw/square mid-bass plus a clean sine sub one octave lower.
-- Add multiple wobble / growl filter-resonance shapes.
-- Add a deeper four-bar downbeat sub boom.
-- Layer the half-time snare with a sharper high-frequency transient.
-- Add final-bar trap hat rolls, randomized digital ticks, and rare offbeat bass yelps.
-- Add a rising transition sweep and phrase-ending octave/glitch fill.
-- Preserve the live-projectile call-response bass accent.
-- Keep one sequencer timer, finite oscillator lifetimes, autoplay-safe startup, and the existing master `S` audio toggle.
-- Extend audio regression testing across a full 64-step macro-pattern, including sub/high-frequency coverage and upward transition sweeps.
+## v0.5.0 — Procedural Music
 
-## v0.5.0
+- Add browser-safe Web Audio background music with one sequencer and explicit oscillator cleanup.
 
-### Procedural soundtrack
+## v0.4.1 — Moving Prism Collision Fix
 
-- Added a fully procedural Web Audio background track with no external audio assets.
-- Runs a compact 16-step sequence at ~140 BPM.
-- Added filtered dual-oscillator bass with resonant low-pass sweeps for a wobble / dubstep character.
-- Added sub-kick accents, half-time snare/clap hits, and bright hats.
-- Bass root shifts subtly with level progression.
-- Adds a small bass fill while a rainbow projectile is in flight.
-- Music starts only after Web Audio is unlocked by a user interaction.
-- Existing `S` sound toggle controls both music and gameplay SFX.
-- Notes are short-lived and explicitly stopped to prevent oscillator accumulation.
+- Replace embedded-point moving-wall collision with relative swept collision and moving-frame reflection.
+- Add post-impact separation to eliminate sticking / dragging at moving prism ends.
 
-## v0.4.1
+## v0.4.0 — Collision + Difficulty Bridge
 
-- Replace moving-wall endpoint-overlap collision with swept relative-motion AABB collision.
-- Reflect velocity in the moving wall frame using the wall normal velocity.
-- Preserve tangential velocity across moving-prism impacts.
-- Separate the projectile just outside the contacted face to prevent sticky repeat collisions.
-- Detect high-speed wall crossings that previously could tunnel through thin prisms.
-- Add dedicated moving-wall regression tests.
-- Revalidate all 40 encoded solution trajectories.
+- Add swept moving-cloud collision to eliminate high-speed lock tunneling.
+- Make out-of-order hits explicit.
+- Rebuild Levels 20–30 as a gentler bridge into late-game combinations.
+- Improve dark-cloud contrast and target-order readability.
 
-## v0.4.0
+## v0.3.0 — Presentation Pass
 
-- Fix cloud-lock tunneling with swept relative-motion collision detection.
-- Add explicit wrong-order cloud feedback.
-- Add active-lock `NEXT` badge, stronger order markers, and next-lock connector.
-- Add white outlines around unresolved dark target, hazard, and active storm clouds.
-- Shift the sky toward a warmer blue-violet gradient for contrast.
-- Rebuild Levels 20–30 into a gentler mixed-mechanic bridge.
-- Increase target radii and preview budgets through the bridge campaign.
-- Make next-level keyboard testing use `LEVELS.length` instead of a hard-coded final index.
-- Preserve all 40 encoded solution trajectories and endgame stages.
+- Darken the arena for stronger trajectory contrast.
+- Simplify navigation and rename major UI surfaces around levels / help.
+- Preserve 40-level campaign structure and local records.
 
-## v0.3.0
+## v0.2.0 — Theme Pass
 
-- Darker background and higher-contrast trajectory presentation.
-- Simplified menu terminology.
-- Reworked Help naming and navigation.
+- Re-theme the original ricochet systems around unicorns, rainbows, clouds, dream fields, moonbows, glitter, and storms.
+- Add the procedural unicorn, rainbow projectile trail, cloud personalities, and pastel HUD.
+
+## v0.1.0
+
+- First uniRico conversion milestone.
