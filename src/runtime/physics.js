@@ -1,4 +1,4 @@
-/** uniRico v0.14.0 readable runtime module. */
+/** uniRico v0.15.0 readable runtime module. */
 function $u(x,y,n=10,h=190){for(let i=0;i<n;i++){let a=R()*T,v=.5+R()*4;$g.push([x,y,Math.cos(a)*v,Math.sin(a)*v,18+R()*24,h+R()*35])}}
 function _d(x,y,t,h=48){$r.push([x,y,t,45,h])}
 function mi(b,i,sim){if(!sim&&!(b.u>>i&1)){b.u|=1<<i;_d(b.x,b.y,MN[i],180+i*17);$u(b.x,b.y,5,i*31);$j(250+i*37,.04,.006,'triangle',1.3)}}
@@ -20,5 +20,5 @@ function $6(k){ek=k;et=sol()[1];ee=0;$l=[];_=0;$1(1);F=7}
 function $p(){if(ek==1){$1(1);F=6;return}$l=B.$a.slice();let r=V[L]||[0];r[0]|=4;V[L]=r;$o();B=null;_=2;$1(1);_d(W/2,H-48,'SOLUTION PATH',190)}
 
 // Ordered cloud-lock resolution
-function $7(e=0){B.$a.push([B.x,B.y,B.r]);if(B.$a.length>1600)B.$a.shift();let z=_f(B,J);if(z<0){e?$p():$4(z==-2?'STORM GOT IT':z==-3?'MAGIC MISSED':'RAINBOW LOST');return}if(z!==2){let l=O(),t=l.t[B.i];if(t){let q=tp(t,J);if(hit(B,t,J)){if(B.r!==t[2]){e?$p():$4('WRONG BOUNCE');return}if(!e){$u(q[0],q[1],22,40+B.i*45);$j(365+B.i*105,.08,.025)}B.i++;if(B.i>=l.t.length){if(e)$p();else{$z(B);B=null;win()}return}else if(!e){$c=6;$k=.1;$0();_d(q[0],q[1],'CLOUD '+B.i+' HAPPY!',48)}}else for(let i=B.i+1;i<l.t.length;i++)if(hit(B,l.t[i],J)){e?$p():$4('WRONG CLOUD · NEXT '+(B.i+1));return}}}}
+function $7(e=0){B.$a.push([B.x,B.y,B.r]);if(B.$a.length>1600)B.$a.shift();let z=_f(B,J);if(z<0){e?$p():$4(z==-2?'STORM GOT IT':z==-3?'MAGIC MISSED':'RAINBOW LOST');return}if(z!==2){let l=O(),t=l.t[B.i];if(t){let q=tp(t,J);if(hit(B,t,J)){if(B.r!==t[2]){e?$p():$4('WRONG BOUNCE');return}if(!e){$u(q[0],q[1],22,40+B.i*45);$j(365+B.i*105,.08,.025)}B.i++;if(B.i>=l.t.length){if(e)$p();else{$z(B);B=null;win()}return}else if(!e){$c=6;$k=.1;$0();_d(q[0],q[1],'CLOUD '+B.i+' HAPPY!',48)}}else for(let i=B.i+1;i<l.t.length;i++)if(hit(B,l.t[i],J)){e?$p():$4('WRONG CLOUD');return}}}}
 function $Q(){if(F===4||F===5||F===6)return;if(F===7){if(++ee%2)return;if(J<et){J++;return}if(!B)B=$i(sol()[0]);J=et+B.age;$7(1)}else{J++;if(F===1){Y++;if(!(Y%6))U.t.textContent=_c(Y);if(B)$7()}}for(let p of $g){p[0]+=p[2];p[1]+=p[3];p[2]*=.985;p[3]*=.985;p[4]--}$g=$g.filter(p=>p[4]>0);for(let w of $r){w[1]-=.55;w[3]--}$r=$r.filter(w=>w[3]>0);$c*=.84;$k*=.88}

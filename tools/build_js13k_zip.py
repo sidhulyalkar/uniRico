@@ -10,7 +10,7 @@ except ImportError as exc:
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "index.html"
-OUTPUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "dist" / "uniRico-v0.14.0-js13k.zip"
+OUTPUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "dist" / "uniRico-v0.15.0-js13k.zip"
 LIMIT = 13_312
 NAME = b"index.html"
 # Stable DOS timestamp: 2026-08-15 12:00:00.

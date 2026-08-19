@@ -20,6 +20,9 @@ jobs:
       - name: Verify Wavedash handshake
         run: node tests/wavedash-adapter.js
 
+      - name: Run target-language regression
+        run: node tests/target-language.js
+
       - name: Build Wavedash ZIP
         run: |
           python3 - <<'PY'
@@ -27,7 +30,7 @@ jobs:
           import hashlib, zipfile
 
           root = Path('.')
-          out = root / 'dist' / 'uniRico-v0.14.0-wavedash.zip'
+          out = root / 'dist' / 'uniRico-v0.15.0-wavedash.zip'
           out.parent.mkdir(exist_ok=True)
           files = [
               Path('index.html'),
@@ -52,7 +55,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dist/uniRico-v0.14.0-wavedash.zip dist/uniRico-v0.14.0-wavedash.zip.sha256
+          git add dist/uniRico-v0.15.0-wavedash.zip dist/uniRico-v0.15.0-wavedash.zip.sha256
           git diff --cached --quiet && exit 0
-          git commit -m "build(wavedash): refresh v0.14.0 upload artifact"
+          git commit -m "build(wavedash): refresh v0.15.0 upload artifact"
           git push

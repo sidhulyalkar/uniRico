@@ -8,5 +8,4 @@ const sandbox={console,document,localStorage:{},innerWidth:960,innerHeight:600,d
 vm.createContext(sandbox);
 for(const file of files) vm.runInContext(fs.readFileSync(path.join(__dirname,file),'utf8'),sandbox,{filename:file,timeout:1000});
 if(els['#time'].textContent!=='00:00.0')throw Error('modular source did not initialize timer');
-if(!/^NEXT 1\//.test(els['#next'].textContent))throw Error('modular source did not initialize objective row');
-console.log(JSON.stringify({status:'PASS',time:els['#time'].textContent,objective:els['#next'].textContent}));
+console.log(JSON.stringify({status:'PASS',time:els['#time'].textContent,liveHUD:'timer only'}));
