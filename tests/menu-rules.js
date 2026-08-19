@@ -1,0 +1,12 @@
+const fs=require('fs'),path=require('path');
+const hud=fs.readFileSync(path.join(__dirname,'../src/runtime/render-hud.js'),'utf8');
+const ui=fs.readFileSync(path.join(__dirname,'../src/runtime/ui.js'),'utf8');
+const assert=(c,m)=>{if(!c)throw Error(m)};
+assert(/function \$T\(\)/.test(hud),'menu rules helper missing');
+assert(/WHITE RING = CURRENT CLOUD/.test(hud),'active-cloud rule missing');
+assert(/2 IN CLOUD = HIT SECOND/.test(hud),'cloud-order rule missing');
+assert(/3 ABOVE = EXACT BOUNCES/.test(hud),'bounce-count rule missing');
+assert(/BOUNCE = WALL \/ PRISM RICOCHET/.test(hud),'bounce definition missing');
+assert(/\$T\(\);_g\(365,398,230,42,'PLAY/.test(hud),'rules legend is not integrated before play controls');
+assert(/\[365,398,230,42\]/.test(ui)&&/\[365,450,230,42\]/.test(ui),'menu hit boxes do not match shifted buttons');
+console.log(JSON.stringify({status:'PASS',rules:'ring=current, cloud number=order, badge=bounces'}));
