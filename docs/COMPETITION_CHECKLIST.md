@@ -2,10 +2,10 @@
 
 ## Package
 
-- [x] ZIP ≤ 13,312 bytes: **12,802 bytes**.
+- [x] ZIP ≤ 13,312 bytes: **12,582 bytes**.
 - [x] Submitted archive contains exactly one root-level `index.html`.
 - [x] No required external scripts, styles, fonts, images, audio files, or network services.
-- [x] SHA-256 recorded: `035c105cdcfa333cc2e38eb86dc964b2c7a400b3ed85055b8e9b4573dbba15a5`.
+- [x] SHA-256 recorded: `b5c3961fb596d9921e9b3bd8d0208beb7fc9b4bfcd44b13d99199fd539d11a80`.
 
 ## Campaign gate
 
@@ -35,8 +35,10 @@
 - [x] Planning state uses the slower orchestral bed.
 - [x] Live shot switches into the denser dubstep arrangement.
 - [x] Oscillator lifecycle/mute regressions pass.
-- [x] Live HUD contains only timer + current objective.
+- [x] Live HUD contains only the timer.
 - [x] Bottom level title is transient and disappears after ~3.5 seconds.
+- [x] Active cloud is indicated by one white ring; target order and bounce requirement are encoded directly on each cloud.
+- [x] No persistent `NEXT` / `NEED` / `BOUNCES` objective prose remains on the playfield.
 - [x] Level title mechanic legend is generated from actual level data.
 - [x] Mechanic echoes fire once per live shot and stay silent during prediction/solution simulation.
 - [x] First-shot completion receives `PERFECT PATH!` presentation without changing scoring.

@@ -1,4 +1,4 @@
-# 🦄🌈 uniRico v0.14.0
+# 🦄🌈 uniRico v0.15.0
 
 <p align="center">
   <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
@@ -12,11 +12,23 @@
 
 Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
 
+## v0.15.0 — Ring Language
+
+v0.15 removes the last word-heavy objective labels from active play and moves the puzzle language directly onto the clouds.
+
+- The persistent top HUD now shows **only the live timer**.
+- The **single white ring** is the only indicator for the currently active cloud.
+- Each cloud's **sequence number is printed directly into the top of the cloud**. Unresolved gray clouds use white numbering; restored white clouds switch to a dark number for contrast.
+- The small circular badge above each unresolved cloud now shows the **required bounce count only**.
+- The old `NEXT X/X · NEED X BOUNCES`, `NEXT`, and bottom `N BOUNCES` labels are removed from the playfield.
+
+The result is a compact visual grammar: **ring = active target, number on cloud = order, number above cloud = reflections required**. The player can read the puzzle spatially instead of parsing HUD prose.
+
 ## v0.14.0 — Mechanic Echoes
 
 v0.13 made every visible mechanic matter. v0.14 makes that rule **legible while you play**.
 
-The temporary level card no longer wastes its second line on generic controls. It now names the actual systems present in that puzzle, for example:
+The temporary level card names the actual systems present in that puzzle, for example:
 
 ```text
 LEVEL 20 · FIRST MIX
@@ -27,15 +39,13 @@ That vocabulary is generated directly from level data, so the title card doubles
 
 ### Reactive mechanic echoes
 
-The first time a live rainbow activates a mechanic during a shot, the game now answers with a brief floating label, a five-spark burst, and a tiny pitched triangle blip. `WIND`, `SPIN`, `MOON`, `CHARGE`, `MAGNET`, `AURORA`, `ARCH`, `PRISM`, and the other systems therefore announce themselves **at the moment cause becomes effect**.
+The first time a live rainbow activates a mechanic during a shot, the game answers with a brief floating label, a five-spark burst, and a tiny pitched triangle blip. `WIND`, `SPIN`, `MOON`, `CHARGE`, `MAGNET`, `AURORA`, `ARCH`, `PRISM`, and the other systems therefore announce themselves **at the moment cause becomes effect**.
 
 Each mechanic can echo only once per shot, so later levels do not become a cloud of repeated labels. Prediction and Help simulations suppress these effects entirely, preserving deterministic physics and preventing fake tutorial feedback.
 
 ### Perfect Path
 
-Completing a level on the first shot now earns a small presentation reward: the result card reads **PERFECT PATH!** and the completion chime resolves higher. It adds satisfaction without changing scoring, physics, or the campaign solution space.
-
-A number of proposed polish ideas were already present before this release: wall/portal/cloud/completion SFX, a six-band projectile trail, failed-shot ghost paths, screen shake/flash, the `R` restart hotkey, and level numbers. v0.14 spends the recovered byte budget on the missing piece instead: **teaching the player what each mechanic just did.**
+Completing a level on the first shot earns a presentation reward: the result card reads **PERFECT PATH!** and the completion chime resolves higher. It does not change scoring, physics, or the campaign solution space.
 
 ## v0.13.0 foundation — mechanic-driven campaign
 
@@ -66,8 +76,6 @@ The trajectory-preview budget is **monotonically non-increasing from Level 1 to 
 
 ## What the campaign teaches
 
-The mechanical vocabulary includes:
-
 - boundary and prism ricochets
 - moving prisms
 - timed storm barriers
@@ -85,7 +93,7 @@ The systems are introduced individually, then linked into small circuits, then r
 
 ## Mechanic-use invariant
 
-The readable source now includes `tests/mechanic-coverage.js`. For every level it executes the encoded intended solution and records which interactive instances are actually touched or traversed. The test fails when a visible mechanic becomes unused.
+`tests/mechanic-coverage.js` executes the encoded intended solution for every level and records which interactive instances are actually touched or traversed. The test fails when a visible mechanic becomes unused.
 
 Three full-height walls are intentionally treated as **portal gate geometry** rather than impact surfaces. In Levels 3, 13, and 15 they prevent crossing the arena normally, making the portal itself mandatory.
 
@@ -93,13 +101,13 @@ Development audits additionally swept broad aim/delay grids and dense neighborho
 
 ## Live presentation
 
-During active play the top HUD deliberately contains only:
+During active play the top HUD deliberately contains only the timer:
 
 ```text
-00:08.6  ·  NEXT 1/3 · NEED 2 BOUNCES
+00:08.6
 ```
 
-At level start, the level name and tagline appear in a bold bottom-centered card for roughly 3.5 seconds, then fade away. Campaign totals and shot statistics live on pause/menu/completion screens instead of covering puzzle geometry.
+Target information is carried by the arena itself: a white ring marks the active cloud, the cloud body carries its order number, and the small badge above it carries the bounce requirement. At level start, the level name and mechanic briefing appear in a bold bottom-centered card for roughly 3.5 seconds, then fade away. Campaign totals and shot statistics live on pause/menu/completion screens instead of covering puzzle geometry.
 
 ## Music
 
@@ -147,6 +155,7 @@ uniRico/
 │   ├── solution-smoke.js
 │   ├── mechanic-coverage.js
 │   ├── mechanic-feedback.js
+│   ├── target-language.js
 │   ├── moving-wall-collision.js
 │   ├── audio-sequencer.js
 │   ├── module-load.js
@@ -160,7 +169,11 @@ uniRico/
     └── COMPETITION_CHECKLIST.md
 ```
 
-The root source package contains the exact one-file competition candidate. `src/` is the readable modular mirror used by the public repository.
+The readable modular game lives in `src/`. The one-file competition candidate is frozen separately so platform-specific hosting code does not alter its byte budget.
+
+## Wavedash deployment
+
+The GitHub root entrypoint keeps a guarded Wavedash readiness handshake. The deployment workflow produces `dist/uniRico-v0.15.0-wavedash.zip`, while the js13k one-file candidate remains platform-neutral. This keeps hosting integration out of the competition byte budget.
 
 ## Running locally
 
@@ -176,7 +189,7 @@ http://localhost:8000/src/
 
 ## Validation
 
-v0.14.0 is covered by automated and design-audit checks for:
+v0.15.0 is covered by automated and design-audit checks for:
 
 - **40/40 encoded solutions truly complete every ordered target**
 - every visible mechanic instance is traversed/collided with by the intended route, except explicitly documented portal gates
@@ -188,7 +201,7 @@ v0.14.0 is covered by automated and design-audit checks for:
 - anti-sticking post-impact separation
 - orchestral-to-dubstep audio state switching
 - oscillator cleanup / mute gating
-- minimal HUD and transient bottom title card
+- timer-only HUD, transient bottom title card, and wordless target-language regression
 - generated mechanic legends and one-shot interaction echoes
 - mechanic-feedback suppression during simulation
 - JavaScript syntax across readable modules
@@ -199,12 +212,12 @@ A final human pass in **current Chrome + current Firefox** remains the last rele
 ## Current js13k candidate
 
 ```text
-12,802 / 13,312 bytes
-510 bytes remaining
-SHA-256: 035c105cdcfa333cc2e38eb86dc964b2c7a400b3ed85055b8e9b4573dbba15a5
+12,582 / 13,312 bytes
+730 bytes remaining
+SHA-256: b5c3961fb596d9921e9b3bd8d0208beb7fc9b4bfcd44b13d99199fd539d11a80
 ```
 
-v0.14 deliberately spends part of v0.13's recovered space on moment-to-moment comprehension and feedback while retaining more than 500 bytes of headroom.
+v0.15 simplifies the live interface further and recovers additional compressed headroom while keeping the v0.14 mechanic-feedback layer intact.
 
 ## Engineering idea
 

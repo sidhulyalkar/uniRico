@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.0 — Ring Language
+
+- Remove the persistent `NEXT X/X · NEED X BOUNCES` objective text from active play; the top HUD now contains only the timer.
+- Remove the `NEXT` label above the active target and the wordy `N BOUNCES` labels below clouds.
+- Use one bright white ring as the sole active-cloud indicator.
+- Move each cloud's order number directly onto the upper cloud body, using white text on unresolved gray clouds and dark text on restored white clouds.
+- Reuse the old circular order badge position for the raw required bounce number.
+- Remove the dotted next-target connector and simplify wrong-order feedback to `WRONG CLOUD`.
+- Add `tests/target-language.js` and update HUD/module regressions to lock in the timer-only HUD and spatial target grammar.
+- Revalidate all 40 true solutions, mechanic coverage, mechanic feedback, moving-wall collisions, audio, and modular load.
+- Freeze the deterministic candidate at 12,582 bytes, leaving 730 bytes beneath the 13,312-byte ceiling.
+
 ## v0.14.0 — Mechanic Echoes
 
 - Replace the generic level-intro tagline with a data-driven list of the mechanics actually present in each puzzle.
@@ -38,7 +50,6 @@
 - Add HUD regression assertions for bottom placement, stronger opacity, and larger typography.
 - Revalidate the full 40-level solution, moving-prism, modular-load, and adaptive-audio regression suite.
 - Freeze the deterministic candidate at 13,223 bytes, leaving 89 bytes beneath the 13,312-byte ceiling.
-
 
 ## v0.11.0 — Minimal Flight HUD
 
