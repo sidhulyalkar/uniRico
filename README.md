@@ -1,4 +1,4 @@
-# 🦄🌈 uniRico v0.15.0
+# 🦄🌈 uniRico v0.16.0
 
 <p align="center">
   <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
@@ -12,54 +12,50 @@
 
 Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
 
+## v0.16.0 — Learn the cloud language before the first shot
+
+The opening menu now includes one compact visual rules card using the exact target grammar seen in play:
+
+- **white ring** → this is the current cloud
+- **number inside the cloud** → hit order
+- **number above the cloud** → exact wall/prism bounces required before impact
+
+The card also defines a bounce as a **wall / prism ricochet**, which removes the ambiguity between sequence order and bounce count before Level 1 begins. The example is deliberately visual rather than another tutorial page. Once Play is pressed, it disappears and the live HUD remains timer-only.
+
 ## v0.15.0 — Ring Language
 
 v0.15 removes the last word-heavy objective labels from active play and moves the puzzle language directly onto the clouds.
 
-- The persistent top HUD now shows **only the live timer**.
+- The persistent top HUD shows **only the live timer**.
 - The **single white ring** is the only indicator for the currently active cloud.
 - Each cloud's **sequence number is printed directly into the top of the cloud**. Unresolved gray clouds use white numbering; restored white clouds switch to a dark number for contrast.
-- The small circular badge above each unresolved cloud now shows the **required bounce count only**.
+- The small circular badge above each unresolved cloud shows the **required bounce count only**.
 - The old `NEXT X/X · NEED X BOUNCES`, `NEXT`, and bottom `N BOUNCES` labels are removed from the playfield.
 
-The result is a compact visual grammar: **ring = active target, number on cloud = order, number above cloud = reflections required**. The player can read the puzzle spatially instead of parsing HUD prose.
+The result is a compact visual grammar: **ring = active target, number on cloud = order, number above cloud = reflections required**.
 
 ## v0.14.0 — Mechanic Echoes
 
-v0.13 made every visible mechanic matter. v0.14 makes that rule **legible while you play**.
-
-The temporary level card names the actual systems present in that puzzle, for example:
+v0.13 made every visible mechanic matter. v0.14 makes that rule legible while you play. The temporary level card names the actual systems present in that puzzle, for example:
 
 ```text
 LEVEL 20 · FIRST MIX
 PRISM · WIND · SPIN
 ```
 
-That vocabulary is generated directly from level data, so the title card doubles as a compact pre-flight briefing without adding permanent HUD clutter. Moving-target lessons identify `MOVING CLOUD`; levels with multiple systems expose the exact mechanic set before the card fades away.
+The first time a live rainbow activates a mechanic during a shot, the game answers with a brief floating label, a five-spark burst, and a tiny pitched triangle blip. Prediction and Help simulations suppress these effects entirely, preserving deterministic physics.
 
-### Reactive mechanic echoes
-
-The first time a live rainbow activates a mechanic during a shot, the game answers with a brief floating label, a five-spark burst, and a tiny pitched triangle blip. `WIND`, `SPIN`, `MOON`, `CHARGE`, `MAGNET`, `AURORA`, `ARCH`, `PRISM`, and the other systems therefore announce themselves **at the moment cause becomes effect**.
-
-Each mechanic can echo only once per shot, so later levels do not become a cloud of repeated labels. Prediction and Help simulations suppress these effects entirely, preserving deterministic physics and preventing fake tutorial feedback.
-
-### Perfect Path
-
-Completing a level on the first shot earns a presentation reward: the result card reads **PERFECT PATH!** and the completion chime resolves higher. It does not change scoring, physics, or the campaign solution space.
+Completing a level on the first shot earns **PERFECT PATH!** plus a brighter resolving chime without changing scoring or physics.
 
 ## v0.13.0 foundation — mechanic-driven campaign
 
-The entire 40-level campaign has been re-audited around one rule:
+The entire 40-level campaign is built around one rule:
 
 > **If an interactive object is visible in a level, the intended solution must use it or it must act as required gate geometry.**
 
-Earlier builds occasionally presented an intimidating collection of fields that a lucky direct bank shot could ignore. Level 20 exposed the problem most clearly. v0.13.0 removes that ambiguity. Decorative mechanics were pruned, important fields were repositioned or strengthened, and cloud locks were rebuilt along mechanic-dependent trajectories.
+`20 · FIRST MIX`, for example, requires **spin + wind + prism reflection** in one ordered two-cloud chain.
 
-### Level 20 is now an actual mixed-system puzzle
-
-`20 · FIRST MIX` requires the player to route through **spin + wind + prism reflection** in one ordered two-cloud chain. Broad aim sweeps and timing variations were audited to reject winning routes that bypass any of those systems.
-
-### Difficulty now has an explicit curriculum
+### Difficulty curriculum
 
 | Levels | Design goal | Ordered locks | Assistance pressure |
 |---|---|---:|---|
@@ -72,7 +68,7 @@ Earlier builds occasionally presented an intimidating collection of fields that 
 | 36–39 | endgame sequences | 5 | 7px lock radii |
 | 40 | `FULL SPECTRUM` | 6 | 6px locks + seven interacting systems |
 
-The trajectory-preview budget is **monotonically non-increasing from Level 1 to Level 40**, so a later level never quietly hands back more predictive assistance than the level before it.
+The trajectory-preview budget is monotonically non-increasing from Level 1 to Level 40.
 
 ## What the campaign teaches
 
@@ -88,16 +84,6 @@ The trajectory-preview budget is **monotonically non-increasing from Level 1 to 
 - charge + magnetic polarity
 - resonance / speed gates
 - ordered cloud locks with exact bounce requirements
-
-The systems are introduced individually, then linked into small circuits, then recombined into late-game trajectory machines.
-
-## Mechanic-use invariant
-
-`tests/mechanic-coverage.js` executes the encoded intended solution for every level and records which interactive instances are actually touched or traversed. The test fails when a visible mechanic becomes unused.
-
-Three full-height walls are intentionally treated as **portal gate geometry** rather than impact surfaces. In Levels 3, 13, and 15 they prevent crossing the arena normally, making the portal itself mandatory.
-
-Development audits additionally swept broad aim/delay grids and dense neighborhoods around each intended solution. No sampled winning route bypassed a required mechanic in the final candidate.
 
 ## Live presentation
 
@@ -156,6 +142,7 @@ uniRico/
 │   ├── mechanic-coverage.js
 │   ├── mechanic-feedback.js
 │   ├── target-language.js
+│   ├── menu-rules.js
 │   ├── moving-wall-collision.js
 │   ├── audio-sequencer.js
 │   ├── module-load.js
@@ -169,11 +156,9 @@ uniRico/
     └── COMPETITION_CHECKLIST.md
 ```
 
-The readable modular game lives in `src/`. The one-file competition candidate is frozen separately so platform-specific hosting code does not alter its byte budget.
-
 ## Wavedash deployment
 
-The GitHub root entrypoint keeps a guarded Wavedash readiness handshake. The deployment workflow produces `dist/uniRico-v0.15.0-wavedash.zip`, while the js13k one-file candidate remains platform-neutral. This keeps hosting integration out of the competition byte budget.
+The GitHub root entrypoint keeps a guarded Wavedash readiness handshake. The deployment workflow produces `dist/uniRico-v0.16.0-wavedash.zip`, while the js13k one-file candidate remains platform-neutral.
 
 ## Running locally
 
@@ -189,20 +174,18 @@ http://localhost:8000/src/
 
 ## Validation
 
-v0.15.0 is covered by automated and design-audit checks for:
+v0.16.0 is covered by automated and design-audit checks for:
 
 - **40/40 encoded solutions truly complete every ordered target**
 - every visible mechanic instance is traversed/collided with by the intended route, except explicitly documented portal gates
-- broad + local aim/timing searches found no sampled winning mechanic bypasses
 - preview assistance never increases as the campaign advances
-- 2-lock bridge → 3-lock chains → 4-lock advanced → 5-lock endgame → 6-lock finale progression
-- swept moving-cloud collision
-- swept moving-prism collision and moving-frame reflection
+- swept moving-cloud and moving-prism collision
 - anti-sticking post-impact separation
 - orchestral-to-dubstep audio state switching
-- oscillator cleanup / mute gating
-- timer-only HUD, transient bottom title card, and wordless target-language regression
-- generated mechanic legends and one-shot interaction echoes
+- timer-only live HUD
+- ring/order/bounce target-language regression
+- first-menu rules regression distinguishing order from bounce count
+- mechanic legends and one-shot interaction echoes
 - mechanic-feedback suppression during simulation
 - JavaScript syntax across readable modules
 - exact one-file ZIP structure and integrity
@@ -212,12 +195,12 @@ A final human pass in **current Chrome + current Firefox** remains the last rele
 ## Current js13k candidate
 
 ```text
-12,582 / 13,312 bytes
-730 bytes remaining
-SHA-256: b5c3961fb596d9921e9b3bd8d0208beb7fc9b4bfcd44b13d99199fd539d11a80
+12,784 / 13,312 bytes
+528 bytes remaining
+SHA-256: b8df2b30fb9df5146ef0af4f50b56329e94e950349e3916c61f0230154663b59
 ```
 
-v0.15 simplifies the live interface further and recovers additional compressed headroom while keeping the v0.14 mechanic-feedback layer intact.
+v0.16 spends part of the recovered byte budget on first-run comprehension while preserving the minimal in-level interface.
 
 ## Engineering idea
 
