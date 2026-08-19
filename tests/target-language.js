@@ -12,6 +12,6 @@ assert(!/fillText\('NEXT'/.test(src),'NEXT label survived target rendering');
 assert(!/ BOUNCE/.test(src),'wordy bounce label survived target rendering');
 assert(/K\(q\[0\],q\[1\],r\+14,'#fff',1\)/.test(src),'active target must be indicated by one white ring');
 assert(/fillText\(i\+1,q\[0\],q\[1\]-r\*\.18\)/.test(src),'cloud order number is not embedded on the cloud');
-assert(/fillText\(t\[2\],q\[0\],y\)/.test(src),'bounce requirement is not in the old top badge position');
+assert(/K\(q\[0\],y,10,'#24162f'\);X\.fillStyle='#fff';X\.fillText\(t\[2\],q\[0\],y\)/.test(src),'bounce requirement must use a dark badge with a white number');
 assert(/fillStyle=d\?'#6d5d78':'#fff'/.test(src),'cloud order number contrast rule regressed');
-console.log(JSON.stringify({status:'PASS',language:'ring=active, cloud=order, badge=bounces, hud=timer'}));
+console.log(JSON.stringify({status:'PASS',language:'ring=active, cloud=order, dark badge=bounces, hud=timer'}));
