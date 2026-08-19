@@ -2,7 +2,7 @@
 
 Wavedash requires browser games to call `Wavedash.init()` once the game is ready. The host injects `window.Wavedash`, so uniRico performs the readiness handshake from the repository root `index.html` after all game scripts have initialized.
 
-The v0.16.0 repository entrypoint retains that handshake while adding the opening cloud-rules legend and keeping the live HUD timer-only.
+The v0.17.0 repository entrypoint retains that handshake while using the timer-only HUD, ring-based cloud objective language, and dark bottom onboarding ribbon.
 
 ```js
 let w=window.Wavedash;
@@ -14,7 +14,7 @@ if(w){
 
 ## Upload from GitHub
 
-For the smallest clean upload, use `dist/uniRico-v0.16.0-wavedash.zip` after the workflow has generated it. The archive contains the root entrypoint plus the readable source files required by that entrypoint.
+For the smallest clean upload, use `dist/uniRico-v0.17.0-wavedash.zip` after the workflow has generated it. The archive contains the root entrypoint plus the readable source files required by that entrypoint.
 
 The Wavedash adapter is guarded, so ordinary local/browser play works unchanged when `window.Wavedash` is absent.
 
