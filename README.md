@@ -1,4 +1,4 @@
-# 🦄🌈 uniRico v0.17.0
+# 🦄🌈 uniRico v0.17.1
 
 <p align="center">
   <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
@@ -11,6 +11,12 @@
 <p align="center"><strong>THE SKY GOT GRUMPY · YOU HAVE A HORN · FIX IT</strong></p>
 
 Built for **js13kGames 2026** around the theme **Unicorns and Rainbows**.
+
+## v0.17.1 — Bounce badge contrast hotfix
+
+The bounce-count badge now uses a **dark plum dot with a white numeral** in both the opening rules ribbon and the live cloud targets. This keeps the onboarding example visually identical to gameplay while fixing the low-contrast white-on-white `3` that could disappear against the legend's white ring/background accents.
+
+The target language is now especially crisp: **white ring = current cloud, number inside cloud = order, dark badge above = exact bounce count**.
 
 ## v0.17.0 — Bottom Rules Ribbon
 
@@ -119,7 +125,7 @@ During active play the top HUD deliberately contains only the timer:
 00:08.6
 ```
 
-Target information is carried by the arena itself: a white ring marks the active cloud, the cloud body carries its order number, and the small badge above it carries the bounce requirement. At level start, the level name and mechanic briefing appear in a bold bottom-centered card for roughly 3.5 seconds, then fade away. Campaign totals and shot statistics live on pause/menu/completion screens instead of covering puzzle geometry.
+Target information is carried by the arena itself: a white ring marks the active cloud, the cloud body carries its order number, and the **dark badge above it carries a white bounce-count numeral**. At level start, the level name and mechanic briefing appear in a bold bottom-centered card for roughly 3.5 seconds, then fade away. Campaign totals and shot statistics live on pause/menu/completion screens instead of covering puzzle geometry.
 
 ## Music
 
@@ -184,7 +190,7 @@ uniRico/
 
 ## Wavedash deployment
 
-The GitHub root entrypoint keeps a guarded Wavedash readiness handshake. The deployment workflow produces `dist/uniRico-v0.17.0-wavedash.zip`, while the js13k one-file candidate remains platform-neutral.
+The GitHub root entrypoint keeps a guarded Wavedash readiness handshake. The deployment workflow produces `dist/uniRico-v0.17.1-wavedash.zip`, while the js13k one-file candidate remains platform-neutral.
 
 ## Running locally
 
@@ -200,7 +206,7 @@ http://localhost:8000/src/
 
 ## Validation
 
-v0.17.0 is covered by automated and design-audit checks for:
+v0.17.1 is covered by automated and design-audit checks for:
 
 - **40/40 encoded solutions truly complete every ordered target**
 - every visible mechanic instance is traversed/collided with by the intended route, except explicitly documented portal gates
@@ -212,6 +218,7 @@ v0.17.0 is covered by automated and design-audit checks for:
 - oscillator cleanup / mute gating
 - timer-only HUD, transient bottom title card, and target-language regression
 - dark bottom onboarding ribbon + centered menu control regression
+- dark bounce badge + white numeral contrast in both onboarding and live targets
 - generated mechanic legends and one-shot interaction echoes
 - mechanic-feedback suppression during simulation
 - JavaScript syntax across readable modules
@@ -221,13 +228,13 @@ A final human pass in **current Chrome + current Firefox** remains the last rele
 
 ## Current js13k candidate
 
+The latest frozen competition artifact remains the v0.17.0 one-file candidate until this visual-only hotfix is folded into the next deterministic competition build:
+
 ```text
 12,858 / 13,312 bytes
 454 bytes remaining
 SHA-256: d091e34bdab99da90f2143977a13904dfbc956cb846777ac41438b36826b4e09
 ```
-
-v0.17 spends part of the recovered byte budget on clearer first-run presentation while preserving the minimal in-level interface.
 
 ## Engineering idea
 
