@@ -1,0 +1,17 @@
+const fs=require('fs'),path=require('path');
+const src=fs.readFileSync(path.join(__dirname,'../src/runtime/render-entities.js'),'utf8');
+const core=fs.readFileSync(path.join(__dirname,'../src/runtime/core.js'),'utf8');
+const html=fs.readFileSync(path.join(__dirname,'../src/index.html'),'utf8');
+const css=fs.readFileSync(path.join(__dirname,'../src/style.css'),'utf8');
+const assert=(c,m)=>{if(!c)throw Error(m)};
+assert(!/id="next"/.test(html),'wordy NEXT/NEED objective HUD survived');
+assert(!/#next/.test(css),'dead objective HUD CSS survived');
+assert(!/U\.n|querySelector\('#next'\)/.test(core),'core still depends on objective text node');
+assert(/function \$0\(\)\{U\.t\.textContent=_c\(Y\);\$2\(\)\}/.test(core),'HUD refresh should update timer/stats only');
+assert(!/fillText\('NEXT'/.test(src),'NEXT label survived target rendering');
+assert(!/ BOUNCE/.test(src),'wordy bounce label survived target rendering');
+assert(/K\(q\[0\],q\[1\],r\+14,'#fff',1\)/.test(src),'active target must be indicated by one white ring');
+assert(/fillText\(i\+1,q\[0\],q\[1\]-r\*\.18\)/.test(src),'cloud order number is not embedded on the cloud');
+assert(/fillText\(t\[2\],q\[0\],y\)/.test(src),'bounce requirement is not in the old top badge position');
+assert(/fillStyle=d\?'#6d5d78':'#fff'/.test(src),'cloud order number contrast rule regressed');
+console.log(JSON.stringify({status:'PASS',language:'ring=active, cloud=order, badge=bounces, hud=timer'}));
