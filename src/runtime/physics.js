@@ -13,7 +13,7 @@ function _f(b,tm,sim=0){let l=O();b.age++;if(b.h){b.h--;if(b.ho){let q=pp(b.ho[0
 function $i(a,s=7){return{x:O().p[0],y:O().p[1],vx:Math.cos(a)*s,vy:Math.sin(a)*s,r:0,i:0,pc:0,h:0,ho:0,spin:0,charge:0,la:-1,ls:-1,lc:-1,u:0,age:0,$a:[]}}
 function $3(){if(F!==1||B)return;let p=O().p,dx=$e[0]-p[0],dy=$e[1]-p[1],q=Math.hypot(dx,dy);if(q<15)return;$d++;B=$i(Math.atan2(dy,dx));mb=0;mu(58,.13,.013,3);$j(290,.05,.025,'triangle');$7()}
 function $z(b){$q.unshift(b.$a.slice());$q.length=3}
-function $4(t='VECTOR LOST'){if(!B)return;$z(B);$u(B.x,B.y,17,8);_d(B.x,B.y,t,8);$j(85,.15,.03,'sawtooth');B=null;$0()}
+function $4(t='VECTOR LOST'){if(!B)return;$z(B);$u(B.x,B.y,17,8);_d(B.x,B.y,t,8);$j(85,.15,.03,'sawtooth');B=null;$0();$d==3&&_d(W/2,H-48,'STUCK? MENU → HELP',190)}
 function win(){let a=$Z(Y,$d),r=V[L]||[0];$s=a[1];$m=a[0];if($m>(r[3]||0))V[L]=[$s|(r[0]&4),Y,$d,$m];$o();$0();F=2;$k=.35;$c=11;_d(W/2,H/2-18,$s+'★  +'+$m,52);$j(rn[3],.12,.025,'triangle',1);setTimeout(()=>$j(rn[5]*($d==1?2:1),.17,.025,'triangle',1),70)}
 function $5(){if(L<LEVELS.length-1)$b(L+1);else{F=3;B=null;$k=.45;$j(523,.14,.03);setTimeout(()=>$j(784,.28,.025),100)}}
 function $6(k){ek=k;et=sol()[1];ee=0;$l=[];_=0;$1(1);F=7}
