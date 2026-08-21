@@ -1,0 +1,51 @@
+name: Competition candidate
+
+on:
+  push:
+    branches:
+      - main
+      - 'agent/**'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run readable-source regressions
+        run: |
+          for test in tests/*.js; do
+            echo "==> $test"
+            node "$test"
+          done
+
+      - name: Install deterministic ZIP compressor
+        run: python3 -m pip install zopfli
+
+      - name: Build js13k candidate
+        run: python3 tools/build_js13k_zip.py dist/uniRico-v0.18.0-js13k.zip
+
+      - name: Verify one-file offline package
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import zipfile
+          path = Path('dist/uniRico-v0.18.0-js13k.zip')
+          with zipfile.ZipFile(path) as z:
+              assert z.namelist() == ['index.html']
+              html = z.read('index.html').decode()
+              assert '<script src=' not in html
+              assert '<link rel="stylesheet"' not in html
+              assert 'src/' not in html
+          print('offline one-file candidate: PASS')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uniRico-v0.18.0-js13k
+          path: dist/uniRico-v0.18.0-js13k.zip
+          if-no-files-found: error
