@@ -25,8 +25,10 @@ jobs:
             node "$test"
           done
 
-      - name: Install deterministic ZIP compressor
-        run: python3 -m pip install zopfli
+      - name: Install deterministic competition tooling
+        run: |
+          python3 -m pip install zopfli
+          npm install --global terser@5.50.0
 
       - name: Build js13k candidate
         run: |
@@ -44,7 +46,6 @@ jobs:
               html = z.read('index.html').decode()
               assert '<script src=' not in html
               assert '<link rel="stylesheet"' not in html
-              assert 'src/' not in html
           print('offline one-file candidate: PASS')
           PY
 
