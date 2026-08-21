@@ -17,14 +17,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Verify Wavedash handshake
-        run: node tests/wavedash-adapter.js
-
-      - name: Run target-language regression
-        run: node tests/target-language.js
-
-      - name: Run menu-rules regression
-        run: node tests/menu-rules.js
+      - name: Verify Wavedash + competition-facing regressions
+        run: |
+          node tests/wavedash-adapter.js
+          node tests/target-language.js
+          node tests/menu-rules.js
+          node tests/touch-controls.js
+          node tests/competition-audio.js
 
       - name: Build Wavedash ZIP
         run: |
@@ -33,7 +32,7 @@ jobs:
           import hashlib, zipfile
 
           root = Path('.')
-          out = root / 'dist' / 'uniRico-v0.17.1-wavedash.zip'
+          out = root / 'dist' / 'uniRico-v0.18.0-wavedash.zip'
           out.parent.mkdir(exist_ok=True)
           files = [
               Path('index.html'),
@@ -58,7 +57,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dist/uniRico-v0.17.1-wavedash.zip dist/uniRico-v0.17.1-wavedash.zip.sha256
+          git add -- dist/uniRico-v0.18.0-wavedash.zip dist/uniRico-v0.18.0-wavedash.zip.sha256
           git diff --cached --quiet && exit 0
-          git commit -m "build(wavedash): refresh v0.17.1 upload artifact"
+          git commit -m "build(wavedash): refresh v0.18.0 upload artifact"
           git push
