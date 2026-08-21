@@ -19,3 +19,7 @@ tmp/
 
 # Local archives not intentionally committed
 *.zip
+
+# Canonical generated release artifacts are intentionally versioned.
+!dist/uniRico-js13k.zip
+!dist/uniRico-v*-wavedash.zip
