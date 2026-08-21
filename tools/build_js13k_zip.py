@@ -9,7 +9,7 @@ except ImportError as exc:
     raise SystemExit("Install the Python 'zopfli' package to reproduce the competition ZIP") from exc
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "dist" / "uniRico-v0.18.0-js13k.zip"
+OUTPUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "dist" / "uniRico-js13k.zip"
 LIMIT = 13_312
 NAME = b"index.html"
 DOS_TIME = (12 << 11)
