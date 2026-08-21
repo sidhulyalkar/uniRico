@@ -12,5 +12,6 @@ assert(/\$T\(\);_g\(365,315,230,42,'PLAY/.test(hud),'rules legend is not integra
 assert(/\[365,315,230,42\]/.test(ui)&&/\[365,370,230,42\]/.test(ui),'menu hit boxes do not match centered buttons');
 assert(/roundRect\(270,448,420,96,20\)/.test(hud),'rules card should sit at the bottom');
 assert(/createLinearGradient\(270,0,690,0\)/.test(hud)&&/#34183f/.test(hud)&&/#12394d/.test(hud),'rules card lost dark rainbow treatment');
-assert(/fillText\('M\/ESC MENU .*W\/2,575\)/.test(hud),'control legend should remain below the rules card');
-console.log(JSON.stringify({status:'PASS',rules:'ring=current, cloud number=order, dark badge=bounces',layout:'dark bottom card + centered buttons'}));
+assert(/fillText\('TOUCH: TAP OR DRAG \+ RELEASE · MOUSE: AIM \+ CLICK',W\/2,575\)/.test(hud),'mobile-aware control legend should remain below the rules card');
+assert(/SOUND '\+\(\$y\?'ON':'OFF'\)/.test(hud)&&/PATH '\+\(\$a\?'ON':'OFF'\)/.test(hud),'pause menu must expose touch-accessible sound/path toggles');
+console.log(JSON.stringify({status:'PASS',rules:'ring=current, cloud number=order, dark badge=bounces',layout:'dark bottom card + centered buttons + mobile-aware controls'}));
