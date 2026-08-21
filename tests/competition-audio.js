@@ -1,0 +1,10 @@
+const fs=require('fs'),path=require('path');
+const audio=fs.readFileSync(path.join(__dirname,'../src/runtime/audio.js'),'utf8');
+const physics=fs.readFileSync(path.join(__dirname,'../src/runtime/physics.js'),'utf8');
+const assert=(c,m)=>{if(!c)throw Error(m)};
+assert(audio.includes('createDynamicsCompressor'),'competition mix no longer uses a master compressor');
+assert(audio.includes('const rn=[262,294,330,392,440,523]'),'six-note rainbow palette changed or disappeared');
+assert(physics.includes('rn[(b.r-1)%6]'),'wall/prism bounces are no longer sonified by rainbow step');
+assert(physics.includes('rn[B.i%6]*2'),'ordered cloud resolution is no longer tied to rainbow harmony');
+assert(audio.includes('B?1+B.i*.04:1'),'flight score no longer responds to cloud-chain progress');
+console.log(JSON.stringify({status:'PASS',rainbowNotes:6,adaptiveMix:true,compressedBus:true}));
