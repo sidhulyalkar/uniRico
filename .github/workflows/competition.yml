@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - 'agent/**'
+    paths-ignore:
+      - 'dist/**'
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
@@ -27,7 +29,9 @@ jobs:
         run: python3 -m pip install zopfli
 
       - name: Build js13k candidate
-        run: python3 tools/build_js13k_zip.py dist/uniRico-v0.18.0-js13k.zip
+        run: |
+          python3 tools/build_js13k_zip.py dist/uniRico-v0.18.0-js13k.zip
+          sha256sum dist/uniRico-v0.18.0-js13k.zip > dist/uniRico-v0.18.0-js13k.zip.sha256
 
       - name: Verify one-file offline package
         run: |
@@ -47,5 +51,17 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: uniRico-v0.18.0-js13k
-          path: dist/uniRico-v0.18.0-js13k.zip
+          path: |
+            dist/uniRico-v0.18.0-js13k.zip
+            dist/uniRico-v0.18.0-js13k.zip.sha256
           if-no-files-found: error
+
+      - name: Commit exact candidate on branch pushes
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- dist/uniRico-v0.18.0-js13k.zip dist/uniRico-v0.18.0-js13k.zip.sha256
+          git diff --cached --quiet && exit 0
+          git commit -m "build(js13k): refresh v0.18.0 competition candidate"
+          git push
