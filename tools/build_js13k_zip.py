@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build a deterministic, self-contained js13k ZIP from the readable source tree."""
 from pathlib import Path
-import hashlib, struct, sys, zlib, zipfile
+import hashlib, re, shutil, struct, subprocess, sys, tempfile, zlib, zipfile
 
 try:
     import zopfli.zlib
@@ -26,8 +26,30 @@ SCRIPTS = [
     ROOT / "src" / "runtime" / "ui.js",
 ]
 
-style = (ROOT / "src" / "style.css").read_text()
-script = "\n".join(path.read_text() for path in SCRIPTS)
+def minify_js(source: str) -> str:
+    terser = shutil.which("terser")
+    if not terser:
+        raise SystemExit("Install terser 5.50.0 (`npm install -g terser@5.50.0`) to build the js13k candidate")
+    with tempfile.TemporaryDirectory() as tmp:
+        inp = Path(tmp) / "all.js"
+        out = Path(tmp) / "all.min.js"
+        inp.write_text(source)
+        subprocess.run([
+            terser, str(inp), "--compress", "passes=3", "--mangle", "toplevel=true",
+            "--ecma", "2020", "--output", str(out)
+        ], check=True)
+        code = out.read_text()
+        subprocess.run(["node", "--check", str(out)], check=True, stdout=subprocess.DEVNULL)
+        return code
+
+def minify_css(source: str) -> str:
+    source = re.sub(r"/\*.*?\*/", "", source, flags=re.S)
+    source = re.sub(r"\s+", " ", source)
+    source = re.sub(r"\s*([{}:;,])\s*", r"\1", source)
+    return source.strip()
+
+style = minify_css((ROOT / "src" / "style.css").read_text())
+script = minify_js("\n".join(path.read_text() for path in SCRIPTS))
 html = (
     '<!doctype html><html lang="en"><head><meta charset="utf-8">'
     '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -59,12 +81,13 @@ with zipfile.ZipFile(OUTPUT) as archive:
     assert archive.namelist() == ["index.html"]
     bundled = archive.read("index.html")
     assert bundled == data
-    assert b"src/" not in bundled
+    assert b"<script src=" not in bundled
+    assert b"<link rel=\"stylesheet\"" not in bundled
 
 size = OUTPUT.stat().st_size
 sha = hashlib.sha256(OUTPUT.read_bytes()).hexdigest()
 print(f"ZIP: {OUTPUT}")
-print(f"html bytes: {len(data)}")
+print(f"minified html bytes: {len(data)}")
 print(f"bytes: {size} / {LIMIT} ({LIMIT-size} free)")
 print(f"sha256: {sha}")
 if size > LIMIT:
