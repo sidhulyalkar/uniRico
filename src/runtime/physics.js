@@ -1,8 +1,8 @@
-/** uniRico v0.18.0 readable runtime module. */
+/** uniRico v0.19.0 readable runtime module. */
 function $u(x,y,n=10,h=190){for(let i=0;i<n;i++){let a=R()*T,v=.5+R()*4;$g.push([x,y,Math.cos(a)*v,Math.sin(a)*v,18+R()*24,h+R()*35])}}
 function _d(x,y,t,h=48){$r.push([x,y,t,45,h])}
 function mi(b,i,sim){if(!sim&&!(b.u>>i&1)){b.u|=1<<i;_d(b.x,b.y,MN[i],180+i*17);$u(b.x,b.y,5,i*31);$j(250+i*37,.04,.006,'triangle',1.3)}}
-function Z(b,x,y,sim=0,mv=[0,0]){if(x)b.vx=2*mv[0]-b.vx;if(y)b.vy=2*mv[1]-b.vy;b.r++;if(!sim){$c=Math.min(7,2+b.r);$u(b.x,b.y,8+b.r*2,(b.r-1)*45);$j(rn[(b.r-1)%6],.07,.015,'triangle',1)}}
+function Z(b,x,y,sim=0,mv=[0,0]){if(x)b.vx=2*mv[0]-b.vx;if(y)b.vy=2*mv[1]-b.vy;b.r++;if(!sim){$c=Math.min(7,2+b.r);$u(b.x,b.y,8+b.r*2,(b.r-1)*45);$j(rn[(b.r-1)%6],.07,.015,'triangle',1);ek==3&&_d(b.x,b.y,'RICOCHET '+b.r,190)}}
 function _e(b,w,tm,sim=0){let a=wp(w,tm),o=wp(w,tm-1),r=6,m=[a[0]-o[0],a[1]-o[1]],x=b.ox-o[0],y=b.oy-o[1],u=b.x-a[0]-x,v=b.y-a[1]-y,x0=(-r-x)/u,x1=(w[2]+r-x)/u,y0=(-r-y)/v,y1=(w[3]+r-y)/v;if(x0>x1)[x0,x1]=[x1,x0];if(y0>y1)[y0,y1]=[y1,y0];let e=Math.max(x0,y0),q=Math.min(x1,y1);if(e<=q&&e>=0&&e<=1){if(x0>y0){b.x=a[0]+(u>0?-r-.01:w[2]+r+.01);Z(b,1,0,sim,m)}else{b.y=a[1]+(v>0?-r-.01:w[3]+r+.01);Z(b,0,1,sim,m)}mi(b,0,sim);return 1}}
 function $E(b,w,sim=0){let r=6;if(b.x>w[0]-r&&b.x<w[0]+w[2]+r&&b.y>w[1]-r&&b.y<w[1]+w[3]+r){let sx=b.ox<=w[0]-r||b.ox>=w[0]+w[2]+r;if(sx){b.x=b.ox<w[0]?w[0]-r:w[0]+w[2]+r;Z(b,1,0,sim)}else{b.y=b.oy<w[1]?w[1]-r:w[1]+w[3]+r;Z(b,0,1,sim)}mi(b,7,sim);return 1}}
 function $O(b,o,tm,sim=0){if(b.pc){b.pc--;return}for(let j=0;j<2;j++){let a=pp(o,j,tm);if(D(b.x,b.y,a[0],a[1])<20){let z=pp(o,1-j,tm);b.x=z[0];b.y=z[1];b.pc=11;b.h=o[4]||0;b.ho=b.h?[o,1-j]:0;if(!sim){$u(a[0],a[1],13,276);$u(z[0],z[1],13,276);$j(o[4]?430:550,.1,.02)}mi(b,1,sim);return 1}}}
@@ -17,8 +17,8 @@ function $4(t='VECTOR LOST'){if(!B)return;$z(B);$u(B.x,B.y,17,8);_d(B.x,B.y,t,8)
 function win(){let a=$Z(Y,$d),r=V[L]||[0];$s=a[1];$m=a[0];if($m>(r[3]||0))V[L]=[$s|(r[0]&4),Y,$d,$m];$o();$0();F=2;$k=.35;$c=11;_d(W/2,H/2-18,$s+'★  +'+$m,52);$j(rn[3],.12,.025,'triangle',1);setTimeout(()=>$j(rn[5]*($d==1?2:1),.17,.025,'triangle',1),70)}
 function $5(){if(L<LEVELS.length-1)$b(L+1);else{F=3;B=null;$k=.45;$j(523,.14,.03);setTimeout(()=>$j(784,.28,.025),100)}}
 function $6(k){ek=k;et=sol()[1];ee=0;$l=[];_=0;$1(1);F=7}
-function $p(){if(ek==1){$1(1);F=6;return}$l=B.$a.slice();let r=V[L]||[0];r[0]|=4;V[L]=r;$o();B=null;_=2;$1(1);_d(W/2,H-48,'SOLUTION PATH',190)}
+function $p(){if(ek==1){$1(1);F=6;return}if(ek==3){ek=0;B=null;$1(1);_d(W/2,H-48,L?'YOUR TURN':'EXACT BOUNCES → CLOUD UNLOCKS · YOUR TURN',190);return}$l=B.$a.slice();let r=V[L]||[0];r[0]|=4;V[L]=r;$o();B=null;_=2;$1(1);_d(W/2,H-48,'SOLUTION PATH',190)}
 
 // Ordered cloud-lock resolution
 function $7(e=0){B.$a.push([B.x,B.y,B.r]);if(B.$a.length>1600)B.$a.shift();let z=_f(B,J);if(z<0){e?$p():$4(z==-2?'STORM GOT IT':z==-3?'MAGIC MISSED':'RAINBOW LOST');return}if(z!==2){let l=O(),t=l.t[B.i];if(t){let q=tp(t,J);if(hit(B,t,J)){if(B.r!==t[2]){e?$p():$4('WRONG BOUNCE');return}if(!e){$u(q[0],q[1],22,40+B.i*45);$j(rn[B.i%6]*2,.09,.025,'triangle',1)}B.i++;if(B.i>=l.t.length){if(e)$p();else{$z(B);B=null;win()}return}else if(!e){$c=6;$k=.1;$0();_d(q[0],q[1],'CLOUD '+B.i+' HAPPY!',48)}}else for(let i=B.i+1;i<l.t.length;i++)if(hit(B,l.t[i],J)){e?$p():$4('WRONG CLOUD');return}}}}
-function $Q(){if(F===4||F===5||F===6)return;if(F===7){if(++ee%2)return;if(J<et){J++;return}if(!B)B=$i(sol()[0]);J=et+B.age;$7(1)}else{J++;if(F===1){Y++;if(!(Y%6))U.t.textContent=_c(Y);if(B)$7()}}for(let p of $g){p[0]+=p[2];p[1]+=p[3];p[2]*=.985;p[3]*=.985;p[4]--}$g=$g.filter(p=>p[4]>0);for(let w of $r){w[1]-=.55;w[3]--}$r=$r.filter(w=>w[3]>0);$c*=.84;$k*=.88}
+function $Q(){if(F===4||F===5||F===6)return;if(F===7){let n=ek==3?2:1;if(ek!=3&&++ee%2)return;while(n--&&F===7){if(J<et){J++;continue}if(!B)B=$i(sol()[0]);J=et+B.age;$7(1)}}else{J++;if(F===1){Y++;if(!(Y%6))U.t.textContent=_c(Y);if(B)$7()}}for(let p of $g){p[0]+=p[2];p[1]+=p[3];p[2]*=.985;p[3]*=.985;p[4]--}$g=$g.filter(p=>p[4]>0);for(let w of $r){w[1]-=.55;w[3]--}$r=$r.filter(w=>w[3]>0);$c*=.84;$k*=.88}
