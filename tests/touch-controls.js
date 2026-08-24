@@ -19,7 +19,7 @@ const assert=(c,m)=>{if(!c)throw Error(m)},ev=(type,x,y,id=1)=>({pointerType:typ
 sandbox.TOUCH.reset();
 handlers.pointerdown(ev('touch',90,456));
 let s=sandbox.TOUCH.state();assert(s.mobile&&s.capture===1&&!s.shot,'aim wheel should capture touch without firing');
-handlers.pointermove(ev('touch',144,510));s=sandbox.TOUCH.state();assert(s.aim[0]>700&&Math.abs(s.aim[1]-300)<1,'aim wheel should map ring position to launch angle');
+handlers.pointermove(ev('touch',144,510));s=sandbox.TOUCH.state();assert(Math.abs(s.aim[0]-430)<1&&Math.abs(s.aim[1]-300)<1,'aim wheel should map ring position to a 300px launch vector');
 handlers.pointerup(ev('touch',144,510));s=sandbox.TOUCH.state();assert(!s.shot&&s.capture===0,'releasing aim wheel must not fire');
 handlers.pointerdown(ev('touch',870,510,2));s=sandbox.TOUCH.state();assert(s.shot&&s.shots===1,'separate FIRE control should launch once using selected angle');
 
