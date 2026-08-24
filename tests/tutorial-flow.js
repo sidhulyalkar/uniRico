@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm'),path=require('path');
+const files=['../src/levels.js','../src/runtime/core.js','../src/runtime/audio.js','../src/runtime/physics.js','../src/runtime/render-world.js','../src/runtime/render-entities.js','../src/runtime/render-hud.js','../src/runtime/ui.js'];
+let js=files.map(f=>fs.readFileSync(path.join(__dirname,f),'utf8')).join('\n');
+js=js.replace('$2();$0();_b()',`globalThis.TUT={start:i=>$b(i),tick:()=>{$Q()},state:()=>({L,F,ek,td,B:!!B,demos:DM.length})};$2();$0()`);
+const n=()=>{},g=()=>({addColorStop:n}),ctx={beginPath:n,arc:n,fill:n,stroke:n,fillRect:n,strokeRect:n,moveTo:n,lineTo:n,quadraticCurveTo:n,roundRect:n,save:n,restore:n,translate:n,rotate:n,scale:n,setTransform:n,clearRect:n,setLineDash:n,fillText:n,createRadialGradient:g,createLinearGradient:g};
+const canvas={getContext:()=>ctx,getBoundingClientRect:()=>({width:960,height:600,left:0,top:0}),addEventListener:n,setPointerCapture:n},els={},document={querySelector:s=>s==='#c'?canvas:(els[s]??={textContent:'',style:{}})},storage={};
+const box={console,document,localStorage:storage,innerWidth:960,innerHeight:600,devicePixelRatio:1,addEventListener:n,requestAnimationFrame:n,setTimeout:n,Math,atob:s=>Buffer.from(s,'base64').toString('binary'),window:{}};box.window=box;vm.createContext(box);vm.runInContext(js,box,{timeout:1000});
+const a=(c,m)=>{if(!c)throw Error(m)};
+box.TUT.start(0);let s=box.TUT.state();a(s.F===7&&s.ek===3&&s.demos===12,'first unplayed lesson must enter fast demo mode');
+for(let i=0;i<1200&&box.TUT.state().F===7;i++)box.TUT.tick();s=box.TUT.state();a(s.F===1&&s.ek===0&&!s.B,'demo must reset cleanly into player control');
+box.TUT.start(0);a(box.TUT.state().F===1,'same lesson must not replay tutorial twice in one session');
+box.TUT.start(1);a(box.TUT.state().F===7&&box.TUT.state().ek===3,'next first-seen mechanic should get its own demo');
+console.log(JSON.stringify({status:'PASS',introDemos:s.demos,handoff:'YOUR TURN'}));
