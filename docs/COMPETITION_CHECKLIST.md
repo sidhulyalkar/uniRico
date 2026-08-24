@@ -6,119 +6,128 @@ Current official rules: https://js13kgames.com/2026/rules
 
 ## Submission contract
 
-The release is not considered submission-ready unless every item in this section is true.
-
-- [x] The uploaded archive is a standard `.zip` file.
-- [x] The ZIP is at or below **13,312 bytes** (`13 × 1024`).
+- [x] Standard `.zip` archive at or below **13,312 bytes** (`13 × 1024`).
 - [x] `index.html` is in the **top directory of the ZIP**.
-- [x] CI requires the exact archive member list to be `['index.html']`, which forbids an enclosing `uniRico/` directory, nested `dist/index.html`, or stray packaged files.
-- [x] The competition build is a complete HTML page containing the compiled JavaScript and CSS, not TypeScript/CoffeeScript/source-only input.
-- [x] The submitted package is self-contained and works without external runtime assets.
-- [x] CI rejects external `<script src>`, external stylesheets, `http://`, `https://`, `fetch`, XHR, WebSocket, and EventSource dependencies in the standard Desktop/Mobile candidate.
-- [x] The readable source is maintained publicly in this GitHub repository alongside the minified competition package.
-- [x] The game is a new 2026 competition project built for the **Unicorns and Rainbows** theme.
-- [x] Desktop and Mobile use one shared game/submission rather than separate duplicate submissions.
-- [ ] Final manual Chrome smoke test has zero game-breaking console errors.
-- [ ] Final manual Firefox smoke test has zero game-breaking console errors.
-- [ ] Submission form fields, repository URL, categories, description, and final ZIP are reviewed once immediately before submission.
+- [x] CI requires exact archive membership `['index.html']`, rejecting wrapper folders and stray files.
+- [x] CSS + compiled JavaScript are self-contained in the competition HTML.
+- [x] CI rejects external/network runtime dependencies in the standard Desktop/Mobile candidate.
+- [x] Readable source remains public beside the minified package.
+- [x] Desktop and Mobile use one shared game/submission.
+- [x] Latest v0.19 merge candidate: **13,208 / 13,312 bytes**, 104 bytes free.
+- [ ] Final manual Chrome smoke test has no game-breaking console errors.
+- [ ] Final manual Firefox smoke test has no game-breaking console errors.
+- [ ] Review submission form, repository URL, categories, description, and final ZIP immediately before upload.
 
-### Optional categories
+## Tutorial / comprehension gate
 
-- [x] **Wavedash:** maintained as a separate deployment artifact; its extra seven-day publishing window is for deployment/publishing only, not additional gameplay features or bug fixes.
-- [x] **Online:** uniRico is not relying on Online-category exceptions; the standard submission remains fully offline and does not depend on the js13k relay or PartySocket.
-
-## Package integrity
-
-- [x] Competition builder assembles the readable source tree into one self-contained `index.html`.
-- [x] CSS and JavaScript are inlined before packaging; the submitted game has no runtime asset dependencies.
-- [x] Terser 5.50.0 + Zopfli are pinned for deterministic minification/compression.
-- [x] CI rejects an archive above **13,312 bytes**.
-- [x] CI opens the ZIP and verifies it contains exactly one root-level `index.html`.
-- [x] CI verifies that the packaged HTML contains no external/network runtime dependencies.
-- [x] Every qualifying game-code push to `main` regenerates `dist/uniRico-js13k.zip`, checksum, and provenance metadata.
-- [ ] Record the final submission byte count and SHA-256 from the successful `main` competition workflow.
-
-## Theme / novelty gate
-
-- [x] The unicorn is the physical launcher rather than a decorative mascot.
-- [x] The rainbow is the projectile, trajectory language, trail, success feedback, and basis of the harmonic SFX palette.
-- [x] Angry clouds are ordered puzzle targets and visibly become happy/restored.
-- [x] Prisms, rainbow arches, wind, dream clouds, stardust, moonbow gravity, spin, charge, magnetism, storms, resonance gates, and void hazards alter the actual solution path.
-- [x] Every visible gameplay mechanic is used by the encoded intended solution or documented as required gate geometry.
-- [x] Mechanic interaction echoes teach cause and effect at the instant the rainbow touches a system.
+- [x] Level 1 demonstrates the full grammar before asking the player to solve it.
+- [x] Tutorial explicitly states **ring = current**, **number = order**, **badge = exact ricochets**.
+- [x] Each reflection during tutorial playback shows a visible `RICOCHET n` count.
+- [x] Level 1 handoff states that exact ricochets unlock the cloud, then gives **YOUR TURN**.
+- [x] First visits to Levels 1–12 run short accelerated demonstrations using the real encoded solution before player control.
+- [x] Tutorial demos use the same deterministic physics as live play, not canned animation.
+- [x] A lesson does not replay repeatedly within the same session.
+- [x] Existing early one-mechanic-at-a-time practice levels are preserved after each demo.
+- [x] Automated tutorial-flow regression completes Level 1 demo, verifies clean handoff, repeat suppression, and the next lesson.
+- [ ] Fresh-player test: without verbal explanation, player can explain **ring/current, number/order, badge/ricochets, ricochet unlock** after Level 1.
+- [ ] Fresh-player test: first new mechanic after Level 1 is understood from its quick demo before the attempt.
 
 ## Gameplay / progression gate
 
-- [x] 40/40 encoded solutions truly complete every target chain.
+- [x] 40/40 encoded solutions complete every target chain.
 - [x] Preview assistance never increases as the campaign advances.
-- [x] Levels 1–8 introduce fundamentals one at a time.
+- [x] Levels 1–8 still isolate fundamentals after demonstrations.
 - [x] Levels 20–25 form a two-lock mixed-system bridge.
 - [x] Levels 26–30 use three-lock chains; 31–35 four-lock chains; 36–39 five-lock chains.
 - [x] Level 40 `FULL SPECTRUM` ends with six ordered clouds and seven interacting mechanic families.
-- [x] Wrong cloud / wrong bounce failures are explicit rather than silent.
-- [x] Help offers aim guidance, a mirrored demonstration, and the actual solution without altering the physics model.
-- [ ] Human first-impression test: a new player can explain **ring = current, inside = order, above = exact bounces** after the opening screen.
-- [ ] Human frustration test: representative players recover from three failed shots without abandoning the level.
+- [x] Wrong cloud / wrong ricochet failures are explicit.
+- [x] Third failure points once toward Help.
+- [x] Help offers aim guidance, mirrored demonstration, and actual solution without changing physics.
+- [ ] Human frustration test: representative players recover from three failed shots rather than abandoning the level.
 
 ## Desktop controls gate
 
 - [x] Mouse movement aims and click fires immediately.
 - [x] Keyboard pause/menu, retry, help, path, and sound controls remain available.
-- [x] Aim preview uses the exact fixed-step simulation used by the live shot.
+- [x] Aim preview uses the exact fixed-step live simulation.
 - [ ] Chrome desktop: early, mixed, moving-target, and endgame representative levels.
 - [ ] Firefox desktop: same representative flow.
 
 ## Mobile controls gate
 
 - [x] `touch-action:none` prevents browser gestures from stealing play.
-- [x] A quick tap preserves direct tap-to-fire behavior.
-- [x] Touch-down no longer commits a shot; drag can refine direction and release fires exactly once.
-- [x] Drag aiming is relative to the gesture, so a thumb can aim without covering the destination.
-- [x] The tap-versus-drag deadzone self-calibrates from the player's own touch jitter and persists locally.
-- [x] Sound and trajectory-preview toggles are tappable from the pause menu and persist locally.
-- [x] Pointer cancellation cannot leave a captured gesture or fire an accidental shot.
-- [x] Automated touch regression covers tap, drag-release, mouse parity, cancel, persistence, and pause toggles.
+- [x] First touch reveals a persistent lower-left AIM wheel and lower-right FIRE button during active play.
+- [x] Dragging around the AIM ring maps continuously to the launch angle.
+- [x] Releasing AIM **never fires** and preserves the selected angle.
+- [x] FIRE launches exactly once using the selected angle.
+- [x] Touches elsewhere in the playfield do not accidentally launch a shot.
+- [x] Pointer cancel safely releases AIM capture without firing.
+- [x] Mobile level briefing moves above the control deck instead of obscuring it.
+- [x] Sound and trajectory-preview toggles remain tappable from Pause and persist.
+- [x] Automated regression covers wheel capture, angle mapping, release-without-fire, separate FIRE, playfield safety, mouse parity, and pause toggles.
 - [ ] Real iPhone/Safari portrait + landscape feel pass.
 - [ ] Real Android/Chrome portrait + landscape feel pass.
-- [ ] Confirm menus, targets, and touch aim remain readable with common browser bars / safe-area layouts.
+- [ ] Confirm AIM/FIRE controls remain comfortable with common browser bars / safe-area layouts.
+- [ ] Confirm the lower-left AIM / lower-right FIRE handedness feels natural for representative players.
+
+## Theme / novelty gate
+
+- [x] Unicorn is the physical launcher rather than a decorative mascot.
+- [x] Rainbow is projectile, trajectory, trail, success feedback, and harmonic SFX language.
+- [x] Angry clouds are ordered locks and visibly become restored/happy.
+- [x] Prisms, arches, wind, dream clouds, stardust, moonbow gravity, spin, charge, magnetism, storms, resonance gates, and void hazards alter real solution paths.
+- [x] Mechanic interaction echoes teach cause/effect when the rainbow activates a system.
+- [x] First-seen demonstrations reinforce the fantasy vocabulary before systems are mixed.
 
 ## Audio gate
 
-- [x] All music and SFX are synthesized with Web Audio; no samples or external audio assets are shipped.
+- [x] All music and SFX are synthesized with Web Audio; no samples ship.
 - [x] Planning uses a sparse, slower orchestral bed.
-- [x] A fired rainbow snaps into the denser dubstep / bass-music arrangement.
-- [x] Flight music responds to bounce count and ordered-cloud progress.
-- [x] A six-note rainbow palette unifies bounce, cloud-resolution, and victory feedback.
-- [x] A dynamics-compressor master bus reduces stacked-oscillator clipping when the browser supports it.
-- [x] Bass uses a clean sub plus filtered upper harmonics so the motif survives small speakers better.
-- [x] Audio regressions cover transport pacing, timbre families, mute gating, oscillator cleanup, and competition-theme hooks.
-- [ ] Real phone speaker mix pass: kick/bass audible without drowning success cues.
+- [x] Firing snaps into denser dubstep / bass-music arrangement.
+- [x] Flight music responds to ricochet count and ordered-cloud progress.
+- [x] Six-note rainbow palette unifies ricochet, cloud-resolution, and victory feedback.
+- [x] Dynamics compressor reduces stacked-oscillator clipping where supported.
+- [x] Bass uses clean sub + filtered upper harmonics for small speakers.
+- [x] Audio regressions cover transport pacing, timbres, mute gating, cleanup, and theme hooks.
+- [ ] Real phone speaker mix pass.
 - [ ] Real laptop speaker mix pass.
 - [ ] Headphones mix pass at low and medium volume.
 
 ## Presentation gate
 
 - [x] Live HUD is timer-only.
-- [x] Level title / mechanic briefing fades after roughly 3.5 seconds.
-- [x] Target grammar is embedded directly in clouds, with a high-contrast bounce badge.
-- [x] Main menu explicitly teaches touch and mouse firing behavior.
+- [x] Desktop level briefing remains bottom-centered and fades after ~3.5 seconds.
+- [x] Mobile level briefing moves to y=105 to clear the control deck.
+- [x] Target grammar is embedded directly in clouds with high-contrast ricochet badge.
+- [x] Main menu names the mobile AIM wheel + FIRE scheme.
 - [x] Pause menu exposes mobile-accessible Sound / Path controls.
-- [x] First-shot clears receive `PERFECT PATH!` presentation.
-- [ ] Verify no late-game target/mechanic is obscured at common 16:9, 19.5:9, and tall-phone aspect ratios.
+- [x] First-shot clears receive `PERFECT PATH!` feedback.
+- [ ] Verify no late-game target/mechanic is obscured at 16:9, 19.5:9, and tall-phone aspect ratios.
+
+## Package integrity
+
+- [x] Deterministic builder assembles one self-contained `index.html`.
+- [x] Terser 5.50.0 + Zopfli are pinned.
+- [x] CI rejects an archive above 13,312 bytes.
+- [x] CI opens ZIP and verifies exactly one root-level `index.html`.
+- [x] CI verifies no external/network runtime dependencies.
+- [x] Every qualifying game-code push to `main` regenerates ZIP, checksum, and provenance.
+- [x] v0.19 PR candidate passes complete regression suite and submission contract at **13,208 bytes**.
+- [ ] After merge, verify `dist/uniRico-js13k-build.txt` points to final v0.19 game commit and records `archive_entry=index.html`.
 
 ## Repository / branch gate
 
-- [x] Every current non-main branch with substantive code changes is represented by a PR to `main` or has been explicitly superseded by a clean PR from current `main`.
-- [x] Dist automation was reviewed and merged through PR #2.
-- [x] Dist race-safety hardening was reviewed and merged through PR #3.
-- [x] v0.18 gameplay/audio/mobile polish is carried by the clean final competition PR from `agent/js13k-final-v018`.
-- [ ] After the final v0.18 PR is merged, verify `main` regenerates the canonical competition ZIP from the merge commit.
+- [x] Dist publisher reviewed/merged through PR #2.
+- [x] Dist race-safety hardening reviewed/merged through PR #3.
+- [x] v0.18 final competition polish reviewed/merged through PR #4.
+- [x] v0.19 tutorial/mobile changes are isolated in PR #5 from current `main`.
+- [ ] Merge PR #5 only after final CI remains green.
 
 ## Submission freeze
 
-- [ ] Successful competition workflow on the final `main` game commit.
-- [ ] Download **`dist/uniRico-js13k.zip`** rather than hand-building or submitting the Wavedash ZIP.
-- [ ] Verify `dist/uniRico-js13k-build.txt` reports `archive_entry=index.html` and a byte count ≤13,312.
-- [ ] Verify the recorded SHA-256 immediately before upload.
-- [ ] Play the downloaded ZIP offline once on desktop and once on a physical phone.
-- [ ] Freeze gameplay code after the official deadline; do not use Wavedash's publishing extension to add features or ordinary bug fixes.
+- [ ] Successful competition workflow on final `main` game commit.
+- [ ] Download **`dist/uniRico-js13k.zip`**, never the Wavedash ZIP.
+- [ ] Verify `archive_entry=index.html` and byte count ≤13,312.
+- [ ] Verify recorded SHA-256 immediately before upload.
+- [ ] Play downloaded ZIP offline once on desktop and once on a physical phone.
+- [ ] Freeze gameplay after the official deadline; do not use Wavedash publishing extension for feature fixes.
