@@ -1,6 +1,6 @@
-# uniRico v0.15.0 Source Guide
+# uniRico v0.20.0 Source Guide
 
-The shipping game is byte-conscious, but the readable source is split into familiar responsibilities.
+The shipping game is aggressively byte-conscious, but the public source remains split into readable responsibilities.
 
 ## Runtime pipeline
 
@@ -36,25 +36,47 @@ Target tuples are:
 [x, y, requiredBounces, motionMode, amplitude, speed, phase, radius]
 ```
 
-## Mechanic-driven campaign
+## 50-level campaign
 
-The intended route of each level is required to interact with every visible mechanic instance, with three documented exceptions: the full-height walls in Levels 3, 13, and 15 are **portal gates**. Their job is to make ordinary cross-arena travel impossible.
+Levels 1–40 are compact declarative puzzles from `src/levels.js`. Levels 41–50 are generated in `core.js` by `rf(level,index)`, which creates exact 180° spatial transformations of Levels 31–40.
 
-This invariant is tested in `tests/mechanic-coverage.js`.
+The reflection transform rotates point geometry with `(W-x,H-y)`, rectangle geometry with `(W-x-width,H-y-height)`, negates directional forces/motion amplitudes where required, rotates both portal endpoints, and preserves scalar properties such as polarity, speed bands, bounce requirements, and spin under 180° rotation. `sol()` reuses the source level's encoded angle/delay and adds π to the launch angle.
+
+This makes the final ten levels new reversed spatial problems without storing ten duplicate late-game maps or ten duplicate solution records.
+
+## Mechanic-driven invariant
+
+The intended route of every level must interact with every visible mechanic instance, with three documented gate exceptions: the full-height walls in Levels 3, 13, and 15 force portal traversal.
+
+`tests/mechanic-coverage.js` executes all 50 intended routes and records per-instance interactions. Reflection levels must preserve the mechanic-family set of their source level.
 
 ## Difficulty curve
 
-The campaign uses four explicit difficulty levers: more interacting systems, more ordered targets, smaller cloud radii, and shorter `q` trajectory previews. `q` is monotonically non-increasing across all 40 levels.
+Difficulty uses mechanic composition, ordered target count, target radius, and trajectory-preview budget `q`. Preview assistance is monotonically non-increasing through all 50 levels.
 
-Level 20 `FIRST MIX` is a regression anchor: its intended solution must use its wind field, spin field, and prism wall.
+```text
+01–08  fundamentals
+09–15  moving/timed/linked lessons
+16–19  first combinations
+20–25  two-lock mixed bridge
+26–30  three-lock chains
+31–35  four-lock advanced
+36–39  five-lock endgame
+40     six-lock FULL SPECTRUM
+41–45  four-lock Reflection Gauntlet
+46–49  five-lock reflected endgame
+50     six-lock MIRROR FULL SPECTRUM
+```
+
+Level 20 `FIRST MIX` remains a regression anchor: its intended solution must use wind, spin, and prism interaction.
 
 ## True solution regression
 
-`tests/solution-smoke.js` decodes the stored solution angle/delay, advances `_f()` directly, checks every active cloud in order, checks exact required bounce counts, and fails on physics death, wrong order, wrong bounce, or timeout. This verifies actual completion for all 40 encoded routes.
+`tests/solution-smoke.js` decodes the stored solution angle/delay, advances `_f()` directly, checks every active cloud in order, checks exact bounce counts, and fails on physics death, wrong order, wrong bounce, or timeout.
 
-## Mechanic vocabulary and feedback
+The test now proves **50/50 routes**, verifies target-count correspondence for Levels 41–50, requires the reflected names, and locks Level 50 to `MIRROR FULL SPECTRUM` with six ordered targets.
 
-`core.js` defines one compact key/name vocabulary shared by presentation and live feedback:
+## Mechanic vocabulary
 
 ```text
 w o f z a g s b c k r v
@@ -62,30 +84,31 @@ w o f z a g s b c k r v
 PRISM ARCH WIND DREAM BOOST MOON SPIN STORM CHARGE MAGNET AURORA VOID
 ```
 
-`ml(level)` scans the current level and builds the second line of the transient title card. Motion-only target lessons add `MOVING CLOUD`.
-
-`mi(ball, mechanicIndex, sim)` is the live cause/effect hook. The projectile carries a small bitmask `u`; on the first activation of a mechanic during a real shot, `mi()` records the bit and emits a floating name, five particles, and a small pitched blip. When `sim` is true, `mi()` does nothing.
+`ml(level)` derives the transient mechanic briefing from actual level data. `mi(ball,index,sim)` emits a once-per-shot live mechanic echo while simulation mode remains silent.
 
 ## Important compact functions
 
 | Symbol | Role |
 |---|---|
+| `rf` | generate a reflected mastery level |
+| `si` | map reflected level index back to source solution data |
+| `sol` | decode launch angle/delay and rotate reflected solutions by π |
 | `tp` | moving target position |
 | `wp` | moving wall position |
 | `pp` | portal endpoint position |
 | `hit` | swept projectile-vs-moving-target collision |
 | `_f` | one projectile physics step |
 | `$7` | ordered cloud progression |
-| `$H` | cloud rendering, order numbers, bounce badges, active ring |
+| `$H` | cloud rendering / target grammar |
 | `$J` | trajectory preview |
 | `$C` | live rainbow projectile |
 | `$Q` | fixed simulation update |
-| `ml` | build the transient mechanic briefing |
-| `mi` | once-per-shot live mechanic echo |
+| `ml` | transient mechanic briefing |
+| `mi` | once-per-shot mechanic feedback |
 
 ## HUD and target language
 
-The live HTML HUD contains only `#time`. Objective prose has been removed. `$H()` renders the target grammar directly in the world:
+The live HTML HUD contains only `#time`. Objective information is embedded in the cloud geometry:
 
 ```text
 white ring        = active cloud
@@ -93,8 +116,12 @@ number on cloud   = sequence order
 number above      = required bounce count
 ```
 
-The bottom-centered Canvas title card is temporary and fades after roughly 3.5 seconds. Pause/menu/completion views own the nonessential statistics.
-
 ## Audio
 
-`audio.js` has one state-aware recursive transport. Planning uses sparse orchestral sine/triangle harmony. A live shot switches into procedural dubstep with sub, wobble/formant bass, yoi responses, sharp percussion, and phrase transitions. The audio graph remains asset-free and autoplay-safe.
+`audio.js` uses one state-aware recursive Web Audio transport. Planning is sparse and orchestral; live flight shifts into procedural bass music. No audio samples or external assets ship.
+
+## Competition build
+
+`tools/build_js13k_zip.py` first minifies the readable modules with pinned Terser 5.50.0. It then builds both a Terser-only candidate and a deterministic Roadroller 2.1.0 `-O0` candidate, applies Zopfli DEFLATE to each complete HTML payload, and selects the smaller **final ZIP**.
+
+Release CI builds the archive twice and requires byte-for-byte identity, then extracts and executes the exact packed runtime before accepting the candidate. The current 50-level PR candidate is **11,512 / 13,312 bytes**, leaving **1,800 bytes** free.
