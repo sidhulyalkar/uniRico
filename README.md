@@ -1,4 +1,4 @@
-# 🦄🌈 uniRico v0.19.0
+# 🦄🌈 uniRico v0.19.1
 
 <p align="center">
   <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
@@ -12,9 +12,15 @@
 
 Built for **js13kGames 2026** around **Unicorns and Rainbows**, targeting **Desktop + Mobile**.
 
-## v0.19.0 — Learn fast, aim precisely
+## v0.19.1 — The line you see is the shot you get
 
-This pass attacks the two highest-risk judge/player friction points: understanding the game immediately and controlling precise shots on a phone.
+Desktop aiming now has one authority: the visible trajectory. Mouse movement chooses the launch angle and click fires that exact already-displayed angle. The click-down event cannot silently retarget the horn at a different coordinate immediately before launch.
+
+This specifically hardens embedded/iframe play and synthetic pointer environments, while also eliminating ordinary click-position jitter. An adversarial regression aims at one point, injects the fire down-event at a completely different point, and requires the launched shot to preserve the displayed aim.
+
+The v0.19.0 mobile control deck remains unchanged: the AIM wheel selects an angle and the separate FIRE button launches it.
+
+## v0.19.0 — Learn fast, aim precisely
 
 ### Guided mechanic demos
 
@@ -34,12 +40,12 @@ The early campaign still keeps its one-mechanic-at-a-time levels. The demo is fo
 
 ### Precision mobile control deck
 
-Mobile aiming is now deliberately decoupled from firing:
+Mobile aiming is deliberately decoupled from firing:
 
 - **AIM wheel, lower left** — drag the knob around the ring to choose the rainbow's launch angle
 - **FIRE button, lower right** — launch using the selected angle
 
-Releasing the aim wheel never fires. Touching elsewhere in the arena never fires. This makes fine adjustments, repeated attempts, and one-handed coordination much less brittle. The mobile control deck appears after touch input is detected; desktop mouse behavior remains immediate aim + click.
+Releasing the aim wheel never fires. Touching elsewhere in the arena never fires. This makes fine adjustments, repeated attempts, and one-handed coordination much less brittle. The mobile control deck appears after touch input is detected.
 
 The transient level card moves upward on mobile so it cannot cover the controls. Sound and trajectory-preview toggles remain tappable from Pause and persist locally.
 
@@ -106,8 +112,8 @@ Trajectory-preview assistance never increases as the campaign advances.
 
 | Input | Action |
 | --- | --- |
-| Mouse / pointer | aim |
-| Click | fire |
+| Mouse / pointer movement | choose the visible trajectory |
+| Click | fire the currently displayed trajectory |
 | `M` / `Esc` | pause / menu |
 | `R` | restart |
 | `H` | help |
@@ -155,7 +161,7 @@ For every qualifying game-source change on `main`, GitHub Actions rebuilds the p
 - no external/network runtime dependency is present
 - the full regression suite passes
 
-The v0.19 merge candidate with guided demos + mobile control deck currently builds at **13,208 / 13,312 bytes**, leaving **104 bytes** of compressed headroom.
+The v0.19.1 PR candidate qualifies at **13,227 / 13,312 bytes**, leaving **85 bytes** of compressed headroom. Its SHA-256 is `2f9bceeaab568d3653a949052478b851c3420e6e65acbd45260b77d9d19fef2c`.
 
 Companion evidence:
 
@@ -177,11 +183,11 @@ Automated coverage includes:
 - procedural audio transport, oscillator cleanup, rainbow harmony, and mix bus
 - Level 1 guided-demo completion and clean **YOUR TURN** handoff
 - per-session tutorial repeat suppression and subsequent mechanic demo
+- desktop displayed-trajectory → fired-shot authority under deliberately mismatched pointerdown coordinates
 - AIM-wheel angle mapping
 - aim release without firing
 - separate FIRE behavior
 - accidental playfield-touch suppression
-- mouse control parity
 - mobile-safe level-card placement
 - exact root-level `index.html`, offline integrity, and 13 KB ceiling
 
