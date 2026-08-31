@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.19.1 — Authoritative Aim Hotfix
+
+- Make the visible desktop trajectory authoritative: mouse movement chooses the launch angle and click fires that already-displayed angle instead of silently re-sampling click coordinates.
+- Fix the website/iframe failure mode where a down-event at a different coordinate could launch away from the dotted preview.
+- Add an adversarial regression that aims at one coordinate, injects the click at another, and requires the launched shot to preserve the displayed aim.
+- Preserve the v0.19.0 precision mobile AIM wheel + separate FIRE control contract unchanged.
+- Re-run the complete readable-source regression suite and deterministic js13k package gate.
+- Qualify the PR candidate at 13,227 / 13,312 bytes, leaving 85 bytes of compressed headroom.
+- Candidate SHA-256: `2f9bceeaab568d3653a949052478b851c3420e6e65acbd45260b77d9d19fef2c`.
+
+## v0.19.0 — Guided Tutorials + Precision Mobile Controls
+
+- Add short first-seen demonstrations for Levels 1–12 using the same deterministic physics and encoded solutions as live play.
+- Teach the cloud grammar explicitly: active ring, order number, and exact ricochet badge.
+- Replace touch-release firing with a lower-left AIM wheel and separate lower-right FIRE button.
+- Keep AIM release non-firing, suppress accidental playfield touch shots, and retain mouse aim + click controls.
+- Add judge-friendly Help recovery, mobile-safe briefing placement, and expanded tutorial/mobile regression coverage.
+- Qualify the canonical v0.19.0 competition package at 13,208 / 13,312 bytes.
+
+## v0.18.0 — Competition Polish
+
+- Add adaptive mobile control behavior, stronger procedural rainbow-aware audio, judge-friendly recovery, and final competition packaging hardening.
+- Preserve the deterministic 40-level campaign, offline single-file package contract, and full source-level regression suite.
+
 ## v0.17.1 — Bounce Badge Contrast Hotfix
 
 - Replace the white onboarding bounce badge with a dark plum badge and white numeral so the example value cannot disappear against pale highlights.
