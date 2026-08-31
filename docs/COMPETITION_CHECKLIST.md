@@ -6,132 +6,119 @@ Current official rules: https://js13kgames.com/2026/rules
 
 ## Submission contract
 
-- [x] Standard `.zip` archive at or below **13,312 bytes** (`13 × 1024`).
-- [x] `index.html` is in the **top directory of the ZIP**.
-- [x] CI requires exact archive membership `['index.html']`, rejecting wrapper folders and stray files.
-- [x] CSS + compiled JavaScript are self-contained in the competition HTML.
-- [x] CI rejects external/network runtime dependencies in the standard Desktop/Mobile candidate.
-- [x] Readable source remains public beside the minified package.
-- [x] Desktop and Mobile use one shared game/submission.
-- [x] v0.19.1 PR candidate: **13,227 / 13,312 bytes**, 85 bytes free; SHA-256 `2f9bceeaab568d3653a949052478b851c3420e6e65acbd45260b77d9d19fef2c`.
-- [ ] Final manual Chrome smoke test has no game-breaking console errors.
-- [ ] Final manual Firefox smoke test has no game-breaking console errors.
-- [ ] Review submission form, repository URL, categories, description, and final ZIP immediately before upload.
+- [x] Standard ZIP is at or below **13,312 bytes** (`13 × 1024`).
+- [x] Archive membership is exactly `['index.html']` with `index.html` at the ZIP root.
+- [x] CSS + JavaScript are self-contained.
+- [x] Standard Desktop/Mobile candidate has no external/network runtime dependency.
+- [x] Readable public source remains available beside the packed artifact.
+- [x] Desktop and Mobile share one game/submission.
+- [x] v0.20.0 50-level PR candidate: **11,512 / 13,312 bytes**, **1,800 bytes free**.
+- [x] Candidate SHA-256: `713114a1185abd266ffdd42664217e06170b22673e9afb5eaa7cb3dd9c9a87ff`.
+- [ ] Reconfirm final `main` size/hash after merge and publisher commit.
+- [ ] Review title, repository URL, categories, description, screenshots, and final ZIP immediately before official upload.
 
-## Tutorial / comprehension gate
+## Gameplay / campaign authority
 
-- [x] Level 1 demonstrates the full grammar before asking the player to solve it.
-- [x] Tutorial explicitly states **ring = current**, **number = order**, **badge = exact ricochets**.
-- [x] Each reflection during tutorial playback shows a visible `RICOCHET n` count.
-- [x] Level 1 handoff states that exact ricochets unlock the cloud, then gives **YOUR TURN**.
-- [x] First visits to Levels 1–12 run short accelerated demonstrations using the real encoded solution before player control.
-- [x] Tutorial demos use the same deterministic physics as live play, not canned animation.
-- [x] A lesson does not replay repeatedly within the same session.
-- [x] Existing early one-mechanic-at-a-time practice levels are preserved after each demo.
-- [x] Automated tutorial-flow regression completes Level 1 demo, verifies clean handoff, repeat suppression, and the next lesson.
-- [ ] Fresh-player test: without verbal explanation, player can explain **ring/current, number/order, badge/ricochets, ricochet unlock** after Level 1.
-- [ ] Fresh-player test: first new mechanic after Level 1 is understood from its quick demo before the attempt.
-
-## Gameplay / progression gate
-
-- [x] 40/40 encoded solutions complete every target chain.
+- [x] **50/50 encoded solutions** complete every ordered target chain under the authoritative fixed-step physics.
+- [x] Intended mechanic-use coverage passes across all 50 levels.
 - [x] Preview assistance never increases as the campaign advances.
-- [x] Levels 1–8 still isolate fundamentals after demonstrations.
-- [x] Levels 20–25 form a two-lock mixed-system bridge.
-- [x] Levels 26–30 use three-lock chains; 31–35 four-lock chains; 36–39 five-lock chains.
-- [x] Level 40 `FULL SPECTRUM` ends with six ordered clouds and seven interacting mechanic families.
-- [x] Wrong cloud / wrong ricochet failures are explicit.
-- [x] Third failure points once toward Help.
-- [x] Help offers aim guidance, mirrored demonstration, and actual solution without changing physics.
-- [ ] Human frustration test: representative players recover from three failed shots rather than abandoning the level.
+- [x] Levels 1–8 isolate fundamentals after demonstrations.
+- [x] Levels 20–25 form the two-lock mixed-system bridge.
+- [x] Levels 26–30 use three-lock chains.
+- [x] Levels 31–35 use four-lock chains.
+- [x] Levels 36–39 use five-lock endgame chains.
+- [x] Level 40 `FULL SPECTRUM` uses six ordered clouds.
+- [x] Levels 41–50 form the **Reflection Gauntlet** derived from Levels 31–40 by exact 180° transformation.
+- [x] Every reflected level preserves its source target count and mechanic family set.
+- [x] Levels 41–45 use four locks; 46–49 use five; Level 50 `MIRROR FULL SPECTRUM` uses six.
+- [x] Wrong cloud / wrong ricochet failures remain explicit.
+- [x] Third failure points once toward Help rather than lowering physics difficulty.
 
-## Desktop controls gate
+## Tutorial / comprehension
 
-- [x] Mouse movement is the sole desktop aim authority; click fires the exact trajectory already displayed.
-- [x] Pointerdown cannot silently retarget the launch away from the visible preview.
-- [x] Adversarial regression aims at one coordinate, fires with pointerdown at another, and verifies exact aim preservation.
-- [x] Keyboard pause/menu, retry, help, path, and sound controls remain available.
-- [x] Aim preview uses the exact fixed-step live simulation.
-- [ ] Chrome desktop: early, mixed, moving-target, and endgame representative levels.
-- [ ] Firefox desktop: same representative flow.
+- [x] Level 1 demonstrates **ring = current, number = order, badge = exact ricochets** before player control.
+- [x] Tutorial playback visibly counts ricochets.
+- [x] First visits to Levels 1–12 run short accelerated demonstrations using real encoded solutions.
+- [x] Tutorial, Help, preview, and live play use the same deterministic physics.
+- [x] Tutorial lessons do not repeatedly replay in one session.
+- [x] Automated tutorial-flow regression verifies Level 1 completion, `YOUR TURN` handoff, repeat suppression, and later lessons.
+- [ ] Fresh-player test: without verbal explanation, player can explain the three cloud cues after Level 1.
+- [ ] Fresh-player test: first new mechanic is understood from its demonstration before the attempt.
 
-## Mobile controls gate
+## Desktop controls
+
+- [x] Pointer movement is the sole desktop aim authority.
+- [x] Click fires the exact trajectory already displayed.
+- [x] Adversarial regression aims at one coordinate, injects pointerdown at another, and verifies no retargeting.
+- [x] Keyboard pause/menu, retry, Help, path, and sound controls remain available.
+- [x] Preview uses the same fixed-step projectile model as live play.
+- [ ] Chrome: play representative early, mixed, moving-target, Reflection Gauntlet, and finale levels.
+- [ ] Firefox: repeat the representative flow.
+
+## Mobile controls
 
 - [x] `touch-action:none` prevents browser gestures from stealing play.
-- [x] First touch reveals a persistent lower-left AIM wheel and lower-right FIRE button during active play.
-- [x] Dragging around the AIM ring maps continuously to the launch angle.
-- [x] Releasing AIM **never fires** and preserves the selected angle.
+- [x] Touch reveals lower-left AIM and lower-right FIRE controls.
+- [x] AIM ring continuously maps to launch angle.
+- [x] Releasing AIM never fires and preserves the selected angle.
 - [x] FIRE launches exactly once using the selected angle.
-- [x] Touches elsewhere in the playfield do not accidentally launch a shot.
-- [x] Pointer cancel safely releases AIM capture without firing.
-- [x] Mobile level briefing moves above the control deck instead of obscuring it.
-- [x] Sound and trajectory-preview toggles remain tappable from Pause and persist.
-- [x] Automated regression covers wheel capture, angle mapping, release-without-fire, separate FIRE, playfield safety, desktop aim authority, and pause toggles.
+- [x] Other playfield touches cannot accidentally shoot.
+- [x] Pointer cancel safely releases AIM capture.
+- [x] Mobile level briefing clears the control deck.
+- [x] Sound and path toggles remain accessible from Pause.
+- [x] Automated touch regression covers mapping, release-without-fire, separate FIRE, playfield safety, and desktop aim authority.
 - [ ] Real iPhone/Safari portrait + landscape feel pass.
 - [ ] Real Android/Chrome portrait + landscape feel pass.
-- [ ] Confirm AIM/FIRE controls remain comfortable with common browser bars / safe-area layouts.
-- [ ] Confirm the lower-left AIM / lower-right FIRE handedness feels natural for representative players.
+- [ ] Verify browser bars/safe areas do not compromise AIM/FIRE comfort.
 
-## Theme / novelty gate
+## Theme / audiovisual identity
 
-- [x] Unicorn is the physical launcher rather than a decorative mascot.
-- [x] Rainbow is projectile, trajectory, trail, success feedback, and harmonic SFX language.
-- [x] Angry clouds are ordered locks and visibly become restored/happy.
-- [x] Prisms, arches, wind, dream clouds, stardust, moonbow gravity, spin, charge, magnetism, storms, resonance gates, and void hazards alter real solution paths.
-- [x] Mechanic interaction echoes teach cause/effect when the rainbow activates a system.
-- [x] First-seen demonstrations reinforce the fantasy vocabulary before systems are mixed.
-
-## Audio gate
-
-- [x] All music and SFX are synthesized with Web Audio; no samples ship.
-- [x] Planning uses a sparse, slower orchestral bed.
-- [x] Firing snaps into denser dubstep / bass-music arrangement.
-- [x] Flight music responds to ricochet count and ordered-cloud progress.
-- [x] Six-note rainbow palette unifies ricochet, cloud-resolution, and victory feedback.
-- [x] Dynamics compressor reduces stacked-oscillator clipping where supported.
-- [x] Bass uses clean sub + filtered upper harmonics for small speakers.
-- [x] Audio regressions cover transport pacing, timbres, mute gating, cleanup, and theme hooks.
+- [x] Unicorn horn is the physical launcher.
+- [x] Rainbow is projectile, trajectory, trail, success feedback, and harmonic language.
+- [x] Grumpy clouds are ordered locks that visibly recover.
+- [x] Prisms, arches, wind, dream zones, stardust, gravity, spin, charge, magnetism, storms, resonance, and void systems alter actual routes.
+- [x] All music and SFX are procedural Web Audio; no samples ship.
+- [x] Planning and flight use distinct orchestral / bass-music states.
+- [x] Six-note rainbow palette connects ricochets, target resolution, and victory.
+- [x] Audio regression covers transport, timbres, mute gating, cleanup, and mix behavior.
 - [ ] Real phone speaker mix pass.
 - [ ] Real laptop speaker mix pass.
-- [ ] Headphones mix pass at low and medium volume.
+- [ ] Headphone pass at low and medium volume.
 
-## Presentation gate
+## Compression / package integrity
 
-- [x] Live HUD is timer-only.
-- [x] Desktop level briefing remains bottom-centered and fades after ~3.5 seconds.
-- [x] Mobile level briefing moves to y=105 to clear the control deck.
-- [x] Target grammar is embedded directly in clouds with high-contrast ricochet badge.
-- [x] Main menu names the mobile AIM wheel + FIRE scheme.
-- [x] Pause menu exposes mobile-accessible Sound / Path controls.
-- [x] First-shot clears receive `PERFECT PATH!` feedback.
-- [ ] Verify no late-game target/mechanic is obscured at 16:9, 19.5:9, and tall-phone aspect ratios.
-
-## Package integrity
-
-- [x] Deterministic builder assembles one self-contained `index.html`.
-- [x] Terser 5.50.0 + Zopfli are pinned.
-- [x] CI rejects an archive above 13,312 bytes.
-- [x] CI opens ZIP and verifies exactly one root-level `index.html`.
-- [x] CI verifies no external/network runtime dependencies.
+- [x] Terser is pinned to **5.50.0**.
+- [x] Roadroller is pinned to **2.1.0** and uses deterministic `-O0` release parameters.
+- [x] Zopfli produces the final DEFLATE stream.
+- [x] Builder compares **actual final ZIP bytes** for Terser-only and Roadroller candidates and chooses the smaller result.
+- [x] Minimal HTML shell retains UTF-8 and mobile viewport behavior while omitting optional wrapper markup.
+- [x] CI rejects any archive above 13,312 bytes.
+- [x] CI rejects wrapper directories and stray archive entries.
+- [x] CI rejects external/network runtime dependencies.
+- [x] CI rebuilds the package twice and requires byte-for-byte identity.
+- [x] CI extracts the exact packed `index.html` and executes its Roadroller-packed runtime before qualification.
 - [x] Every qualifying game-code push to `main` regenerates ZIP, checksum, and provenance.
-- [x] v0.19.1 PR #6 qualification passes the complete regression suite and submission contract at **13,227 bytes**, leaving 85 bytes free.
-- [ ] After merge, verify `dist/uniRico-js13k-build.txt` points to the final v0.19.1 game commit and records `archive_entry=index.html`.
 
-## Repository / branch gate
+## Human presentation pass
 
-- [x] Dist publisher reviewed/merged through PR #2.
-- [x] Dist race-safety hardening reviewed/merged through PR #3.
-- [x] v0.18 final competition polish reviewed/merged through PR #4.
-- [x] v0.19 tutorial/mobile release reviewed/merged through PR #5.
-- [x] v0.19.1 authoritative desktop aim hotfix isolated in PR #6.
-- [x] PR #6 exact candidate workflow passed on the gameplay/test head before release-document cleanup.
-- [ ] Merge PR #6 only while its release state remains coherent and the game-source qualification is unchanged.
+- [x] Live HUD remains timer-only.
+- [x] Target grammar is embedded directly in clouds with high-contrast ricochet badges.
+- [x] Main menu explains desktop and mobile control schemes.
+- [x] Pause exposes mobile-accessible Sound / Path controls.
+- [x] First-shot clears receive `PERFECT PATH!` feedback.
+- [ ] Verify representative late-game and mirrored layouts at 16:9, 19.5:9, and tall-phone aspect ratios.
+- [ ] Confirm Reflection Gauntlet feels like deliberate reversed mastery rather than confusing duplication.
+- [ ] Confirm Level 50 provides a satisfying final cadence.
 
-## Submission freeze
+## Release / submission freeze
 
-- [ ] Successful competition workflow on final `main` game commit.
+- [ ] PR #8 exact-head Competition candidate workflow is green after all v0.20.0 code/docs changes.
+- [ ] Merge PR #8 using its verified exact head.
+- [ ] Main-branch competition workflow succeeds and publishes canonical dist.
+- [ ] `dist/uniRico-js13k-build.txt` points to the final v0.20.0 game-source commit.
+- [ ] Verify `archive_entry=index.html`, byte count ≤13,312, and recorded SHA-256 on `main`.
 - [ ] Download **`dist/uniRico-js13k.zip`**, never the Wavedash ZIP.
-- [ ] Verify `archive_entry=index.html` and byte count ≤13,312.
-- [ ] Verify recorded SHA-256 immediately before upload.
-- [ ] Play downloaded ZIP offline once on desktop and once on a physical phone.
-- [ ] Freeze gameplay after the official deadline; do not use Wavedash publishing extension for feature fixes.
+- [ ] Play the downloaded ZIP offline once on desktop and once on a physical phone.
+- [ ] Perform final Chrome + Firefox smoke tests with no game-breaking console errors.
+- [ ] Upload that exact canonical ZIP to the official js13kGames submission form.
+- [ ] Freeze gameplay after the official deadline; do not use any publishing extension for feature fixes.
