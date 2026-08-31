@@ -50,7 +50,7 @@ jobs:
       - name: Install deterministic competition tooling
         run: |
           python3 -m pip install zopfli
-          npm install --global terser@5.50.0
+          npm install --global terser@5.50.0 roadroller@2.1.0
 
       - name: Build canonical js13k candidate
         run: python3 tools/build_js13k_zip.py "$ZIP_PATH"
