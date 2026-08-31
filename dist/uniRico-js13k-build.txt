@@ -1,5 +1,8 @@
-source_commit=a9350c6a47d5fa2cac85ffb8e4874cffc87ef2a2
+source_commit=7df719558462bae381c8e02b5d606e3d190fbb1c
 zip_bytes=11512
 limit_bytes=13312
 sha256=713114a1185abd266ffdd42664217e06170b22673e9afb5eaa7cb3dd9c9a87ff
 archive_entry=index.html
+local_html=uniRico-local.html
+local_html_bytes=15358
+local_html_sha256=5584ffd817af47108bd5fec97a0c669ace2b8249143a6a6b717cf21ec2c00c6f
