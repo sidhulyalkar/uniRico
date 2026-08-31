@@ -1,5 +1,25 @@
-/** uniRico v0.19.0 readable runtime module. */
+/** uniRico v0.20.0 readable runtime module. */
 const C=document.querySelector('#c'),X=C.getContext('2d'),U={h:document.querySelector('#hud'),t:document.querySelector('#time')},W=960,H=600,P=Math.PI,T=P*2,MK='wofzagsbckrv',MN='PRISM ARCH WIND DREAM BOOST MOON SPIN STORM CHARGE MAGNET AURORA VOID'.split(' '),DM='RICOCHET = BOUNCE · MATCH BADGE → UNLOCK|MOVING CLOUD · TIME IT|ARCH · TELEPORT|WIND · BENDS|DREAM · SLOWS|BOOST · SPEEDS|MOON · PULLS|SPIN · CURVES|MOVING PRISM · BOUNCES|STORM · TIME GAP|CHARGE + MAGNET · + / −|AURORA · SPEED GATE'.split('|'),Q='KIJJLJJJOIJHJJGJLNKSRTRRPUUURPUUTSPUVUQV',E=atob('IB9A3XQD8NMAALHRAM7g2EDOQM4g0AAAAACwzQAAAABdyitkwtAAAF3KwtArZIBw3Vm5GgAAwtBdyitkuRqAcMLQ3Vmr1DmLAABCYKvUuRo=');let R=Math.random,$V=1,L=0,$d=0,$t=0,$n=0,F=0,$h=0,$e=[800,300],B=null,$q=[],$g=[],$r=[],$c=0,$k=0,$a=1,$y=1,$F,J=0,Y=0,$s=0,$m=0,V=[],$W=0,$l=[],_=0,ek=0,et=0,ee=0,mt,mb=0,tc=0,mo=0,td=0;
+
+// Levels 41–50 are a compressed mastery gauntlet: exact 180° rotations of
+// Levels 31–40. Rotation is a symmetry of the deterministic projectile model,
+// so the source solution remains a proof after its launch angle is rotated by π.
+// This creates genuinely reversed spatial problems without storing ten more
+// copies of late-game geometry and solution data in the 13 KB package.
+function rf(l,i){
+  const pt=a=>{a=a.slice();a[0]=W-a[0];a[1]=H-a[1];return a},
+    rc=a=>{a=a.slice();a[0]=W-a[0]-a[2];a[1]=H-a[1]-a[3];return a},
+    z={...l,n:'MIRROR '+l.n,p:[W-l.p[0],H-l.p[1]],q:18-i};
+  z.t=l.t.map(a=>{a=pt(a);a[4]=-a[4];return a});
+  if(l.w)z.w=l.w.map(a=>{a=rc(a);if(a[4])a[5]=-a[5];return a});
+  if(l.o)z.o=l.o.map(a=>{a=a.slice();a[0]=W-a[0];a[1]=H-a[1];a[2]=W-a[2];a[3]=H-a[3];a[6]=-a[6];a[10]=-a[10];return a});
+  if(l.f)z.f=l.f.map(a=>{a=rc(a);a[4]=-a[4];a[5]=-a[5];return a});
+  for(let k of 'scr')if(l[k])z[k]=l[k].map(rc);
+  for(let k of 'gk')if(l[k])z[k]=l[k].map(pt);
+  return z
+}
+LEVELS.push(...LEVELS.slice(30,40).map(rf));
+
 const cl=(v,a,b)=>v<a?a:v>b?b:v,D=(a,b,c,d)=>Math.hypot(a-c,b-d),I=(x,y,r)=>x>r[0]&&x<r[0]+r[2]&&y>r[1]&&y<r[1]+r[3],hit=(b,t,n)=>{let q=tp(t,n),r=(t[7]||16)+6;if(b.pc==11)return D(b.x,b.y,q[0],q[1])<r;let p=tp(t,n-1),x=b.ox-p[0],y=b.oy-p[1],u=b.x-q[0]-x,v=b.y-q[1]-y,z=cl(-(x*u+y*v)/(u*u+v*v||1),0,1);return Math.hypot(x+u*z,y+v*z)<r};
 try{V=JSON.parse(localStorage.r1r||'[]');Array.isArray(V)||(V=[]);$W=+localStorage.r1l||0;$a=localStorage.r1p!=='0';$y=localStorage.r1s!=='0'}catch{}L=cl($W,0,LEVELS.length-1);
 function $x(){$V=Math.min(devicePixelRatio||1,2);C.width=innerWidth*$V;C.height=innerHeight*$V}addEventListener('resize',$x);$x();
@@ -11,7 +31,8 @@ function wp(w,tm){let q=$w(w[0],w[1],w[4],w[5],w[6],w[7],tm);return[q[0],q[1],w[
 function pp(o,j,tm){let k=j?9:5,q=$w(o[j?2:0],o[j?3:1],o[k],o[k+1],o[k+2],o[k+3],tm);return q}
 function $2(){$t=$n=0;for(let r of V)if(r){$n+=r[0]&3;$t+=r[3]||0}}
 function $o(){try{localStorage.r1r=JSON.stringify(V);localStorage.r1l=L;localStorage.r1p=$a?1:0;localStorage.r1s=$y?1:0}catch{}}
-function _c(t){let s=t/60|0;return String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0')+'.'+(t%60/6|0)}const $Y=()=>(Q.charCodeAt(L)-65)*30,sol=()=>{let i=L*2,v=E.charCodeAt(i)|E.charCodeAt(i+1)<<8;return[(v>>3)*P/3600,[0,24,28,40,72,96,120][v&7]]};
+function _c(t){let s=t/60|0;return String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0')+'.'+(t%60/6|0)}
+const si=()=>L<40?L:L-10,$Y=()=>(Q.charCodeAt(si())-65)*30,sol=()=>{let i=si()*2,v=E.charCodeAt(i)|E.charCodeAt(i+1)<<8,a=(v>>3)*P/3600;return[a+(L<40?0:P),[0,24,28,40,72,96,120][v&7]]};
 function $Z(t,s){let q=Math.max(100,Math.min(1000,Math.round(1000*$Y()/Math.max($Y(),t))-180*(s-1)));return[q,q>=900?3:q>=650?2:1]}
 function ml(l){let m=[];for(let i=0;i<MK.length;i++)A(l,MK[i]).length&&m.push(MN[i]);l.t.some(t=>t[3])&&m.push('MOVING CLOUD');return m.join(' · ')||'RAINBOW PATH'}
 function $0(){U.t.textContent=_c(Y);$2()}

@@ -50,10 +50,21 @@ jobs:
       - name: Install deterministic competition tooling
         run: |
           python3 -m pip install zopfli
-          npm install --global terser@5.50.0
+          npm install --global terser@5.50.0 roadroller@2.1.0
 
       - name: Build canonical js13k candidate
         run: python3 tools/build_js13k_zip.py "$ZIP_PATH"
+
+      - name: Prove deterministic packaging
+        run: |
+          python3 tools/build_js13k_zip.py /tmp/uniRico-js13k-rebuild.zip
+          cmp "$ZIP_PATH" /tmp/uniRico-js13k-rebuild.zip
+          echo "deterministic package rebuild: PASS"
+
+      - name: Execute exact packed runtime
+        run: |
+          unzip -p "$ZIP_PATH" index.html > /tmp/uniRico-packed.html
+          node tests/packed-runtime-smoke.js /tmp/uniRico-packed.html
 
       - name: Record candidate provenance
         run: |
