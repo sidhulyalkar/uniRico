@@ -2,137 +2,164 @@
 
 ## Executive assessment
 
-uniRico is already substantially beyond a prototype. Its strongest competitive idea is that the theme is structural: a unicorn launches a rainbow whose physical route is the puzzle, and the sky's fantasy systems transform that route. The 40-level campaign, exact-bounce cloud grammar, same-simulation trajectory preview, procedural Canvas presentation, and procedural Web Audio all reinforce a single compact concept.
+uniRico's strongest competition argument is coherence. The unicorn horn is the launcher, the rainbow is both projectile and trajectory language, grumpy clouds are ordered locks, and the fantasy systems physically transform the same shot. The game now delivers **50 deterministic levels** while the standard Desktop/Mobile candidate occupies only **11,512 of 13,312 bytes**.
 
-The main risks entering this audit were not lack of mechanics. They were judge-facing friction: a stale competition packaging path, mobile input that committed on touch-down, important settings that were keyboard-centric, procedural music without a master mix bus, and sound effects whose pitch language did not reinforce the rainbow theme.
+v0.20.0 materially improves both sides of the entry: the player gets a longer mastery arc ending in a ten-level Reflection Gauntlet, while the release pipeline gains deterministic Roadroller packing, final-ZIP strategy comparison, byte-identical rebuild proof, and packed-runtime execution.
 
-v0.18.0 addresses those risks without changing the encoded solution space.
+The remaining risks are primarily human-facing: first-minute comprehension, physical-phone ergonomics, cross-browser feel, and final audio balance. Those deserve the remaining validation time more than another mechanic.
 
 ## Competition scorecard
 
-| Criterion | Before v0.18 | v0.18 target | Assessment |
-| --- | ---: | ---: | --- |
-| Theme | 4.3 / 5 | 4.7 / 5 | Unicorn, rainbow, clouds, prisms, arches, moonbow/stardust systems and restoration fantasy are gameplay rather than decoration. Rainbow harmony now extends the theme into audio. |
-| Innovation | 4.4 / 5 | 4.6 / 5 | One tiny deterministic physics language supports prediction, live play, moving geometry, portals, force fields, ordered targets, and 40 authored puzzles. Adaptive touch adds a compact human-input twist. |
-| Gameplay | 4.0 / 5 | 4.4 / 5 | Strong discovery curve and mastery ceiling. Main remaining risk is exact-bounce frustration if a judge misses the cloud grammar or reaches precision levels too quickly. |
-| Graphics | 4.1 / 5 | 4.3 / 5 | Cohesive procedural sky, readable mechanic vocabulary, strong rainbow trail, and very low HUD clutter. Final device-size legibility is still a human gate. |
-| Audio | 3.8 / 5 | 4.5 / 5 | State-aware orchestral-to-dubstep score is unusual at this size. v0.18 adds dynamic mix control and theme-linked harmonic feedback. Physical speaker tests remain mandatory. |
-| Controls | 3.7 / 5 | 4.6 / 5 | Desktop was already clean. Mobile now supports tap or relative drag-and-release, self-calibrating touch jitter, pointer cancellation, and tappable persistent settings. |
+| Criterion | Current assessment | Why |
+| --- | --- | --- |
+| Theme | **Very strong** | Removing unicorns/rainbows would remove the launch, projectile, target fantasy, portal/prism language, and much of the audio vocabulary. |
+| Innovation | **Very strong** | One deterministic physics model supports live play, preview, Help, tutorials, 50 puzzles, generated reflection mastery, and automated proofs. |
+| Gameplay | **Strong, comprehension-sensitive** | Exact ricochet constraints create real puzzle mastery, but the first minute must make ring/order/badge language effortless. |
+| Graphics | **Strong for the budget** | Procedural Canvas art is cohesive, readable, and asset-free; device-size legibility remains a physical test. |
+| Audio | **Distinctive** | Procedural orchestral-planning → bass-flight structure and rainbow-linked harmonic cues are unusual at this size. |
+| Controls | **Strong** | Desktop has authoritative displayed aim; Mobile separates AIM and FIRE to prevent accidental commitment. |
+| Technical execution | **Exceptional for 13 KB** | 50/50 solution proof, mechanic coverage, deterministic package reproduction, packed-runtime smoke, exact archive contract. |
 
-These are design-audit targets, not claims about official judge scores.
+These are internal design assessments, not predictions of official judge scores.
 
 ## 1. Theme
 
-### What works
+The theme is gameplay rather than a skin:
 
-The best choice in uniRico is that removing the theme would destroy the game rather than merely reskin it. The unicorn's horn establishes the launch direction. The rainbow is both projectile and persistent visual trace. Angry clouds are the ordered objectives and become happy after restoration. Prisms create literal rainbow ricochet. Rainbow arches behave as portals. Later mechanics read as escalating weather / celestial magic rather than unrelated puzzle gadgets.
+- unicorn horn establishes launch direction;
+- rainbow is projectile, preview, trail, and harmonic feedback;
+- grumpy clouds are ordered objectives that visibly recover;
+- prisms create literal rainbow ricochets;
+- rainbow arches teleport the shot;
+- wind, dream zones, stardust, moonbow gravity, spin, charge, magnetism, storms, resonance, and void hazards all read as escalating sky magic.
 
-The target language is especially efficient: white ring means current cloud, number inside means order, badge above means exact bounce count. That lets the world itself carry the objective instead of a permanent instruction panel.
-
-### Remaining risk
-
-There are enough systems that late levels can read as a generic physics laboratory unless the fantasy vocabulary stays legible. The transient mechanic names and interaction echoes are therefore important and should remain, even under byte pressure.
-
-### v0.18 improvement
-
-Bounce notes now cycle through a six-note rainbow palette, ordered-cloud resolutions climb through the same palette, victory resolves within it, and flight harmony lifts slightly as the rainbow restores additional clouds. The theme now exists in the soundtrack's rules, not only in its timbre.
+The compact target language is especially valuable under the byte limit: **white ring = current target, cloud number = order, dark badge = exact ricochets**.
 
 ## 2. Innovation
 
-### What works
+The novelty is compositional. A single fixed-step projectile model powers live play, trajectory prediction, Help, tutorial demonstrations, moving geometry, portals, continuous forces, ordered targets, and the entire campaign.
 
-The technical novelty is compositional rather than one flashy subsystem. A fixed-step projectile model drives live play and prediction. Moving targets use swept collision. Moving prisms reflect in their moving frame. Portals, forces, spin, charge, magnetism, timed barriers, resonance windows, and hazards all modify the same projectile state. Compact data tuples then turn that engine into a 40-level campaign.
+v0.20.0 adds another compact idea: **geometric symmetry as content compression**. Levels 41–50 are exact 180° transformations of Levels 31–40. Geometry, directional forces, motion amplitudes, portal endpoints, and launch angle are transformed consistently, so the deterministic source solution remains a proof after rotation.
 
-This is exactly the sort of small-code leverage a 13 KB competition can reward: systems multiply one another instead of each requiring an asset or bespoke engine.
+That gives the player ten reversed mastery puzzles for only a small compressed-byte cost instead of storing ten full new maps.
 
-### v0.18 improvement
+## 3. Gameplay / progression
 
-Mobile aiming now adapts with almost no interface cost. A quick tap remains direct aim-and-fire. A drag becomes a relative direction gesture, allowing the thumb to stay anywhere on the screen and avoid covering the target. Release commits the shot. The tap/drag threshold learns from that player's small touch movements and persists locally. It is an accessibility/control improvement that is also a compact technical idea.
+The campaign deliberately teaches before it combines:
 
-## 3. Gameplay
+```text
+01–08  fundamentals
+09–15  moving/timed/linked lessons
+16–19  first combinations
+20–25  two-lock mixed bridge
+26–30  three-lock chains
+31–35  four-lock advanced
+36–39  five-lock endgame
+40     six-lock FULL SPECTRUM
+41–45  four-lock Reflection Gauntlet
+46–49  five-lock reflected endgame
+50     six-lock MIRROR FULL SPECTRUM
+```
 
-### What works
+Trajectory assistance never increases. Difficulty comes from interaction and route planning rather than arbitrary projectile-speed inflation.
 
-The campaign has a deliberate curriculum. Early levels isolate fundamentals. Middle levels introduce moving/timed systems and two-system mixtures. Later levels chain multiple mechanics and ordered clouds while trajectory assistance shrinks. The encoded intended path for every level is executable in automated tests, and visible mechanics are audited for actual participation in that path.
+The main gameplay risk remains exact-bounce frustration when a player has not internalized the visual grammar. Guided demonstrations on first visits to Levels 1–12 and the Help recovery path are therefore competition-critical features, not optional tutorial garnish.
 
-The help system is stronger than a normal hint button because it reuses the simulation: show aim, watch a mirrored shot, or watch the true solution. That provides an escape hatch without changing physics or secretly solving a different game.
+## 4. Controls
 
-### Main risk
+### Desktop
 
-Exact bounce counts create satisfying "I see it" moments, but also brittle-feeling misses when the visual grammar is not understood. Judges frequently evaluate many games in a short period; confusion during the first minute is much more dangerous than a difficult Level 35.
+Pointer movement is the sole aim authority. Click fires the already-displayed trajectory and cannot re-sample a different down-event coordinate. An adversarial regression deliberately separates the pointermove and pointerdown coordinates and requires exact preservation.
 
-### v0.18 improvement
+### Mobile
 
-After a third failed shot, one contextual `STUCK? MENU → HELP` nudge points to the existing deterministic help tools. It does not lower difficulty or auto-solve the level; it makes the recovery path discoverable before frustration becomes abandonment.
+Touch uses a persistent lower-left **AIM** wheel plus lower-right **FIRE** button. Releasing AIM never fires. Touching elsewhere in the arena never fires. This costs more interface space than tap-to-shoot but provides much better precision and predictability for a ricochet puzzle.
 
-## 4. Graphics / presentation
+Remaining release gates are physical iPhone/Safari and Android/Chrome ergonomics, including browser bars and safe-area behavior.
 
-### What works
+## 5. Graphics / presentation
 
-Canvas-generated art gives the game a coherent handmade identity with virtually no asset overhead. The unicorn is readable at gameplay scale, clouds encode state, the shot trail is unmistakably rainbow-colored, each mechanic has a distinct visual language, and the live HUD has been reduced to the timer.
+Canvas-generated art keeps the visual language coherent without image assets. The unicorn is readable at game scale, clouds visibly encode state, rainbow flight is unmistakable, mechanics have distinct visual signatures, and the live HUD remains timer-only.
 
-The transient level card is a good compromise: judges learn the level name and active mechanic vocabulary, then the card disappears so the puzzle owns the screen.
+The remaining risk is physical-size legibility on unusual phone aspect ratios. Uniform logical scaling preserves physics, but very tall/narrow devices still need a human visual pass.
 
-### Remaining risk
+## 6. Audio
 
-Mobile legibility cannot be inferred from the 960×600 logical canvas alone. Uniform scaling prevents aspect-ratio-dependent physics, but very tall or very narrow displays can still make labels and small late-game targets physically tiny. Physical-device review remains a release gate.
+All audio is synthesized with Web Audio. Planning uses sparse orchestral harmony; firing transitions into a denser bass-music state with sub, filtered upper voices, percussion, wobble/formant calls, and progress-sensitive harmonic motion.
 
-## 5. Audio / music
+Bounce, cloud-resolution, and victory feedback share a six-note rainbow palette. A dynamics-compressor bus limits harsh stacked peaks where supported.
 
-### What worked before
+Remaining work is mix validation on real phone speakers, laptop speakers, and headphones.
 
-The soundtrack already had an unusually ambitious state machine for the size budget. Planning used sparse sine/triangle orchestral pulses; firing snapped into a faster bass-music state with sub, filtered wobble, formant/yoi calls, irregular kicks, half-time snare, hats, swing, risers, and phrase-end fills. Audio was synthesized entirely with Web Audio.
+## 7. Deterministic confidence
 
-### Problems found
+The game has unusually strong proof for a tiny arcade entry:
 
-Voices connected directly to the destination, so dense moments could stack harshly. Bounce pitches were useful feedback but musically arbitrary. The score reacted to planning versus flight but did not communicate ordered-cloud progress strongly enough. Development headphones could hide the fact that pure sub energy disappears on many phone speakers.
+- **50/50 intended solutions** execute target-by-target through the real fixed-step physics;
+- mechanic-use coverage rejects visible systems that the intended path can ignore;
+- moving-target and moving-prism collision regressions protect high-speed geometry;
+- tutorial and Help playback share the same simulation;
+- desktop/mobile input authority has dedicated adversarial tests;
+- preview assistance is verified non-increasing through Level 50.
 
-### v0.18 improvement
+The Reflection Gauntlet is also tested as transformed gameplay, not merely generated data: each reflected level must solve, preserve its target count, preserve its source mechanic-family set, and exercise those mechanics.
 
-A browser-supported dynamics compressor is now the master bus, with a direct-output fallback. The bass voice retains a clean low sine while an upper filtered oscillator carries the motif on small speakers. Bounce count alters the wobble behavior. Cloud-chain progress lifts the tonal center. Bounce, cloud-success, and victory SFX share a six-note rainbow palette.
+## 8. 13 KB release engineering
 
-The intended arc is now:
+The competition builder no longer assumes that the shortest intermediate JavaScript creates the smallest submission.
 
-`quiet plan → fire/drop → harmonic ricochet → rising cloud chain → resolved victory`
+It builds two candidates:
 
-The remaining work is mixing, not composition: verify cue audibility and bass balance on actual phone, laptop, and headphones.
+```text
+Terser 5.50.0 → minimal HTML → Zopfli
+Terser 5.50.0 → Roadroller 2.1.0 -O0 → minimal HTML → Zopfli
+```
 
-## 6. Desktop controls
+The smaller **final ZIP** wins.
 
-Mouse aiming remains absolute and click still fires immediately. Keyboard shortcuts retain pause/menu, retry, Help, sound, and path toggles. The path preview is not an approximation: it uses the live simulation in prediction mode, which gives the player trustworthy feedback.
+Current v0.20.0 PR result:
 
-No desktop behavior needed reinvention in v0.18; preserving its immediacy was the goal.
+```text
+50 levels
+11,512 / 13,312 bytes
+1,800 bytes free
+SHA-256 713114a1185abd266ffdd42664217e06170b22673e9afb5eaa7cb3dd9c9a87ff
+```
 
-## 7. Mobile controls
+For comparison, v0.19.1 occupied 13,227 bytes with only 85 bytes free.
 
-### Problem found
+Release CI additionally:
 
-The previous pointer abstraction made the game technically playable on touch, but pointer-down in active play immediately fired. That creates accidental shots, especially when the player's finger obscures the exact location being selected. Sound and path settings were also described through keyboard shortcuts instead of feeling first-class on a phone.
+1. rebuilds the archive and requires byte-for-byte identity;
+2. extracts and executes the exact packed runtime;
+3. requires exactly one root `index.html`;
+4. rejects external/network runtime dependencies;
+5. rejects anything above 13,312 bytes.
 
-### v0.18 behavior
-
-Touch-down begins an aim gesture without committing. While the finger moves, a sufficiently large gesture becomes relative directional aiming. Release fires once. A small gesture stays direct, so quick tap-to-fire remains available. The transition threshold continuously adapts to the player's observed tap jitter and is stored in localStorage. Pointer cancellation safely discards a gesture. Sound and trajectory-preview controls are now real pause-menu buttons and their choices persist.
-
-This gives three useful properties within a tiny code budget: no mandatory calibration screen, no forced left/right handed layout, and no need for the thumb to cover the intended target.
-
-## 8. Engineering / 13 KB integrity
-
-The standard competition package is built from the readable source modules into a single self-contained HTML document, minified with pinned tooling, deterministically Zopfli-compressed, and rejected if it exceeds 13,312 bytes.
-
-The release workflow verifies the archive contains exactly one member named `index.html`. That makes the js13k upload-form requirement mechanically enforceable: there can be no wrapper folder, no nested `dist/index.html`, and no stray payload files. The same gate rejects external script/style/network dependencies for the Desktop/Mobile candidate and records source commit, byte size, and SHA-256 beside the canonical `dist/uniRico-js13k.zip`.
+This makes the submission artifact itself a tested product rather than an incidental build output.
 
 ## 9. Judge-first play path
 
-The desired first five minutes are:
+The ideal first few minutes are:
 
-1. Menu communicates the cloud grammar and that touch supports tap or drag-release.
-2. Level 1 produces a successful rainbow almost immediately.
-3. The first ricochet makes a pitched rainbow response and a grumpy cloud visibly resolves.
-4. A new mechanic arrives alone, announces itself only when touched, and produces an obvious cause/effect change.
-5. By the first mixed level, the player understands that the pleasure of the game is composing a magical route, not merely finding an angle.
+1. Menu communicates the three cloud rules plus desktop/mobile controls.
+2. Level 1 shows a valid shot before asking the player to reproduce it.
+3. The first successful ricochet produces obvious visual and musical feedback.
+4. New mechanics arrive in isolation and demonstrate their effect.
+5. The player reaches mixed levels already understanding that the pleasure is *routing* the rainbow, not guessing angles.
+6. The late Reflection Gauntlet feels like a mastery inversion of familiar systems rather than recycled filler.
 
-Do not optimize the submission around showing all 40 levels to a judge. Optimize the first few levels so the judge wants to see Level 40.
+Do not optimize the entry around showing every level to a judge. Optimize the opening so the judge wants to discover why there are 50.
 
 ## 10. Freeze recommendation
 
-Once the exact merge candidate is below the size ceiling and all automated regressions pass, the remaining blockers should be human/device checks rather than new mechanics: current Chrome, current Firefox, iPhone Safari, Android Chrome, plus phone/laptop/headphone audio. If those sessions are clean, freeze mechanics and spend any remaining bytes only on defects or high-value micro-polish discovered in those sessions.
+The codebase no longer needs another major feature before submission. The highest-value remaining work is empirical:
+
+- fresh-player comprehension with no verbal coaching;
+- Chrome + Firefox desktop play;
+- iPhone Safari + Android Chrome physical-device play;
+- phone/laptop/headphone audio;
+- visual inspection of several Reflection Gauntlet levels and Level 50;
+- final offline play of the exact canonical ZIP after `main` publication.
+
+If those checks are clean, freeze mechanics. The remaining **1,800 bytes** should be treated as reliability/polish reserve, not an invitation to fill the ZIP for its own sake.
