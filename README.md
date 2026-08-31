@@ -242,7 +242,7 @@ The goal is not to feel impressive *for 13 KB*. The goal is to feel like a compl
 
 v0.20.0 treats compression as an optimization problem over the **actual final ZIP**, not over pretty-looking minified-source numbers.
 
-The deterministic builder now produces competing candidates:
+The deterministic builder produces competing candidates:
 
 1. **Terser 5.50.0 → Zopfli DEFLATE**;
 2. **Terser → Roadroller 2.1.0 (`-O0`) → Zopfli DEFLATE**.
@@ -253,7 +253,7 @@ The HTML shell also omits optional document wrappers and other bytes that do not
 
 For reproducibility, release CI builds the package **twice** and requires byte-for-byte identity. It also extracts `index.html` from the exact ZIP and executes the packed runtime in a browser-like VM, so readable-source success alone is not enough.
 
-### v0.20.0 PR candidate
+### v0.20.0 canonical `main` artifact
 
 | Property | Value |
 | --- | --- |
@@ -263,11 +263,12 @@ For reproducibility, release CI builds the package **twice** and requires byte-f
 | Remaining headroom | **1,800 bytes** |
 | Archive | root-level `index.html` only |
 | Runtime network dependencies | **none** |
-| Candidate SHA-256 | `713114a1185abd266ffdd42664217e06170b22673e9afb5eaa7cb3dd9c9a87ff` |
+| SHA-256 | `713114a1185abd266ffdd42664217e06170b22673e9afb5eaa7cb3dd9c9a87ff` |
+| Qualified source commit | `a9350c6a47d5fa2cac85ffb8e4874cffc87ef2a2` |
 
-For comparison, the qualified v0.19.1 package was **13,227 bytes with only 85 bytes free**. The new compression pipeline simultaneously creates ten additional levels and leaves substantially more safety margin.
+For comparison, the qualified v0.19.1 package was **13,227 bytes with only 85 bytes free**. v0.20.0 therefore adds ten levels while reducing the submission by **1,715 bytes** and creating substantially more safety margin.
 
-These numbers describe the current PR candidate. `main` remains the canonical submission authority after merge and rebuild.
+These values come from the canonical `main` publisher and are recorded in `dist/uniRico-js13k-build.txt` beside the exact submission ZIP.
 
 ---
 
