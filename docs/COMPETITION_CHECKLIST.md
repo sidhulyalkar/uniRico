@@ -13,7 +13,7 @@ Current official rules: https://js13kgames.com/2026/rules
 - [x] CI rejects external/network runtime dependencies in the standard Desktop/Mobile candidate.
 - [x] Readable source remains public beside the minified package.
 - [x] Desktop and Mobile use one shared game/submission.
-- [x] Latest v0.19 merge candidate: **13,208 / 13,312 bytes**, 104 bytes free.
+- [x] v0.19.1 PR candidate: **13,227 / 13,312 bytes**, 85 bytes free; SHA-256 `2f9bceeaab568d3653a949052478b851c3420e6e65acbd45260b77d9d19fef2c`.
 - [ ] Final manual Chrome smoke test has no game-breaking console errors.
 - [ ] Final manual Firefox smoke test has no game-breaking console errors.
 - [ ] Review submission form, repository URL, categories, description, and final ZIP immediately before upload.
@@ -47,7 +47,9 @@ Current official rules: https://js13kgames.com/2026/rules
 
 ## Desktop controls gate
 
-- [x] Mouse movement aims and click fires immediately.
+- [x] Mouse movement is the sole desktop aim authority; click fires the exact trajectory already displayed.
+- [x] Pointerdown cannot silently retarget the launch away from the visible preview.
+- [x] Adversarial regression aims at one coordinate, fires with pointerdown at another, and verifies exact aim preservation.
 - [x] Keyboard pause/menu, retry, help, path, and sound controls remain available.
 - [x] Aim preview uses the exact fixed-step live simulation.
 - [ ] Chrome desktop: early, mixed, moving-target, and endgame representative levels.
@@ -64,7 +66,7 @@ Current official rules: https://js13kgames.com/2026/rules
 - [x] Pointer cancel safely releases AIM capture without firing.
 - [x] Mobile level briefing moves above the control deck instead of obscuring it.
 - [x] Sound and trajectory-preview toggles remain tappable from Pause and persist.
-- [x] Automated regression covers wheel capture, angle mapping, release-without-fire, separate FIRE, playfield safety, mouse parity, and pause toggles.
+- [x] Automated regression covers wheel capture, angle mapping, release-without-fire, separate FIRE, playfield safety, desktop aim authority, and pause toggles.
 - [ ] Real iPhone/Safari portrait + landscape feel pass.
 - [ ] Real Android/Chrome portrait + landscape feel pass.
 - [ ] Confirm AIM/FIRE controls remain comfortable with common browser bars / safe-area layouts.
@@ -112,16 +114,18 @@ Current official rules: https://js13kgames.com/2026/rules
 - [x] CI opens ZIP and verifies exactly one root-level `index.html`.
 - [x] CI verifies no external/network runtime dependencies.
 - [x] Every qualifying game-code push to `main` regenerates ZIP, checksum, and provenance.
-- [x] v0.19 PR candidate passes complete regression suite and submission contract at **13,208 bytes**.
-- [ ] After merge, verify `dist/uniRico-js13k-build.txt` points to final v0.19 game commit and records `archive_entry=index.html`.
+- [x] v0.19.1 PR #6 qualification passes the complete regression suite and submission contract at **13,227 bytes**, leaving 85 bytes free.
+- [ ] After merge, verify `dist/uniRico-js13k-build.txt` points to the final v0.19.1 game commit and records `archive_entry=index.html`.
 
 ## Repository / branch gate
 
 - [x] Dist publisher reviewed/merged through PR #2.
 - [x] Dist race-safety hardening reviewed/merged through PR #3.
 - [x] v0.18 final competition polish reviewed/merged through PR #4.
-- [x] v0.19 tutorial/mobile changes are isolated in PR #5 from current `main`.
-- [ ] Merge PR #5 only after final CI remains green.
+- [x] v0.19 tutorial/mobile release reviewed/merged through PR #5.
+- [x] v0.19.1 authoritative desktop aim hotfix isolated in PR #6.
+- [x] PR #6 exact candidate workflow passed on the gameplay/test head before release-document cleanup.
+- [ ] Merge PR #6 only while its release state remains coherent and the game-source qualification is unchanged.
 
 ## Submission freeze
 
