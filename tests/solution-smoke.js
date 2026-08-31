@@ -27,11 +27,20 @@ const els={};const document={querySelector:s=>s==='#c'?canvas:(els[s]??={textCon
 const sandbox={console,document,localStorage:{},innerWidth:960,innerHeight:600,devicePixelRatio:1,addEventListener:noop,requestAnimationFrame:noop,setTimeout:noop,Math,atob:s=>Buffer.from(s,'base64').toString('binary'),window:{}};sandbox.window=sandbox;
 vm.createContext(sandbox);vm.runInContext(js,sandbox,{timeout:1000});
 const info=sandbox.G.info(),out=[];
-for(let i=0;i<40;i++){let r=sandbox.G.run(i);if(!r.ok)throw Error(`encoded solution FAILED on ${i+1} ${info[i].name}: ${JSON.stringify(r)}`);if(r.idx!==info[i].targets)throw Error(`target chain incomplete on ${i+1}`);out.push(r)}
+if(info.length!==50)throw Error(`campaign must contain exactly 50 levels, got ${info.length}`);
+for(let i=0;i<info.length;i++){let r=sandbox.G.run(i);if(!r.ok)throw Error(`encoded solution FAILED on ${i+1} ${info[i].name}: ${JSON.stringify(r)}`);if(r.idx!==info[i].targets)throw Error(`target chain incomplete on ${i+1}`);out.push(r)}
 for(let i=1;i<info.length;i++)if(info[i].q>info[i-1].q)throw Error(`preview budget got easier at ${i+1}: ${info[i-1].q} -> ${info[i].q}`);
 for(let i=15;i<25;i++)if(info[i].targets<2)throw Error(`bridge level ${i+1} needs at least 2 ordered locks`);
 for(let i=25;i<30;i++)if(info[i].targets!==3)throw Error(`level ${i+1} should be a 3-lock chain`);
 for(let i=30;i<35;i++)if(info[i].targets!==4)throw Error(`level ${i+1} should be a 4-lock chain`);
 for(let i=35;i<40;i++)if(info[i].targets<5)throw Error(`endgame level ${i+1} needs at least 5 locks`);
-if(info[39].targets!==6)throw Error('FULL SPECTRUM must end with a 6-lock chain');
-console.log(JSON.stringify({status:'PASS',levels:out.length,targets:info.map(x=>x.targets),previewBudgets:info.map(x=>x.q),last:out.at(-1)},null,2));
+if(info[39].targets!==6)throw Error('FULL SPECTRUM must end the original campaign with a 6-lock chain');
+for(let i=40;i<50;i++){
+  let src=info[i-10];
+  if(info[i].targets!==src.targets)throw Error(`reflection ${i+1} changed source target count`);
+  if(!info[i].name.startsWith('MIRROR '))throw Error(`reflection ${i+1} missing MIRROR identity`);
+}
+for(let i=40;i<45;i++)if(info[i].targets!==4)throw Error(`reflection level ${i+1} should be a 4-lock chain`);
+for(let i=45;i<49;i++)if(info[i].targets<5)throw Error(`reflection endgame ${i+1} needs at least 5 locks`);
+if(info[49].name!=='MIRROR FULL SPECTRUM'||info[49].targets!==6)throw Error('level 50 must be MIRROR FULL SPECTRUM with 6 locks');
+console.log(JSON.stringify({status:'PASS',levels:out.length,targets:info.map(x=>x.targets),previewBudgets:info.map(x=>x.q),reflection:info.slice(40).map(x=>x.name),last:out.at(-1)},null,2));
