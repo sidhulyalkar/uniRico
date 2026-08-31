@@ -10,6 +10,7 @@ except ImportError as exc:
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "dist" / "uniRico-js13k.zip"
+LOCAL_OUTPUT = Path(sys.argv[2]) if len(sys.argv) > 2 else None
 LIMIT = 13_312
 NAME = b"index.html"
 DOS_TIME = 12 << 11
@@ -112,6 +113,9 @@ for strategy, candidate_script in (("terser", script), ("roadroller", roadrolled
 size, strategy, data, archive = min(candidates, key=lambda item: item[0])
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 OUTPUT.write_bytes(archive)
+if LOCAL_OUTPUT:
+    LOCAL_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    LOCAL_OUTPUT.write_bytes(data)
 
 with zipfile.ZipFile(OUTPUT) as z:
     assert z.namelist() == ["index.html"]
@@ -120,9 +124,14 @@ with zipfile.ZipFile(OUTPUT) as z:
     assert b"<script src=" not in bundled
     assert b"<link rel=\"stylesheet\"" not in bundled
 
+if LOCAL_OUTPUT:
+    assert LOCAL_OUTPUT.read_bytes() == data
+
 sha = hashlib.sha256(OUTPUT.read_bytes()).hexdigest()
 print(f"strategy: {strategy}")
 print(f"ZIP: {OUTPUT}")
+if LOCAL_OUTPUT:
+    print(f"local HTML: {LOCAL_OUTPUT}")
 print(f"minified html bytes: {len(data)}")
 print(f"bytes: {size} / {LIMIT} ({LIMIT-size} free)")
 print(f"sha256: {sha}")
