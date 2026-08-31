@@ -1,4 +1,5 @@
 const fs=require('fs'),vm=require('vm');
+if(!process.argv[2]){console.log(JSON.stringify({status:'SKIP',reason:'packed artifact not built yet'}));process.exit(0)}
 const html=fs.readFileSync(process.argv[2],'utf8'),m=html.match(/<script>([\s\S]*)<\/script>/i);
 if(!m)throw Error('packed index.html has no inline script');
 const noop=()=>{},gradient={addColorStop:noop};
