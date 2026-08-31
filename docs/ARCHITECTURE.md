@@ -1,48 +1,48 @@
-# uniRico Architecture — v0.15.0
+# uniRico Architecture — v0.20.0
 
-uniRico is an engine-free 2D precision puzzle game built around a 960×600 logical world, fixed-step projectile simulation, procedural Canvas rendering, procedural Web Audio, compact declarative levels, and a deterministic 13KB release pipeline.
+uniRico is an engine-free 2D precision puzzle game built around a 960×600 logical world, fixed-step projectile simulation, procedural Canvas rendering, procedural Web Audio, compact declarative levels, generated symmetry transforms, and a deterministic 13 KB release pipeline.
 
 ## Runtime flow
 
 ```text
-Pointer / keyboard
+Pointer / keyboard / touch
       ↓
 Game + menu state ─────────────→ state-aware audio transport
       ↓
 Fixed-step update
       ↓
-Projectile physics ← level data / reusable field rigs
+Projectile physics ← declarative level data / reusable field rigs
       ↓
 Ordered cloud resolution
       ↓
-Canvas world + transient level reveal
+Canvas world + transient teaching / feedback
       ↓
 Minimal HTML timer HUD
       ↓
 localStorage records / progression
 ```
 
-## Shared simulation
+## Shared simulation authority
 
-The white trajectory predictor and live rainbow both use the same `_f()` physics step. Simulation mode suppresses audiovisual side effects but retains walls, portals, moving geometry, continuous forces, hazards, state changes, and bounce counting.
+Live rainbow flight, trajectory prediction, Help playback, and guided demonstrations all advance the same `_f()` projectile step. Simulation mode suppresses audiovisual effects while preserving collisions, portals, moving geometry, forces, hazards, state transitions, and bounce counting.
+
+This prevents tutorial/preview authority from drifting away from gameplay physics.
 
 ## Collision reliability
 
-Moving targets use relative swept-segment collision so fast rainbows cannot tunnel through small cloud locks. Portal teleports are explicitly excluded from that sweep.
+Moving targets use relative swept-segment collision so fast projectiles cannot tunnel through cloud locks. Portal teleports are explicitly excluded from that sweep.
 
-Moving prisms use swept point-vs-expanded-AABB collision in the wall's moving reference frame. The earliest contacted face is resolved, only the normal component is reflected using wall velocity, and the projectile is separated just outside the face. This prevents tunneling, sticky repeat contacts, wall dragging, and wrong-angle end-cap ejections.
+Moving prisms use swept point-vs-expanded-AABB collision in the wall's moving reference frame. The contacted face is resolved, its normal component reflects relative to wall velocity, and the projectile is separated outside the face to prevent tunneling, sticking, dragging, and incorrect end-cap ejection.
 
-## v0.13 campaign invariant
+## Campaign invariant
 
 > Every visible interactive mechanic must be used by the intended route, or serve as required gate geometry.
 
-`tests/mechanic-coverage.js` executes each encoded route and records per-instance interaction with walls, portals, wind, slow zones, accelerators, gravity, spin, barriers, charge, magnetic fields, and resonance gates.
-
-The only explicit impact exemptions are full-height portal gate walls on Levels 3, 13, and 15. They prevent ordinary traversal between the two sides of the arena.
+`tests/mechanic-coverage.js` executes every encoded route and records per-instance interaction with walls, portals, wind, slow zones, accelerators, gravity, spin, barriers, charge, magnetic fields, and resonance gates. The only explicit impact exemptions are the full-height portal gates in Levels 3, 13, and 15.
 
 ## Difficulty architecture
 
-Difficulty uses four independent levers: mechanic composition, ordered target count, target radius, and a trajectory-preview budget `q` that never increases as the campaign advances.
+Difficulty comes from composition, ordered target count, target radius, and trajectory-preview budget `q`, which never increases through the campaign.
 
 ```text
 01–08  fundamentals
@@ -52,10 +52,32 @@ Difficulty uses four independent levers: mechanic composition, ordered target co
 26–30  three-lock chains
 31–35  four-lock advanced
 36–39  five-lock endgame
-40     six-lock full-spectrum finale
+40     six-lock FULL SPECTRUM
+41–45  four-lock Reflection Gauntlet
+46–49  five-lock reflected endgame
+50     six-lock MIRROR FULL SPECTRUM
 ```
 
-Reusable `F0...F9` rigs keep this progression affordable under the ZIP budget while letting later levels recombine known mechanical families.
+Reusable `F0...F9` rigs make the first 40 levels inexpensive. v0.20.0 extends the same leverage through geometric generation rather than duplicating late-game data.
+
+## Reflection Gauntlet architecture
+
+Levels 41–50 are generated from Levels 31–40 by `rf()`.
+
+A 180° transform maps:
+
+```text
+point:      (x,y)       → (W-x,H-y)
+rectangle:  (x,y,w,h)   → (W-x-w,H-y-h,w,h)
+vector:     (vx,vy)     → (-vx,-vy)
+angle:      θ           → θ+π
+```
+
+Targets, moving prisms, portal endpoints, wind, gravity/magnet centers, spin/charge/resonance regions, and motion amplitudes are transformed according to their geometry. Scalar route semantics such as bounce counts, speed bands, polarity, and solution delay remain unchanged.
+
+`si()` maps Levels 41–50 back to source solution records from Levels 31–40; `sol()` adds π to the decoded source angle. Because the underlying equations are rotationally symmetric, the transformed solution is a physics proof rather than a separately stored hint.
+
+`tests/solution-smoke.js` then verifies the resulting ten routes independently, while `tests/mechanic-coverage.js` requires every reflected level to preserve and exercise its source mechanic-family set.
 
 ## Ordered cloud locks
 
@@ -65,28 +87,24 @@ Targets use:
 [x, y, requiredBounces, motionMode, amplitude, speed, phase, radius]
 ```
 
-Only the active cloud may advance the chain. Hitting a future unresolved cloud gives explicit `WRONG CLOUD` feedback. The renderer now carries order spatially: one white ring marks the active cloud, the sequence number is embedded on the cloud body, and the circular badge above an unresolved cloud contains only its required bounce count.
+Only the active cloud may advance the chain. Future-cloud contact gives `WRONG CLOUD`; incorrect ricochet count gives explicit failure feedback. One white ring identifies the active target, the cloud body contains sequence order, and the dark badge contains the exact required bounce count.
 
-## HUD lifecycle
+## Input authority
 
-Persistent HTML play UI contains only elapsed time. Active-target state and bounce requirements are rendered directly on the clouds, removing objective prose from the HUD. A bottom-centered level title card appears for roughly 3.5 seconds and fades. Level identity, shots, stars, and total score live on pause/menu/completion surfaces.
+Desktop pointer movement owns the displayed aim direction. Pointerdown fires that already-selected trajectory and cannot silently resample a different coordinate.
 
-## Mechanic-legibility layer
+Mobile intentionally separates an AIM wheel from FIRE. Releasing AIM preserves the selected direction without launching.
 
-`MK` stores compact level keys and `MN` stores their player-facing names. `ml(level)` scans actual level data and builds the second line of the transient title card, so a stage such as Level 20 announces `PRISM · WIND · SPIN` without maintaining a separate tutorial table.
-
-The projectile carries a small interaction bitmask. `mi(ball, mechanicIndex, sim)` runs only on the first live activation of each mechanic in a shot and emits a short floating label, five particles, and a pitch-coded triangle blip. When `sim=1`, `mi()` is silent and does not mutate the feedback bitmask.
-
-First-shot completion adds one presentation-only reward: `PERFECT PATH!` plus a higher resolving chime. Scoring and physics remain unchanged.
+These contracts are protected by adversarial pointer/touch regressions.
 
 ## Soundtrack
 
-One recursive Web Audio transport changes orchestration based on live projectile state.
+One recursive Web Audio transport changes arrangement with projectile state:
 
-- No projectile: slower orchestral-style harmonic planning bed.
-- Projectile alive: Wobble Warfare dubstep with root sub, wobble/formant bass, yoi responses, irregular kicks, sharp half-time snare, hats, risers, growls, swing, and phrase transitions.
+- planning: sparse orchestral-style harmonic bed;
+- live projectile: procedural bass/dubstep state with sub, wobble/formant voices, percussion, risers, and progress-responsive harmony.
 
-Oscillators are finite-lived and explicitly stopped. AudioContext initialization remains interaction-gated for browser autoplay compatibility.
+Oscillators are finite-lived and explicitly stopped. AudioContext initialization remains interaction-gated.
 
 ## Readable-source split
 
@@ -101,12 +119,40 @@ src/runtime/render-hud.js
 src/runtime/ui.js
 ```
 
-The public source is readable and modular. The competition package is a separate one-file artifact generated with deterministic Zopfli ZIP packaging.
+Readable source remains modular even though the submission is one packed HTML file.
 
-## Frozen v0.15.0 candidate
+## Release compression architecture
+
+The canonical builder measures **final archive bytes**, not only minified JavaScript size:
 
 ```text
-12,582 / 13,312 bytes
-730 bytes remaining
-SHA-256: b5c3961fb596d9921e9b3bd8d0208beb7fc9b4bfcd44b13d99199fd539d11a80
+readable modules
+      ↓
+Terser 5.50.0
+      ├──────────────→ minimal HTML → Zopfli → ZIP A
+      ↓
+Roadroller 2.1.0 -O0
+      ↓
+minimal HTML → Zopfli → ZIP B
+      ↓
+choose min(size(A), size(B))
 ```
+
+Roadroller `-O0` keeps the model parameters deterministic. A Terser-only candidate remains available as a fallback because additional packing is only useful if the **final DEFLATE archive** is actually smaller.
+
+CI then performs three release gates beyond source tests:
+
+1. rebuild the package and require byte-for-byte equality;
+2. extract `index.html` and execute the exact packed runtime in a browser-like VM;
+3. verify one root-level `index.html`, no external/network runtime dependency, and size ≤13,312 bytes.
+
+## Current v0.20.0 PR candidate
+
+```text
+50 validated levels
+11,512 / 13,312 bytes
+1,800 bytes remaining
+SHA-256: 713114a1185abd266ffdd42664217e06170b22673e9afb5eaa7cb3dd9c9a87ff
+```
+
+The exact canonical values are re-recorded by the `main` publisher after merge.
