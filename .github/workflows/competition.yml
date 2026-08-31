@@ -29,6 +29,7 @@ concurrency:
 
 env:
   ZIP_PATH: dist/uniRico-js13k.zip
+  LOCAL_PATH: dist/uniRico-local.html
   SHA_PATH: dist/uniRico-js13k.zip.sha256
   INFO_PATH: dist/uniRico-js13k-build.txt
 
@@ -52,19 +53,22 @@ jobs:
           python3 -m pip install zopfli
           npm install --global terser@5.50.0 roadroller@2.1.0
 
-      - name: Build canonical js13k candidate
-        run: python3 tools/build_js13k_zip.py "$ZIP_PATH"
+      - name: Build canonical js13k candidate and local HTML
+        run: python3 tools/build_js13k_zip.py "$ZIP_PATH" "$LOCAL_PATH"
 
       - name: Prove deterministic packaging
         run: |
-          python3 tools/build_js13k_zip.py /tmp/uniRico-js13k-rebuild.zip
+          python3 tools/build_js13k_zip.py /tmp/uniRico-js13k-rebuild.zip /tmp/uniRico-local-rebuild.html
           cmp "$ZIP_PATH" /tmp/uniRico-js13k-rebuild.zip
-          echo "deterministic package rebuild: PASS"
+          cmp "$LOCAL_PATH" /tmp/uniRico-local-rebuild.html
+          echo "deterministic package and local HTML rebuild: PASS"
 
       - name: Execute exact packed runtime
         run: |
           unzip -p "$ZIP_PATH" index.html > /tmp/uniRico-packed.html
-          node tests/packed-runtime-smoke.js /tmp/uniRico-packed.html
+          cmp "$LOCAL_PATH" /tmp/uniRico-packed.html
+          node tests/packed-runtime-smoke.js "$LOCAL_PATH"
+          echo "local HTML equals ZIP index.html byte-for-byte: PASS"
 
       - name: Record candidate provenance
         run: |
@@ -75,6 +79,9 @@ jobs:
             echo "limit_bytes=13312"
             echo "sha256=$(cut -d' ' -f1 "$SHA_PATH")"
             echo "archive_entry=index.html"
+            echo "local_html=uniRico-local.html"
+            echo "local_html_bytes=$(stat -c%s "$LOCAL_PATH")"
+            echo "local_html_sha256=$(sha256sum "$LOCAL_PATH" | cut -d' ' -f1)"
           } > "$INFO_PATH"
 
       - name: Verify js13k submission contract
@@ -84,14 +91,20 @@ jobs:
           import zipfile
 
           path = Path('dist/uniRico-js13k.zip')
+          local = Path('dist/uniRico-local.html')
           assert path.stat().st_size <= 13_312
 
           with zipfile.ZipFile(path) as z:
               # The js13k upload form requires index.html in the ZIP top directory.
               # Exact membership also rejects wrapper folders and stray payload files.
               assert z.namelist() == ['index.html']
-              html = z.read('index.html').decode('utf-8')
+              packed = z.read('index.html')
+              html = packed.decode('utf-8')
               assert html.strip()
+
+          # The convenient local tester is not a second build. It must be the exact
+          # packed index.html payload shipped in the competition archive.
+          assert local.read_bytes() == packed
 
           # Standard Desktop/Mobile candidate is deliberately self-contained/offline.
           forbidden = (
@@ -109,6 +122,7 @@ jobs:
 
           print('js13k submission contract: PASS')
           print('archive entries: index.html (top-level only)')
+          print('local HTML identity: PASS')
           print(f'zip bytes: {path.stat().st_size} / 13312')
           PY
 
@@ -118,6 +132,7 @@ jobs:
           name: uniRico-js13k-${{ github.sha }}
           path: |
             dist/uniRico-js13k.zip
+            dist/uniRico-local.html
             dist/uniRico-js13k.zip.sha256
             dist/uniRico-js13k-build.txt
           if-no-files-found: error
@@ -127,7 +142,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- "$ZIP_PATH" "$SHA_PATH" "$INFO_PATH"
+          git add -- "$ZIP_PATH" "$LOCAL_PATH" "$SHA_PATH" "$INFO_PATH"
           git diff --cached --quiet && exit 0
           git commit -m "build(js13k): refresh competition dist for ${GITHUB_SHA::7}"
 
