@@ -11,7 +11,7 @@ function rf(l,i){
     rc=a=>{a=a.slice();a[0]=W-a[0]-a[2];a[1]=H-a[1]-a[3];return a},
     z={...l,n:'MIRROR '+l.n,p:[W-l.p[0],H-l.p[1]],q:18-i};
   z.t=l.t.map(a=>{a=pt(a);a[4]=-a[4];return a});
-  if(l.w)z.w=l.w.map(a=>{a=rc(a);a[5]=-a[5];return a});
+  if(l.w)z.w=l.w.map(a=>{a=rc(a);if(a[4])a[5]=-a[5];return a});
   if(l.o)z.o=l.o.map(a=>{a=a.slice();a[0]=W-a[0];a[1]=H-a[1];a[2]=W-a[2];a[3]=H-a[3];a[6]=-a[6];a[10]=-a[10];return a});
   if(l.f)z.f=l.f.map(a=>{a=rc(a);a[4]=-a[4];a[5]=-a[5];return a});
   for(let k of 'scr')if(l[k])z[k]=l[k].map(rc);
