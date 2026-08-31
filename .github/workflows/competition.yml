@@ -55,6 +55,17 @@ jobs:
       - name: Build canonical js13k candidate
         run: python3 tools/build_js13k_zip.py "$ZIP_PATH"
 
+      - name: Prove deterministic packaging
+        run: |
+          python3 tools/build_js13k_zip.py /tmp/uniRico-js13k-rebuild.zip
+          cmp "$ZIP_PATH" /tmp/uniRico-js13k-rebuild.zip
+          echo "deterministic package rebuild: PASS"
+
+      - name: Execute exact packed runtime
+        run: |
+          unzip -p "$ZIP_PATH" index.html > /tmp/uniRico-packed.html
+          node tests/packed-runtime-smoke.js /tmp/uniRico-packed.html
+
       - name: Record candidate provenance
         run: |
           sha256sum "$ZIP_PATH" > "$SHA_PATH"
