@@ -26,5 +26,7 @@ handlers.pointerdown(ev('touch',870,510,2));s=sandbox.TOUCH.state();assert(s.sho
 sandbox.TOUCH.reset();handlers.pointerdown(ev('touch',480,300,3));s=sandbox.TOUCH.state();assert(!s.shot,'touching playfield outside controls must not fire');
 sandbox.TOUCH.reset();handlers.pointerdown(ev('mouse',800,300,4));s=sandbox.TOUCH.state();assert(s.shot&&s.shots===1,'mouse click should still fire immediately');
 
-sandbox.TOUCH.pause();let before=sandbox.TOUCH.state();handlers.pointerdown(ev('touch',420,478,5));let after=sandbox.TOUCH.state();assert(after.sound!==before.sound,'pause sound toggle is not touch-clickable');before=after;handlers.pointerdown(ev('touch',540,478,6));after=sandbox.TOUCH.state();assert(after.path!==before.path,'pause path toggle is not touch-clickable');
-console.log(JSON.stringify({status:'PASS',scheme:'aim-wheel + separate fire',sound:after.sound,path:after.path}));
+sandbox.TOUCH.reset();handlers.pointermove(ev('mouse',780,180,5));let aimed=sandbox.TOUCH.state();handlers.pointerdown(ev('mouse',260,520,6));s=sandbox.TOUCH.state();assert(s.shot&&s.shots===1,'desktop click should fire the current aim');assert(s.aim[0]===aimed.aim[0]&&s.aim[1]===aimed.aim[1],'desktop pointerdown must not retarget away from the displayed trajectory');
+
+sandbox.TOUCH.pause();let before=sandbox.TOUCH.state();handlers.pointerdown(ev('touch',420,478,7));let after=sandbox.TOUCH.state();assert(after.sound!==before.sound,'pause sound toggle is not touch-clickable');before=after;handlers.pointerdown(ev('touch',540,478,8));after=sandbox.TOUCH.state();assert(after.path!==before.path,'pause path toggle is not touch-clickable');
+console.log(JSON.stringify({status:'PASS',scheme:'authoritative preview + aim-wheel + separate fire',sound:after.sound,path:after.path}));
