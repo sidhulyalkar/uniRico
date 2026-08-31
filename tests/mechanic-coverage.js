@@ -29,7 +29,8 @@ const canvas={getContext:()=>ctx,getBoundingClientRect:()=>({width:960,height:60
 const sandbox={console,document,localStorage:{},innerWidth:960,innerHeight:600,devicePixelRatio:1,addEventListener:noop,requestAnimationFrame:noop,setTimeout:noop,Math,atob:s=>Buffer.from(s,'base64').toString('binary'),window:{}};sandbox.window=sandbox;
 vm.createContext(sandbox);vm.runInContext(js,sandbox,{timeout:1000});
 const KEYS=['w','o','f','z','a','g','s','b','c','k','r'],levels=sandbox.COVER.levels(),gateWalls=new Set(['3:0','13:0','15:0']),summary=[];
-for(let i=0;i<40;i++){
+if(levels.length!==50)throw Error(`campaign must contain exactly 50 levels, got ${levels.length}`);
+for(let i=0;i<levels.length;i++){
  const r=sandbox.COVER.run(i);if(!r.ok)throw Error(`intended route failed on ${i+1} ${levels[i].n}: ${JSON.stringify(r)}`);
  let missing=[];
  for(const k of KEYS)for(let j=0;j<(levels[i][k]||[]).length;j++)if(!(r.used[k]||[]).includes(j)&&!gateWalls.has(`${i+1}:${j}`))missing.push(`${k}${j}`);
@@ -41,4 +42,5 @@ for(let i=0;i<40;i++){
  summary.push({level:i+1,name:levels[i].n,mechanics:KEYS.filter(k=>(levels[i][k]||[]).length).join('/')||'bounce/target'});
 }
 if(summary[19].mechanics!=='w/f/s')throw Error('Level 20 no longer requires its wall/wind/spin mix');
-console.log(JSON.stringify({status:'PASS',levels:40,level20:summary[19],endgame:summary.slice(35)},null,2));
+for(let i=40;i<50;i++)if(summary[i].mechanics!==summary[i-10].mechanics)throw Error(`reflection ${i+1} mechanic set drifted from source ${i-9}`);
+console.log(JSON.stringify({status:'PASS',levels:summary.length,level20:summary[19],originalEndgame:summary.slice(35,40),reflectionGauntlet:summary.slice(40)},null,2));
