@@ -9,9 +9,9 @@ assert(/c<10/.test(hud)&&/r<5/.test(hud)&&/r\*10\+c/.test(hud),'level-select hit
 assert(!/'40 LEVELS · LOCAL RECORDS'/.test(hud),'stale 40-level menu label survived');
 assert(!/for\(let i=0;i<40;i\+\+\)/.test(hud),'stale 40-level render cap survived');
 assert(/LEVELS\.length\*3/.test(hud)&&/LEVELS\.length\*1000/.test(hud),'campaign totals must scale with campaign length');
-js=js.replace('$2();$0();_b()',`globalThis.L50TEST={count:()=>LEVELS.length,name:i=>LEVELS[i].n,hit:(x,y)=>{$e=[x,y];return $f()},select:(x,y)=>{$e=[x,y];F=5;return $f()},setLevel:i=>{L=i;return O().n}};$2();$0();_b()`);
-const noop=()=>{},grad=()=>({addColorStop:noop});
-const ctx=new Proxy({}, {get:(o,k)=>k==='createRadialGradient'||k==='createLinearGradient'?()=>grad:k==='measureText'?s=>({width:String(s).length*8}):noop,set:(o,k,v)=>(o[k]=v,true)});
+js=js.replace('$2();$0();_b()',`globalThis.L50TEST={count:()=>LEVELS.length,name:i=>LEVELS[i].n,hit:(x,y)=>{$e=[x,y];return $f()},setLevel:i=>{L=i;return O().n}};$2();$0();_b()`);
+const noop=()=>{},gradient={addColorStop:noop};
+const ctx=new Proxy({}, {get:(o,k)=>k==='createRadialGradient'||k==='createLinearGradient'?()=>gradient:k==='measureText'?s=>({width:String(s).length*8}):noop,set:(o,k,v)=>(o[k]=v,true)});
 const canvas={getContext:()=>ctx,getBoundingClientRect:()=>({width:960,height:600,left:0,top:0}),addEventListener:noop,setPointerCapture:noop};
 const els={};const document={querySelector:s=>s==='#c'?canvas:(els[s]??={textContent:'',style:{}})};
 const sandbox={console,document,localStorage:{},innerWidth:960,innerHeight:600,devicePixelRatio:1,addEventListener:noop,requestAnimationFrame:noop,setTimeout:()=>1,Math,atob:s=>Buffer.from(s,'base64').toString('binary'),window:{AudioContext:function(){}}};
