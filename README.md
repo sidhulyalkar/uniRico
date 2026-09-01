@@ -1,34 +1,62 @@
 # 🦄🌈 uniRico v0.20.0
 
 <p align="center">
-  <img src="docs/banner.svg" alt="uniRico — Rainbow Ricochet" width="100%">
+  <img src="docs/banner.svg" alt="uniRico - Rainbow Ricochet" width="100%">
 </p>
 
 <p align="center">
-  <strong>A 13 KB, 50-level puzzle game about aiming a unicorn horn, bending one rainbow through a strange sky, and making every ricochet count.</strong>
+  <strong>A 50-level deterministic rainbow-ricochet puzzle game built for js13kGames 2026.</strong><br>
+  Aim a unicorn horn. Bend one rainbow through a strange sky. Make every bounce count.
 </p>
 
 <p align="center"><strong>THE SKY GOT GRUMPY · YOU HAVE A HORN · FIX IT</strong></p>
 
-Built for **js13kGames 2026** around **Unicorns and Rainbows**, targeting **Desktop + Mobile**.
+<p align="center">
+  <a href="https://sidhulyalkar.com/arcade/unirico"><strong>▶ Website showcase</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/sidhulyalkar/uniRico/raw/refs/heads/main/dist/uniRico-local.html"><strong>⬇ Download latest local HTML</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/sidhulyalkar/uniRico/raw/refs/heads/main/dist/uniRico-js13k.zip"><strong>📦 Download js13k ZIP</strong></a>
+</p>
 
 <p align="center">
-  <a href="https://sidhulyalkar.com/arcade/unirico"><strong>▶ PLAY uniRico</strong></a>
+  <a href="https://github.com/sidhulyalkar/uniRico/actions/workflows/competition.yml"><img alt="Competition candidate" src="https://github.com/sidhulyalkar/uniRico/actions/workflows/competition.yml/badge.svg?branch=main"></a>
 </p>
+
+## At a glance
+
+| | |
+| --- | --- |
+| **Campaign** | 50 deterministic puzzle levels |
+| **Competition target** | js13kGames 2026, Desktop + Mobile |
+| **Canonical submission** | **11,512 / 13,312 bytes** |
+| **Free ZIP headroom** | **1,800 bytes** |
+| **Runtime assets** | Procedural Canvas + Web Audio, no external runtime dependencies |
+| **Physics authority** | One fixed-step engine for play, preview, Help, tutorials, and tests |
+| **Final challenge** | Level 50: **MIRROR FULL SPECTRUM**, six ordered locks |
+| **Quick local test** | `dist/uniRico-local.html`, self-contained and directly openable |
+
+> **The core design question:** How much puzzle depth can one rainbow projectile create if every system modifies the same deterministic shot?
+
+uniRico grows from a simple bank shot into a compact physics language. Prisms redirect the rainbow. Portals relocate it. Wind changes velocity. Gravity bends the path continuously. Spin alters later rebounds. Magnetism attracts or repels a charged shot. Moving clouds turn geometry into timing. Ordered target chains turn one shot into route planning.
+
+The game does not keep introducing unrelated minigames. It keeps asking you to compose a deeper route through the same trusted system.
 
 ---
 
-## How to play in 30 seconds
+# Play in 30 seconds
 
-uniRico is **read → aim → ricochet → restore**.
+uniRico is:
+
+**read → aim → ricochet → restore**
 
 1. **Find the cloud with the white ring.** That is the cloud you must hit now.
-2. **Read the dark badge above it.** The badge is the exact number of wall/prism ricochets required before impact.
-3. **Aim the unicorn's horn.** The dotted line is the trajectory you are choosing.
-4. **Fire.** Desktop click fires the exact displayed trajectory. Mobile uses a separate AIM wheel and FIRE button.
-5. **Hit numbered clouds in order.** Restore the full chain to clear the level.
+2. **Read the dark badge above it.** That is the exact number of wall/prism ricochets required before impact.
+3. **Read the number inside the cloud.** Clouds must be restored in order.
+4. **Aim the unicorn horn.** The dotted trajectory is the shot you are choosing.
+5. **Fire and satisfy the route.** Restore the full cloud chain to clear the level.
 
-If a cloud's badge says **2**, bounce exactly twice before reaching it. One is wrong. Three is wrong. The puzzle is not just *where* the rainbow lands, but **how it gets there**.
+If a target badge says **2**, the rainbow must ricochet exactly twice before impact. One is wrong. Three is wrong. The puzzle is not merely *where* the shot lands. It is **how the rainbow gets there**.
 
 ### The three visual rules
 
@@ -38,13 +66,127 @@ If a cloud's badge says **2**, bounce exactly twice before reaching it. One is w
 | **Number inside cloud** | Required hit order |
 | **Dark badge above cloud** | Exact ricochets required before impact |
 
-The rest of the campaign keeps recombining those rules with prisms, portals, wind, storms, gravity, spin, magnetism, moving targets, speed gates, and increasingly long cloud chains.
+Everything else expands that grammar.
 
 ---
 
-## Controls
+# Why uniRico is interesting
 
-### Desktop
+## 1. The theme is the mechanic
+
+The **unicorn horn** is the launcher. The **rainbow** is projectile, preview, trail, and musical feedback. **Grumpy clouds** are ordered locks that visibly recover when solved. **Prisms** create literal rainbow ricochets. **Rainbow arches** teleport the shot.
+
+Remove the unicorns and rainbows and the mechanical language collapses with them. The theme is not a skin placed on top of a physics game.
+
+## 2. One simulation does almost everything
+
+The same authoritative fixed-step projectile model powers:
+
+- live gameplay;
+- the dotted trajectory preview;
+- deterministic Help / solution playback;
+- first-seen mechanic demonstrations;
+- automated campaign proofs.
+
+The tutorial is not a fake animation. Help does not secretly use easier rules. The preview does not approximate another world. **The line you learn from is the same world you have to master.**
+
+## 3. Compression created more game instead of less code
+
+v0.20.0 expanded uniRico from 40 to **50 levels** while shrinking the canonical ZIP from **13,227 bytes to 11,512 bytes**.
+
+That happened by treating compression as a design tool, not a final cleanup pass.
+
+The clearest example is the **Reflection Gauntlet**. Levels 41-50 are exact 180° spatial transformations of Levels 31-40. Launch points, targets, walls, moving geometry, portals, force vectors, gravity/magnet centers, gates, and solution angles rotate consistently.
+
+That turns symmetry into a content primitive: ten new mastery puzzles reuse compact source geometry and proof data instead of shipping ten duplicate maps.
+
+## 4. Trust is treated as a gameplay feature
+
+A precision ricochet game becomes frustrating the moment the trajectory, controls, collision rules, or tutorial feel unreliable.
+
+Desktop input therefore has one explicit authority:
+
+**pointer movement chooses the trajectory → click fires that exact trajectory**
+
+Click cannot silently re-aim the horn. A permanent adversarial test deliberately aims at one coordinate and injects `pointerdown` somewhere else. The shot must still preserve the displayed trajectory exactly.
+
+Mobile follows the same philosophy with a separate **AIM wheel** and **FIRE** button. Releasing AIM never fires.
+
+---
+
+# The 50-level campaign
+
+The campaign is structured as a curriculum, then a mastery exam.
+
+| Levels | Design goal | Ordered locks |
+| --- | --- | ---: |
+| **1-8** | Fundamentals, demonstrated then practiced | 1 |
+| **9-15** | Moving, timed, and linked lessons | 1-2 |
+| **16-19** | First combinations | 2-3 |
+| **20-25** | Mixed-system bridge | 2 |
+| **26-30** | Multi-system chains | 3 |
+| **31-35** | Advanced routing | 4 |
+| **36-39** | Endgame sequences | 5 |
+| **40** | **FULL SPECTRUM** | 6 |
+| **41-45** | Reflection Gauntlet: reversed advanced routes | 4 |
+| **46-49** | Reflected endgame mastery | 5 |
+| **50** | **MIRROR FULL SPECTRUM** | 6 |
+
+Trajectory assistance never increases as the campaign advances.
+
+### Mechanic vocabulary
+
+The same rainbow path is recombined with:
+
+- boundary and prism ricochets;
+- moving prisms;
+- timed storm barriers;
+- rainbow-arch portals;
+- wind fields;
+- dream-cloud slow zones;
+- stardust acceleration;
+- moonbow gravity;
+- persistent spin;
+- charge and magnetic polarity;
+- resonance / speed gates;
+- moving cloud targets;
+- ordered cloud chains;
+- exact ricochet requirements.
+
+The goal is not mechanical quantity. The goal is **combinatorial leverage**.
+
+---
+
+# Teaching without spending the game on tutorial text
+
+The first visit to Levels **1-12** begins with a short, input-locked demonstration using that level's already-validated solution.
+
+The game:
+
+1. names the new idea;
+2. runs the real solution at accelerated simulation speed;
+3. resets the puzzle;
+4. hands control back with **YOUR TURN**.
+
+Level 1 establishes the entire visual grammar directly inside the playfield:
+
+- white ring = current target;
+- number = order;
+- dark badge = exact ricochets;
+- wall/prism reflection increments the count;
+- matching the required count restores the cloud.
+
+This creates a compact loop:
+
+**watch → reproduce → internalize → combine**
+
+After repeated failed shots, the game points toward `MENU → HELP` rather than silently lowering difficulty. Help reuses the same deterministic simulation and encoded valid solutions.
+
+---
+
+# Controls
+
+## Desktop
 
 | Input | Action |
 | --- | --- |
@@ -57,203 +199,74 @@ The rest of the campaign keeps recombining those rules with prisms, portals, win
 | `M` / `Esc` | Pause / menu |
 | `Space` / `Enter` | Continue |
 
-### Mobile
+## Mobile
 
 | Input | Action |
 | --- | --- |
 | **Drag lower-left AIM wheel** | Choose launch angle |
-| **Release AIM wheel** | Keep the angle; releasing never fires |
+| **Release AIM wheel** | Keep the angle, never fire |
 | **Tap lower-right FIRE** | Launch the selected rainbow |
 | `MENU` | Pause |
 | Pause controls | Toggle sound / trajectory preview |
 
-AIM and FIRE are intentionally separate on touch screens. Fine adjustment should never accidentally commit a shot.
+AIM and FIRE are deliberately separate. Fine adjustment should never accidentally commit a shot.
 
 ---
 
-# The design idea
+# Procedural audiovisual identity
 
-The central question behind uniRico is:
+There are no shipped image or audio assets in the standard runtime.
 
-> **How much puzzle depth can one rainbow projectile create if every system modifies the same deterministic shot?**
+Canvas generates the game world, unicorn, clouds, mechanics, trajectory language, and rainbow trail. Web Audio generates the score and effects.
 
-Instead of spending the 13 KB budget on dozens of disconnected mechanics, the game grows outward from one reusable interaction:
+The soundtrack follows the physical shot:
 
-**aim → transform the path → satisfy a route constraint → reach the correct target.**
+**quiet orchestral planning → FIRE → bass-music drop → harmonic ricochet → cloud-chain rise → resolution**
 
-A prism changes direction. A portal changes location. Wind changes velocity. Gravity continuously bends the path. Spin changes future rebounds. Magnetism attracts or repels a charged rainbow. Moving clouds turn geometry into timing. Ordered cloud chains turn one bank shot into a route-planning problem.
+Bounce, cloud-success, and victory cues share a six-note rainbow palette. Ordered-cloud progress raises harmonic energy. A compressor-backed mix bus controls stacked peaks where supported.
 
-Every mechanic speaks the same underlying language, so later puzzles ask the player to **compose knowledge**, not learn another game.
-
-## Why the theme is gameplay
-
-The theme is structurally fused into the mechanics:
-
-- the **unicorn horn** is the launcher;
-- the **rainbow** is projectile, trajectory, trail, and musical feedback;
-- **grumpy clouds** are ordered locks that recover when solved;
-- **prisms** create literal rainbow ricochets;
-- **rainbow arches** teleport the shot;
-- weather, celestial forces, stardust, charge, polarity, and resonance manipulate that same rainbow flight.
-
-Remove the unicorns and rainbows and the game's mechanical language disappears with them.
+The audio system is another example of the project's governing strategy: one compact subsystem should reinforce gameplay, theme, feedback, and atmosphere at once.
 
 ---
 
-# Designed around trust
+# How 13 KB becomes a 50-level game
 
-A precision puzzle game stops being fun as soon as the player stops trusting its trajectory, collisions, rules, or tutorial. A large part of uniRico's development therefore went into **making the game trustworthy instead of merely making it larger**.
+The byte budget rewards systems that do several jobs.
 
-## The line you see is the shot you get
+uniRico leans on:
 
-Desktop aiming has one authority:
-
-**pointer movement chooses the trajectory → click fires that exact trajectory.**
-
-Click cannot silently retarget the horn. A permanent adversarial regression deliberately moves the pointer to one coordinate and injects the firing `pointerdown` at a completely different coordinate. The launched rainbow must still preserve the displayed aim.
-
-## One simulation, four jobs
-
-The same fixed-step projectile engine powers:
-
-1. live gameplay;
-2. trajectory preview;
-3. Help / deterministic solution playback;
-4. first-seen mechanic demonstrations.
-
-The tutorial is not a fake animation. Help does not secretly use easier physics. The preview does not approximate another world. **The game teaches with the exact rules the player has to master.**
-
-## Failure should teach
-
-After repeated failed shots, the game points toward `MENU → HELP` rather than silently lowering difficulty. Help can reveal the intended aim or replay an encoded valid solution through the real simulation.
-
-The loop is:
-
-**attempt → diagnose → observe → retry → master.**
-
----
-
-# Teaching 50 levels inside 13 KB
-
-The first visit to Levels **1–12** begins with a short input-locked demonstration using that level's already-tested solution. The game labels the mechanic, runs the real solution at accelerated simulation speed, resets, then hands control back with **YOUR TURN**.
-
-Level 1 demonstrates the complete cloud grammar directly in the world:
-
-- white ring = current target;
-- number = order;
-- dark badge = exact ricochets;
-- wall/prism reflections increment the count;
-- matching the badge at impact restores the cloud.
-
-That produces a compact learning loop:
-
-**watch → reproduce → internalize → combine.**
-
-The live HUD stays intentionally sparse because the puzzle objects themselves carry the rules.
-
----
-
-# The 50-level campaign
-
-The campaign begins with a simple bank shot and ends with a compressed **Reflection Gauntlet** that reverses the spatial logic of the hardest puzzles.
-
-### Mechanic vocabulary
-
-- boundary and prism ricochets
-- moving prisms
-- timed storm barriers
-- rainbow-arch portals
-- wind fields
-- dream-cloud slow zones
-- stardust acceleration
-- moonbow gravity
-- persistent spin
-- charge + magnetic polarity
-- resonance / speed gates
-- moving cloud targets
-- ordered cloud chains
-- exact ricochet requirements
-
-### Progression
-
-| Levels | Design goal | Ordered locks |
-| --- | --- | ---: |
-| **1–8** | Fundamentals, demonstrated then practiced | 1 |
-| **9–15** | Moving, timed, and linked lessons | 1–2 |
-| **16–19** | First combinations | 2–3 |
-| **20–25** | Mixed-system bridge | 2 |
-| **26–30** | Multi-system chains | 3 |
-| **31–35** | Advanced routing | 4 |
-| **36–39** | Endgame sequences | 5 |
-| **40** | **FULL SPECTRUM** | 6 |
-| **41–45** | Reflection Gauntlet: reversed advanced routes | 4 |
-| **46–49** | Reflected endgame mastery | 5 |
-| **50** | **MIRROR FULL SPECTRUM** | 6 |
-
-Trajectory assistance never increases as the campaign advances. Levels 41–50 tighten it further.
-
-## Reflection Gauntlet: level design as compression
-
-Levels **41–50** are generated as exact **180° spatial transformations of Levels 31–40**.
-
-This is not a screenshot flip. The game rotates the launch point, ordered targets, walls, moving prisms, portals, force fields, gravity/magnet centers, resonance gates, and relevant motion/force vectors. The encoded solution angle is rotated by π while its timing is preserved.
-
-A 180° rotation is a symmetry of uniRico's deterministic projectile model. That lets ten new late-game spatial problems reuse the same compact source geometry and proof data rather than shipping ten duplicate maps.
-
-The regression suite then solves all ten transformed levels from scratch and requires their visible mechanics to be exercised by the intended route. In other words, **symmetry is both a game mechanic and a compression primitive**.
-
----
-
-# Audio is part of the rainbow
-
-All music and SFX are synthesized at runtime with Web Audio. No audio assets are shipped.
-
-A six-note rainbow palette ties together ricochets, cloud restoration, and victory cues. Cloud progress raises harmonic energy. Bounce count changes the flight groove. A compressor-backed mix bus controls stacked peaks.
-
-The macro arc follows the physical shot:
-
-**quiet orchestral planning → FIRE → dubstep drop → harmonic ricochet → cloud-chain rise → resolution**
-
----
-
-# How 13 KB becomes a full game
-
-js13kGames rewards leverage. uniRico gets depth by making systems do several jobs:
-
-- **one deterministic physics model** for play, preview, tutorials, and Help;
+- **one deterministic physics model** for play, preview, tutorial, Help, and proof;
 - **tuple-encoded level data** instead of per-level scripts;
 - **procedural Canvas art** instead of image assets;
 - **procedural Web Audio** instead of audio files;
 - **world-embedded visual rules** instead of large tutorial UI;
 - **encoded valid solutions** that double as tests, tutorials, and Help playback;
-- **reusable environmental forces** composed into many puzzle families;
-- **rotational generation** that turns ten existing mastery layouts into ten new verified spatial problems;
-- **one mobile control model** instead of a second game implementation.
+- **reusable forces and geometry** composed into many puzzle families;
+- **rotational generation** for ten verified mastery remixes;
+- **one responsive control model** rather than separate desktop/mobile games.
 
-The governing rule is:
+The design rule is simple:
 
-> **Do not merely make code smaller. Make each system more useful.**
-
-The goal is not to feel impressive *for 13 KB*. The goal is to feel like a complete little game that happens to fit there.
+> **Do not merely make code smaller. Make every byte do more.**
 
 ---
 
 # Compression engineering
 
-v0.20.0 treats compression as an optimization problem over the **actual final ZIP**, not over pretty-looking minified-source numbers.
+The release builder optimizes the **actual final ZIP**, not an intermediate source-size number.
 
-The deterministic builder produces competing candidates:
+It builds two deterministic candidates:
 
-1. **Terser 5.50.0 → Zopfli DEFLATE**;
-2. **Terser → Roadroller 2.1.0 (`-O0`) → Zopfli DEFLATE**.
+```text
+Terser 5.50.0 → minimal HTML → Zopfli
+Terser 5.50.0 → Roadroller 2.1.0 -O0 → minimal HTML → Zopfli
+```
 
-It then chooses whichever final ZIP is smaller. Roadroller is therefore never assumed to win merely because its JavaScript text is shorter.
+The smaller final ZIP wins.
 
-The HTML shell also omits optional document wrappers and other bytes that do not help the single-canvas game while retaining UTF-8 and mobile viewport behavior.
+Roadroller uses deterministic `-O0` parameters instead of stochastic search. Release CI then builds everything again and requires byte-for-byte equality.
 
-For reproducibility, release CI builds the package **twice** and requires byte-for-byte identity. It also extracts `index.html` from the exact ZIP and executes the packed runtime in a browser-like VM, so readable-source success alone is not enough.
-
-### v0.20.0 canonical `main` artifact
+### v0.20.0 canonical package
 
 | Property | Value |
 | --- | --- |
@@ -263,84 +276,71 @@ For reproducibility, release CI builds the package **twice** and requires byte-f
 | Remaining headroom | **1,800 bytes** |
 | Archive | root-level `index.html` only |
 | Runtime network dependencies | **none** |
-| SHA-256 | `713114a1185abd266ffdd42664217e06170b22673e9afb5eaa7cb3dd9c9a87ff` |
-| Qualified source commit | `a9350c6a47d5fa2cac85ffb8e4874cffc87ef2a2` |
+| ZIP SHA-256 | `713114a1185abd266ffdd42664217e06170b22673e9afb5eaa7cb3dd9c9a87ff` |
+| Local HTML size | **15,358 bytes** |
+| Local HTML SHA-256 | `5584ffd817af47108bd5fec97a0c669ace2b8249143a6a6b717cf21ec2c00c6f` |
+| Current package source | `7df719558462bae381c8e02b5d606e3d190fbb1c` |
 
-For comparison, the qualified v0.19.1 package was **13,227 bytes with only 85 bytes free**. v0.20.0 therefore adds ten levels while reducing the submission by **1,715 bytes** and creating substantially more safety margin.
+For comparison, v0.19.1 occupied **13,227 bytes with 85 bytes free**. v0.20.0 adds ten levels while reducing the submission by **1,715 bytes**.
 
-These values come from the canonical `main` publisher and are recorded in `dist/uniRico-js13k-build.txt` beside the exact submission ZIP.
-
----
-
-# Submission engineering
-
-The standard competition artifact is always:
-
-```text
-dist/uniRico-js13k.zip
-```
-
-For every qualifying game-source change on `main`, GitHub Actions rejects the release unless:
-
-- ZIP size is at most **13,312 bytes**;
-- archive membership is exactly `['index.html']`;
-- `index.html` is at the ZIP root;
-- CSS and JavaScript are self-contained;
-- no external/network runtime dependency exists;
-- the readable regression suite passes;
-- the packed artifact executes;
-- a second independent package build is byte-identical.
-
-Companion provenance files:
-
-```text
-dist/uniRico-js13k.zip.sha256
-dist/uniRico-js13k-build.txt
-```
-
-Do **not** submit the Wavedash deployment ZIP for the normal Desktop/Mobile entry. Use the canonical standard package from `main`.
+Exact provenance is recorded in [`dist/uniRico-js13k-build.txt`](dist/uniRico-js13k-build.txt).
 
 ---
 
-# Validation
+# Release confidence
 
 The size limit is tiny. The confidence bar is not.
 
-Automated coverage now includes:
+Automated coverage includes:
 
 - **50/50 encoded solutions** completing every ordered target chain;
-- intended mechanic-use coverage across all **50 levels**;
-- exact Reflection Gauntlet source/mechanic correspondence;
-- non-increasing trajectory assistance through level 50;
-- swept moving-cloud / moving-prism collisions;
-- moving-frame reflection and anti-sticking separation;
-- wrong-order and wrong-ricochet behavior;
-- procedural audio transport, oscillator cleanup, rainbow harmony, and compression bus;
+- intended mechanic-use coverage across all 50 levels;
+- Reflection Gauntlet source/mechanic correspondence;
+- non-increasing trajectory assistance through Level 50;
+- swept moving-cloud and moving-prism collisions;
+- moving-frame reflection and anti-sticking behavior;
+- wrong-order and wrong-ricochet rules;
 - guided mechanic demos and clean **YOUR TURN** handoff;
 - tutorial repeat suppression;
-- desktop displayed-trajectory → fired-shot authority under adversarial pointer coordinates;
+- authoritative desktop displayed-trajectory → fired-shot behavior;
 - AIM-wheel mapping, release-without-fire, and separate mobile FIRE behavior;
 - accidental playfield-touch suppression;
-- mobile-safe HUD/tutorial placement;
-- packed-runtime startup validation;
+- procedural audio transport and cleanup;
 - deterministic package reproduction;
-- exact root-level archive membership, offline integrity, and hard size enforcement.
+- exact packed-runtime startup execution;
+- exact root-level archive membership;
+- offline/no-network runtime enforcement;
+- hard **13,312-byte** release ceiling.
 
-Human release checks live in [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md), especially fresh-player comprehension, real iPhone/Android ergonomics, Chrome/Firefox play, and speaker/headphone mix.
+The competition publisher also emits a directly testable `dist/uniRico-local.html` and proves it is byte-for-byte identical to the `index.html` inside the canonical submission ZIP.
+
+Human release checks are tracked in [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md).
 
 ---
 
-# Run and build locally
+# Download and run
 
-## Readable build
+## Fastest: open the exact packed game locally
+
+Download:
+
+[`dist/uniRico-local.html`](https://github.com/sidhulyalkar/uniRico/raw/refs/heads/main/dist/uniRico-local.html)
+
+Then double-click it. No server, install step, or network connection is required.
+
+## Readable development build
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Open `http://localhost:8000/src/`.
+Open:
 
-## Competition package
+```text
+http://localhost:8000/src/
+```
+
+## Rebuild the competition package
 
 ```bash
 python3 -m pip install zopfli
@@ -348,19 +348,43 @@ npm install -g terser@5.50.0 roadroller@2.1.0
 python3 tools/build_js13k_zip.py
 ```
 
-For an official submission, use the validated `dist/uniRico-js13k.zip` from `main`, never a separately hand-packed archive.
+For an official submission, use the validated artifact from `main`:
+
+```text
+dist/uniRico-js13k.zip
+```
+
+Do not hand-pack a separate release archive.
 
 ---
 
-# The design journey in one sentence
+# Repository map
 
-uniRico grew from a rainbow bank-shot prototype into a **50-level deterministic puzzle campaign** by repeatedly asking:
+| Path | Purpose |
+| --- | --- |
+| [`src/`](src/) | Readable game source |
+| [`src/runtime/`](src/runtime/) | Simulation, rendering, audio, UI, input |
+| [`tests/`](tests/) | Physics, solutions, controls, audio, campaign, package regressions |
+| [`tools/build_js13k_zip.py`](tools/build_js13k_zip.py) | Deterministic competition packer |
+| [`dist/`](dist/) | Canonical submission ZIP, local HTML, hashes, provenance |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Runtime and systems architecture |
+| [`docs/SOURCE_GUIDE.md`](docs/SOURCE_GUIDE.md) | Codebase orientation |
+| [`docs/COMPETITION_AUDIT_2026.md`](docs/COMPETITION_AUDIT_2026.md) | Competition-focused design audit |
+| [`docs/COMPETITION_CHECKLIST.md`](docs/COMPETITION_CHECKLIST.md) | Human/device release gates |
+| [`docs/FINAL_CANDIDATE.md`](docs/FINAL_CANDIDATE.md) | Canonical release evidence |
+| [`CHANGELOG.md`](CHANGELOG.md) | Version history |
+
+---
+
+# The project in one sentence
+
+uniRico started as a rainbow bank-shot prototype and became a **50-level deterministic puzzle campaign** by repeatedly asking one question:
 
 > **Can this next byte make the game clearer, deeper, more expressive, or more trustworthy?**
 
 The resulting priorities are:
 
-**clear visual grammar · deterministic physics · composable mechanics · tutorials built from real solutions · precise desktop/mobile controls · procedural audiovisual identity · compression-aware level design · ruthless release validation.**
+**clear visual grammar · deterministic physics · composable mechanics · tutorials built from real solutions · precise desktop/mobile controls · procedural audiovisual identity · compression-aware level design · ruthless release validation**
 
 <p align="center">
   🦄 <strong>Aim the horn. Bend the rainbow. Fix the sky.</strong> 🌈
