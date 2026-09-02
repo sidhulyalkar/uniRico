@@ -2,6 +2,7 @@ const fs=require('fs'),vm=require('vm'),path=require('path');
 const files=['../src/levels.js','../src/runtime/core.js','../src/runtime/audio.js','../src/runtime/physics.js','../src/runtime/render-world.js','../src/runtime/render-entities.js','../src/runtime/render-hud.js','../src/runtime/ui.js'];
 let js=files.map(f=>fs.readFileSync(path.join(__dirname,f),'utf8')).join('\n');
 const hud=fs.readFileSync(path.join(__dirname,'../src/runtime/render-hud.js'),'utf8');
+const ui=fs.readFileSync(path.join(__dirname,'../src/runtime/ui.js'),'utf8');
 const assert=(c,m)=>{if(!c)throw Error(m)};
 assert(/LEVELS\.length\+' LEVELS · LOCAL RECORDS'/.test(hud),'level-select count must come from LEVELS.length');
 assert(/i<LEVELS\.length/.test(hud),'level-select renderer must iterate the full campaign');
@@ -9,6 +10,7 @@ assert(/c<10/.test(hud)&&/r<5/.test(hud)&&/r\*10\+c/.test(hud),'level-select hit
 assert(!/'40 LEVELS · LOCAL RECORDS'/.test(hud),'stale 40-level menu label survived');
 assert(!/for\(let i=0;i<40;i\+\+\)/.test(hud),'stale 40-level render cap survived');
 assert(/LEVELS\.length\*3/.test(hud)&&/LEVELS\.length\*1000/.test(hud),'campaign totals must scale with campaign length');
+assert(/if\(F===5\)\{\$e=q;let i=\$f\(\)/.test(ui),'level-select click must resolve from pointerdown coordinates, not stale hover state');
 js=js.replace('$2();$0();_b()',`globalThis.L50TEST={count:()=>LEVELS.length,name:i=>LEVELS[i].n,hit:(x,y)=>{$e=[x,y];return $f()},setLevel:i=>{L=i;return O().n}};$2();$0();_b()`);
 const noop=()=>{},gradient={addColorStop:noop};
 const ctx=new Proxy({}, {get:(o,k)=>k==='createRadialGradient'||k==='createLinearGradient'?()=>gradient:k==='measureText'?s=>({width:String(s).length*8}):noop,set:(o,k,v)=>(o[k]=v,true)});
@@ -19,7 +21,8 @@ vm.createContext(sandbox);vm.runInContext(js,sandbox,{timeout:1500});
 assert(sandbox.L50TEST.count()===50,`runtime campaign must expose 50 levels, got ${sandbox.L50TEST.count()}`);
 assert(sandbox.L50TEST.name(40).startsWith('MIRROR '),'Level 41 must enter Reflection Gauntlet');
 assert(sandbox.L50TEST.name(49)==='MIRROR FULL SPECTRUM','Level 50 identity drifted');
-// Level 50 is row 5, column 10 in the 10x5 selector. Center of its card is (834,455).
+assert(sandbox.L50TEST.hit(114,159)===0,'Level 1 card is not hit-testable');
+assert(sandbox.L50TEST.hit(594,381)===36,'Level 37 card is not hit-testable');
 assert(sandbox.L50TEST.hit(834,455)===49,'Level 50 card is not hit-testable');
 assert(sandbox.L50TEST.setLevel(49)==='MIRROR FULL SPECTRUM','Level 50 cannot become the active playable level');
-console.log(JSON.stringify({status:'PASS',levels:50,level50:'MIRROR FULL SPECTRUM',selectable:true}));
+console.log(JSON.stringify({status:'PASS',levels:50,level37Selectable:true,level50:'MIRROR FULL SPECTRUM',pointerdownAuthority:true}));
