@@ -13,6 +13,8 @@ assert(/\$T\(\);_g\(365,315,230,42,'PLAY/.test(hud),'rules legend is not integra
 assert(/\[365,315,230,42\]/.test(ui)&&/\[365,370,230,42\]/.test(ui),'menu hit boxes do not match centered buttons');
 assert(/roundRect\(270,448,420,96,20\)/.test(hud),'rules card should sit at the bottom');
 assert(/createLinearGradient\(270,0,690,0\)/.test(hud)&&/#34183f/.test(hud)&&/#12394d/.test(hud),'rules card lost dark rainbow treatment');
-assert(/MOBILE: AIM WHEEL \+ FIRE · MOUSE: AIM \+ CLICK/.test(hud),'mobile control legend missing');
-assert(/SOUND '\+\(\$y\?'ON':'OFF'\)/.test(hud)&&/PATH '\+\(\$a\?'ON':'OFF'\)/.test(hud),'pause menu must expose touch-accessible sound/path toggles');
-console.log(JSON.stringify({status:'PASS',rules:'ring=current, number=order, badge=ricochets',mobile:'aim wheel + fire'}));
+assert(/MOBILE: AIM WHEEL \+ FIRE/.test(hud),'mobile control legend missing');
+assert(/DESKTOP: KEYS \+ SPACE \/ MOUSE \+ CLICK/.test(hud),'desktop dual-mode control legend missing');
+assert(/_g\(390,420,180,28,'AIM '\+\(cm\?'MOUSE':'KEYS'\)\)/.test(hud),'main-menu AIM mode toggle missing');
+assert(/SOUND '\+\(\$y\?'ON':'OFF'\)/.test(hud)&&/PATH '\+\(\$a\?'ON':'OFF'\)/.test(hud)&&/AIM '\+\(cm\?'MOUSE':'KEYS'\)/.test(hud),'pause menu must expose sound/path/aim toggles');
+console.log(JSON.stringify({status:'PASS',rules:'ring=current, number=order, badge=ricochets',mobile:'aim wheel + fire',desktop:'keyboard default + mouse toggle'}));
