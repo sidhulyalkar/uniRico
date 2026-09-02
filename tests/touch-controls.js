@@ -33,7 +33,7 @@ assert(/AIM '\+\(cm\?'MOUSE':'KEYS'\)/.test(hud),'visible desktop aim toggle is 
 sandbox.TOUCH.reset();let s=sandbox.TOUCH.state();assert(s.mode==='keys','keyboard aim must be the desktop default');
 let start=s.angle,q=s.pivot;handlers.pointermove(ev('mouse',q[0],q[1]-80,1));s=sandbox.TOUCH.state();assert(ad(s.angle,start)<1e-12,'mouse movement changed aim while keyboard mode was active');
 handlers.pointerdown(ev('mouse',300,300,2));s=sandbox.TOUCH.state();assert(!s.shot&&s.shots===0,'mouse click fired while keyboard mode was active');
-key('ArrowRight');s=sandbox.TOUCH.state();assert(ad(s.angle,P=Math.PI/45)<1e-9,'ArrowRight did not coarse-rotate by 4 degrees');
+key('ArrowRight');s=sandbox.TOUCH.state();assert(ad(s.angle,Math.PI/45)<1e-9,'ArrowRight did not coarse-rotate by 4 degrees');
 key('ArrowUp');s=sandbox.TOUCH.state();assert(ad(s.angle,Math.PI/45-Math.PI/360)<1e-9,'ArrowUp did not fine-rotate by 0.5 degrees');
 key(' ');s=sandbox.TOUCH.state();assert(s.shot&&s.shots===1,'Space did not fire the keyboard-selected aim');
 
