@@ -19,6 +19,7 @@ if(!handlers.pointerdown||!handlers.pointermove)throw Error('packed runtime did 
 const evt=(x,y,pointerType='mouse')=>({clientX:x,clientY:y,pointerType,pointerId:1});
 const render=t=>{text.length=0;rotations.length=0;previewLines=0;previewDash=false;frame(t);return [...text]};
 const expectLevel=(n,strings)=>{let p='LEVEL '+String(n).padStart(2,'0')+' · ';if(!strings.some(s=>s.startsWith(p)))throw Error(`packed Level ${n} did not launch: ${JSON.stringify(strings.slice(-24))}`)};
+const ad=(a,b)=>Math.abs(Math.atan2(Math.sin(a-b),Math.cos(a-b)));
 // Enter LEVELS from the main menu using the actual packed input path.
 handlers.pointerdown(evt(480,390));let strings=render(16.667);
 if(!strings.includes('50 LEVELS · LOCAL RECORDS'))throw Error(`packed level select does not expose 50 levels: ${JSON.stringify(strings.slice(-20))}`);
@@ -37,15 +38,20 @@ if(!strings.includes('50 LEVELS · LOCAL RECORDS'))throw Error('could not reopen
 handlers.pointermove(evt(194,159));render(100.002);
 handlers.pointerdown(evt(834,455));strings=render(116.669);
 if(!strings.some(s=>s.includes('LEVEL 50 · MIRROR FULL SPECTRUM')))throw Error(`packed Level 50 is not independently clickable: ${JSON.stringify(strings.slice(-24))}`);
-// Level 50's unicorn is at (870,100). Desktop pointer movement must rotate the
-// horn toward the actual pointer and the deterministic preview must no longer be
-// the old 9-tick sliver. Click remains pure fire authority and is tested in source.
-handlers.pointermove(evt(800,35));strings=render(133.336);
-let want=Math.atan2(-65,-70),aim=rotations.at(-1);
-if(aim==null||Math.abs(aim-want)>1e-9)throw Error(`packed Level 50 horn aim drifted: ${aim} vs ${want}`);
+// Level 50's projectile origin remains (870,100), but desktop control uses an
+// edge-safe pivot at (820,140). An 80px circle around that pivot must expose all
+// four cardinal horn directions in the exact packed HTML, proving usable 360° aim.
+const aims=[[900,140,0],[820,220,Math.PI/2],[740,140,Math.PI],[820,60,-Math.PI/2]];
+let tm=133.336;
+for(const [x,y,want] of aims){
+  handlers.pointermove(evt(x,y));strings=render(tm);tm+=16.667;
+  let aim=rotations.at(-1);
+  if(aim==null||ad(aim,want)>1e-9)throw Error(`packed Level 50 full-circle aim drifted at ${x},${y}: ${aim} vs ${want}`);
+  if(!strings.includes('AIM'))throw Error('packed Level 50 edge-safe AIM pivot cue is missing');
+}
 if(previewLines<5)throw Error(`packed Level 50 trajectory preview is still too short: ${previewLines} dotted segments`);
 // Touch selection must also use tap coordinates and require no hover state.
-handlers.pointerdown(evt(900,87));render(150.003);
-handlers.pointerdown(evt(480,389));render(166.67);
-handlers.pointerdown(evt(194,307,'touch'));strings=render(183.337);expectLevel(22,strings);
-console.log(JSON.stringify({status:'PASS',packedRuntimeExecuted:true,animationScheduled:raf>0,levelSelect:50,hoverPreview:true,staleHoverClickAuthority:true,level37:true,level50:'MIRROR FULL SPECTRUM',level50DesktopAim:true,level50PreviewSegments:previewLines,touchLevel22:true}));
+handlers.pointerdown(evt(900,87));render(tm);tm+=16.667;
+handlers.pointerdown(evt(480,389));render(tm);tm+=16.667;
+handlers.pointerdown(evt(194,307,'touch'));strings=render(tm);expectLevel(22,strings);
+console.log(JSON.stringify({status:'PASS',packedRuntimeExecuted:true,animationScheduled:raf>0,levelSelect:50,hoverPreview:true,staleHoverClickAuthority:true,level37:true,level50:'MIRROR FULL SPECTRUM',level50FullCircleAim:true,level50AimPivot:[820,140],level50PreviewSegments:previewLines,touchLevel22:true}));
