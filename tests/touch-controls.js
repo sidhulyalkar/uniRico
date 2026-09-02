@@ -43,10 +43,10 @@ for(let i=0;i<45;i++)key('ArrowRight');s=sandbox.TOUCH.state();assert(ad(s.angle
 
 // K and the clickable menu toggle switch to legacy mouse aim, which preserves
 // edge-safe 360-degree pointer mapping and click-to-fire authority.
-key('K');s=sandbox.TOUCH.state();assert(s.mode==='mouse'&&storage.r1c==='1','K did not persist mouse aim mode');q=s.pivot;
+key('K');s=sandbox.TOUCH.state();assert(s.mode==='mouse'&&+storage.r1c===1,'K did not persist mouse aim mode');q=s.pivot;
 handlers.pointermove(ev('mouse',q[0],q[1]-80,3));s=sandbox.TOUCH.state();assert(ad(s.angle,-Math.PI/2)<1e-9,'mouse mode did not restore pointer aim');
 handlers.pointerdown(ev('mouse',260,520,4));s=sandbox.TOUCH.state();assert(s.shot&&s.shots===1,'mouse mode click did not fire');
-sandbox.TOUCH.menu();handlers.pointerdown(ev('mouse',480,434,5));s=sandbox.TOUCH.state();assert(s.mode==='keys'&&storage.r1c==='0','main-menu AIM toggle did not return to keyboard mode');
+sandbox.TOUCH.menu();handlers.pointerdown(ev('mouse',480,434,5));s=sandbox.TOUCH.state();assert(s.mode==='keys'&&+storage.r1c===0,'main-menu AIM toggle did not return to keyboard mode');
 
 // Mobile AIM/FIRE remains independent from desktop mode.
 sandbox.TOUCH.reset();handlers.pointerdown(ev('touch',90,456,6));s=sandbox.TOUCH.state();assert(s.mobile&&s.capture===6&&!s.shot,'aim wheel should capture touch without firing');
