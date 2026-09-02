@@ -16,12 +16,29 @@ vm.runInContext(m[1],sandbox,{timeout:2000});
 if(!raf||!frame)throw Error('packed runtime never reached animation scheduling');
 if(canvas.width!==960||canvas.height!==600)throw Error(`packed runtime canvas init drifted: ${canvas.width}x${canvas.height}`);
 if(!handlers.pointerdown||!handlers.pointermove)throw Error('packed runtime did not register pointer controls');
-const evt=(x,y)=>({clientX:x,clientY:y,pointerType:'mouse',pointerId:1});
+const evt=(x,y,pointerType='mouse')=>({clientX:x,clientY:y,pointerType,pointerId:1});
+const render=t=>{text.length=0;frame(t);return [...text]};
+const expectLevel=(n,strings)=>{let p='LEVEL '+String(n).padStart(2,'0')+' · ';if(!strings.some(s=>s.startsWith(p)))throw Error(`packed Level ${n} did not launch: ${JSON.stringify(strings.slice(-24))}`)};
 // Enter LEVELS from the main menu using the actual packed input path.
-text.length=0;handlers.pointerdown(evt(480,390));frame(16.667);
-if(!text.includes('50 LEVELS · LOCAL RECORDS'))throw Error(`packed level select does not expose 50 levels: ${JSON.stringify(text.slice(-20))}`);
-if(!text.includes('50'))throw Error('packed level select did not render a Level 50 card');
-// Level 50 is row 5, column 10 of the 10x5 grid. Aim at its card, then click it.
-text.length=0;handlers.pointermove(evt(834,455));handlers.pointerdown(evt(834,455));frame(33.334);
-if(!text.some(s=>s.includes('LEVEL 50 · MIRROR FULL SPECTRUM')))throw Error(`packed Level 50 is not selectable/playable: ${JSON.stringify(text.slice(-20))}`);
-console.log(JSON.stringify({status:'PASS',packedRuntimeExecuted:true,animationScheduled:raf>0,levelSelect:50,level50:'MIRROR FULL SPECTRUM'}));
+handlers.pointerdown(evt(480,390));let strings=render(16.667);
+if(!strings.includes('50 LEVELS · LOCAL RECORDS'))throw Error(`packed level select does not expose 50 levels: ${JSON.stringify(strings.slice(-20))}`);
+if(!strings.includes('50'))throw Error('packed level select did not render a Level 50 card');
+// Hover must preview the card under the pointer.
+handlers.pointermove(evt(114,159));strings=render(33.334);
+if(!strings.some(s=>s.startsWith('01 · ')))throw Error(`Level 1 hover preview did not follow pointermove: ${JSON.stringify(strings.slice(-20))}`);
+// Adversarial authority test: leave hover on Level 1, then pointerdown Level 37 directly.
+// A selector that reads stale hover state launches Level 1 here. The click itself must win.
+handlers.pointerdown(evt(594,381));strings=render(50.001);expectLevel(37,strings);
+// Return to LEVELS through the actual gameplay -> pause -> levels path.
+handlers.pointerdown(evt(900,87));render(66.668);
+handlers.pointerdown(evt(480,389));strings=render(83.335);
+if(!strings.includes('50 LEVELS · LOCAL RECORDS'))throw Error('could not reopen packed 50-level selector');
+// Hover a different card, then click Level 50 without moving there first.
+handlers.pointermove(evt(194,159));render(100.002);
+handlers.pointerdown(evt(834,455));strings=render(116.669);
+if(!strings.some(s=>s.includes('LEVEL 50 · MIRROR FULL SPECTRUM')))throw Error(`packed Level 50 is not independently clickable: ${JSON.stringify(strings.slice(-24))}`);
+// Touch selection must also use tap coordinates and require no hover state.
+handlers.pointerdown(evt(900,87));render(133.336);
+handlers.pointerdown(evt(480,389));render(150.003);
+handlers.pointerdown(evt(194,307,'touch'));strings=render(166.67);expectLevel(22,strings);
+console.log(JSON.stringify({status:'PASS',packedRuntimeExecuted:true,animationScheduled:raf>0,levelSelect:50,hoverPreview:true,staleHoverClickAuthority:true,level37:true,level50:'MIRROR FULL SPECTRUM',touchLevel22:true}));
